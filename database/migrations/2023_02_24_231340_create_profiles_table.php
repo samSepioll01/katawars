@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('honor');
             $table->boolean('is_darkmode');
             $table->boolean('is_deleted');
+            $table->booloen('is_banned');
             $table->foreignId('rango_id')->constrained('rangos', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
