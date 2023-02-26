@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('profile_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
+            $table->unique(['resource_id', 'profile_id']);
         });
     }
 
