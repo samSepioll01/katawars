@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreModoRequest;
-use App\Http\Requests\UpdateModoRequest;
-use App\Models\Modo;
+use App\Http\Requests\StoreRankRequest;
+use App\Http\Requests\UpdateRankRequest;
+use App\Models\Rank;
 
-class ModoController extends Controller
+class RankController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class ModoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreModoRequest  $request
+     * @param  \App\Http\Requests\StoreRankRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreModoRequest $request)
+    public function store(StoreRankRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class ModoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Modo  $modo
+     * @param  \App\Models\Rank  $ranK
      * @return \Illuminate\Http\Response
      */
-    public function show(Modo $modo)
+    public function show(Rank $rank)
     {
         //
     }
@@ -53,10 +53,10 @@ class ModoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Modo  $modo
+     * @param  \App\Models\Rank  $rank
      * @return \Illuminate\Http\Response
      */
-    public function edit(Modo $modo)
+    public function edit(Rank $rank)
     {
         //
     }
@@ -64,11 +64,11 @@ class ModoController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateModoRequest  $request
-     * @param  \App\Models\Modo  $modo
+     * @param  \App\Http\Requests\UpdateRankRequest  $request
+     * @param  \App\Models\Rank  $rank
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateModoRequest $request, Modo $modo)
+    public function update(UpdateRankRequest $request, Rank $rank)
     {
         //
     }
@@ -76,10 +76,10 @@ class ModoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Modo  $modo
+     * @param  \App\Models\Rank  $rank
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Modo $modo)
+    public function destroy(Rank $rank)
     {
         //
     }

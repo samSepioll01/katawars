@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('is_darkmode');
             $table->boolean('is_deleted');
             $table->booloen('is_banned');
-            $table->foreignId('rango_id')->constrained('rangos', 'id')
+            $table->foreignId('rank_id')->constrained('ranks', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });

@@ -19,11 +19,11 @@ return new class extends Migration
             $table->text('description');
             $table->foreignId('owner_id')->constrained('profiles', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('modo_id')->constrained('modos', 'id')
+            $table->foreignId('mode_id')->constrained('modes', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('language_id')->constrained('languages', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('rango_id')->constrained('rangos', 'id')
+            $table->foreignId('rank_id')->constrained('ranks', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });

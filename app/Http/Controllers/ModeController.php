@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRangoRequest;
-use App\Http\Requests\UpdateRangoRequest;
-use App\Models\Rango;
+use App\Http\Requests\StoreModeRequest;
+use App\Http\Requests\UpdateModeRequest;
+use App\Models\Mode;
 
-class RangoController extends Controller
+class ModeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class RangoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreRangoRequest  $request
+     * @param  \App\Http\Requests\StoreModeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRangoRequest $request)
+    public function store(StoreModeRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class RangoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Rango  $rango
+     * @param  \App\Models\Mode  $mode
      * @return \Illuminate\Http\Response
      */
-    public function show(Rango $rango)
+    public function show(Mode $mode)
     {
         //
     }
@@ -53,10 +53,10 @@ class RangoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Rango  $rango
+     * @param  \App\Models\Mode  $mode
      * @return \Illuminate\Http\Response
      */
-    public function edit(Rango $rango)
+    public function edit(Mode $mode)
     {
         //
     }
@@ -64,11 +64,11 @@ class RangoController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateRangoRequest  $request
-     * @param  \App\Models\Rango  $rango
+     * @param  \App\Http\Requests\UpdateModeRequest  $request
+     * @param  \App\Models\Mode  $mode
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRangoRequest $request, Rango $rango)
+    public function update(UpdateModeRequest $request, Mode $mode)
     {
         //
     }
@@ -76,10 +76,10 @@ class RangoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Rango  $rango
+     * @param  \App\Models\Mode  $mode
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Rango $rango)
+    public function destroy(Mode $mode)
     {
         //
     }

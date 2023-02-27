@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Rango;
+use App\Models\Mode;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class RangoPolicy
+class ModePolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class RangoPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Rango  $rango
+     * @param  \App\Models\Mode  $mode
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Rango $rango)
+    public function view(User $user, Mode $mode)
     {
         //
     }
@@ -48,10 +48,10 @@ class RangoPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Rango  $rango
+     * @param  \App\Models\Mode  $mode
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Rango $rango)
+    public function update(User $user, Mode $mode)
     {
         //
     }
@@ -60,10 +60,10 @@ class RangoPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Rango  $rango
+     * @param  \App\Models\Mode  $mode
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Rango $rango)
+    public function delete(User $user, Mode $mode)
     {
         //
     }
@@ -72,10 +72,10 @@ class RangoPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Rango  $rango
+     * @param  \App\Models\Mode  $mode
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Rango $rango)
+    public function restore(User $user, Mode $mode)
     {
         //
     }
@@ -84,10 +84,10 @@ class RangoPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Rango  $rango
+     * @param  \App\Models\Mode  $mode
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Rango $rango)
+    public function forceDelete(User $user, Mode $mode)
     {
         //
     }
