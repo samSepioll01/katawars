@@ -21,6 +21,7 @@ return new class extends Migration
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamp('start_date');
             $table->timestamp('end_date')->nullable();
+            $table->unique(['kataway_id', 'profile_id']);
         });
     }
 

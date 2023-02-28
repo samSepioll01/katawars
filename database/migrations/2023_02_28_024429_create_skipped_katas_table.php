@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('kata_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
+            $table->unique(['profile_id', 'kata_id']);
         });
     }
 
