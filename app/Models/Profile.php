@@ -11,7 +11,6 @@ class Profile extends Model
     use HasFactory;
 
     /**
-     * Set the the relationship with Kata model.
      * This determines which katas were skipped by the users
      * and see their solutions.
      *
@@ -20,5 +19,15 @@ class Profile extends Model
     public function skippedKatas(): BelongsToMany
     {
         return $this->belongsToMany(Kata::class, 'skipped_katas');
+    }
+
+    /**
+     * This determines which katas were passed with success by the user.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongToMany
+     */
+    public function solutions(): BelongsToMany
+    {
+        return $this->belongsToMany(Kata::class, 'solutions');
     }
 }
