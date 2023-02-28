@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('blocked_profiles', function (Blueprint $table) {
+        Schema::create('followers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('profile_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('blocked_id')->constrained('profiles', 'id')
+            $table->foreignId('follower_id')->constrained('profiles', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
-            $table->unique(['profile_id', 'blocked_id']);
+            $table->unique(['profile_id', 'follower_id']);
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blocked_profiles');
+        Schema::dropIfExists('followers');
     }
 };

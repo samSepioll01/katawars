@@ -54,4 +54,26 @@ class Profile extends Model
             Profile::class, 'blocked_profiles', 'blocked_id', 'profile_id'
         );
     }
+
+    /**
+     * This determines which profiles follow the user.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongToMany
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(
+            Profile::class, 'followers', 'profile_id', 'follower_id'
+        );
+    }
+
+    /**
+     * This determines which profiles are followed by the user.
+     */
+    public function following()
+    {
+        return $this->belongsToMany(
+            Profile::class, 'followers', 'follower_id', 'profile_id'
+        );
+    }
 }
