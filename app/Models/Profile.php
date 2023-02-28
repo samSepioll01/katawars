@@ -30,4 +30,28 @@ class Profile extends Model
     {
         return $this->belongsToMany(Kata::class, 'solutions');
     }
+
+    /**
+     * This determines which profiles were blocked by the user.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongToMany
+     */
+    public function blockedProfiles(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Profile::class, 'blocked_profiles', 'profile_id', 'blocked_id'
+        );
+    }
+
+    /**
+     * This determines which profiles blocked the user.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongToMany
+     */
+    public function blockers(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Profile::class, 'blocked_profiles', 'blocked_id', 'profile_id'
+        );
+    }
 }
