@@ -10,6 +10,8 @@ class Kata extends Model
 {
     use HasFactory;
 
+    // RELATIONSHIPS METHODS
+
     /**
      * This determines which profiles skipped a Kata.
      *
@@ -27,6 +29,17 @@ class Kata extends Model
      */
     public function passedByProfiles(): BelongsToMany
     {
-        return $this->belongsToMany(Profile::class, 'solutions');
+        return $this->belongsToMany(Profile::class, 'solutions')
+            ->withPivot('code', 'chrono', 'is_favorite', 'start_date', 'end_date');
+    }
+
+    // STATIC METHODS.
+
+    /**
+     * This determines which profiles passed succesly a kata.
+     */
+    public static function favorites($id)
+    {
+        return self::find($id)?->passedByProfiles()->where('is_favorite', true)->get();
     }
 }

@@ -13,18 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('solutions', function (Blueprint $table) {
+        Schema::create('solution_hasbeen_favorite', function (Blueprint $table) {
             $table->id();
             $table->foreignId('profile_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('kata_id')->constrained()
+            $table->foreignId('solution_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->text('code');
-            $table->string('chrono');
-            $table->boolean('is_favorite')->default(false);
-            $table->timestamp('start_date');
-            $table->timestamp('end_date')->nullable();
-            $table->unique(['profile_id', 'kata_id']);
+            $table->timestamps();
+            $table->unique(['profile_id', 'solution_id']);
         });
     }
 
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('solutions');
+        Schema::dropIfExists('favorites');
     }
 };

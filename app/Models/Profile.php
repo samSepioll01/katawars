@@ -10,6 +10,9 @@ class Profile extends Model
 {
     use HasFactory;
 
+
+    // RELATIONSHIPS METHODS
+
     /**
      * This determines which katas were skipped by the users
      * and see their solutions.
@@ -26,9 +29,10 @@ class Profile extends Model
      *
      * @return Illuminate\Database\Eloquent\Relations\BelongToMany
      */
-    public function solutions(): BelongsToMany
+    public function passedKatas(): BelongsToMany
     {
-        return $this->belongsToMany(Kata::class, 'solutions');
+        return $this->belongsToMany(Kata::class, 'solutions')
+            ->withPivot('code', 'chrono', 'is_favorite', 'start_date', 'end_date');
     }
 
     /**
@@ -76,4 +80,41 @@ class Profile extends Model
             Profile::class, 'followers', 'follower_id', 'profile_id'
         );
     }
+
+    // STATIC METHODS.
+
+    /**
+     * This determines which katas the user has in their favorites list.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public static function favorites($id)
+    {
+        return self::find($id)->passedKatas()->where('is_favorite', true)->get();
+    }
+
+    /**
+     * This add/remove a kata from profile's favorites list.
+     */
+    public static function toggleKataToFavorites($profileID, $kataID, $add = true)
+    {
+        $solution = self::find($profileID)?->passedKatas()->find($kataID)?->pivot;
+        $solution->is_favorite = $add;
+        $solution->save();
+
+        return $solution ? true : false;
+    }
+
+    /**
+     * TODO - Implentar la comprobación de la tabla has_been_favorito que no podrá
+     *        ser modificada porque su objetivo es cuando se le de un favorito a una
+     *        solución conste en ella siempre para que no se le vuelvan a sumar los puntos.
+     *        Pensar si no es mejor implementarlo con un campo en solutions table al igual
+     *        que is_favorite.
+     */
+    public function hasBeenFavorite()
+    {
+
+    }
+
 }
