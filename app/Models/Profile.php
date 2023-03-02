@@ -118,4 +118,16 @@ class Profile extends Model
     {
         return $this->hasMany(Favorite::class);
     }
+
+    /**
+     * This determines which katas has been saved in the profile's saved kata list.
+     * Set the relationship using saved_katas pivot table.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function savedKatas(): BelongsToMany
+    {
+        return $this->belongsToMany(Kata::class, 'saved_katas')
+            ->withPivot('num_orden')->withTimestamps();
+    }
 }

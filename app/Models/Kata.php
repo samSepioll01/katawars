@@ -45,6 +45,16 @@ class Kata extends Model
             ->withTimestamps();
     }
 
+    /**
+     * This determines which profiles were saved a kata in their profile's
+     * saved kata list. Sets the relationship
+     */
+    public function savedByProfiles(): BelongsToMany
+    {
+        return $this->belongsToMany(Profile::class, 'saved_katas')
+            ->withPivot('num_orden')->withTimestamps();
+    }
+
     // STATIC METHODS.
 
     /**
