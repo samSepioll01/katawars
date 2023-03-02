@@ -19,7 +19,7 @@ return new class extends Migration
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('profile_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->timestamp('start_date');
+            $table->timestamps();
             $table->timestamp('end_date')->nullable();
             $table->unique(['kataway_id', 'profile_id']);
         });

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Profile extends Model
 {
@@ -32,7 +33,8 @@ class Profile extends Model
     public function passedKatas(): BelongsToMany
     {
         return $this->belongsToMany(Kata::class, 'solutions')
-            ->withPivot('code', 'chrono', 'is_favorite', 'start_date', 'end_date');
+            ->withPivot('code', 'chrono', 'is_favorite', 'end_date')
+            ->withTimestamps();
     }
 
     /**
@@ -73,48 +75,47 @@ class Profile extends Model
 
     /**
      * This determines which profiles are followed by the user.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function following()
+    public function following(): BelongsToMany
     {
         return $this->belongsToMany(
             Profile::class, 'followers', 'follower_id', 'profile_id'
         );
     }
 
-    // STATIC METHODS.
-
     /**
      * This determines which katas the user has in their favorites list.
      *
      * @return Illuminate\Database\Eloquent\Collection
      */
-    public static function favorites($id)
+    public function favorites()
     {
-        return self::find($id)->passedKatas()->where('is_favorite', true)->get();
+        return $this->passedKatas()->where('is_favorite', true)->get();
     }
 
     /**
      * This add/remove a kata from profile's favorites list.
+     * MUST BE MODIFICATED FOR PRODUCTION ENVIRONTMENT.
+     * $profileID MUST BE CHANGED FOR auth()->user()->id VALUE.
+     *
+     * @return void
      */
-    public static function toggleKataToFavorites($profileID, $kataID, $add = true)
+    public static function toggleKataToFavorites($profileID, $kataID)
     {
         $solution = self::find($profileID)?->passedKatas()->find($kataID)?->pivot;
-        $solution->is_favorite = $add;
+        $solution->is_favorite = !$solution->is_favorite;
         $solution->save();
-
-        return $solution ? true : false;
     }
 
     /**
-     * TODO - Implentar la comprobación de la tabla has_been_favorito que no podrá
-     *        ser modificada porque su objetivo es cuando se le de un favorito a una
-     *        solución conste en ella siempre para que no se le vuelvan a sumar los puntos.
-     *        Pensar si no es mejor implementarlo con un campo en solutions table al igual
-     *        que is_favorite.
+     * This determines which solutions katas has ever been in profile's favorite list.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function hasBeenFavorite()
+    public function profileFavoritesHistory(): HasMany
     {
-
+        return $this->hasMany(Favorite::class);
     }
-
 }

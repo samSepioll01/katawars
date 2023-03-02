@@ -6,6 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /*
+    *   This table is used to control whether the solutions
+    *   have ever been marked as favorites.
+    *   It also helps to take control over distributed honor points.
+    */
+
     /**
      * Run the migrations.
      *
@@ -13,7 +19,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('solution_hasbeen_favorite', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->id();
             $table->foreignId('profile_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();

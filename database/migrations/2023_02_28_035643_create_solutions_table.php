@@ -20,9 +20,9 @@ return new class extends Migration
             $table->foreignId('kata_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->text('code');
-            $table->string('chrono');
+            $table->string('chrono')->nullable();
             $table->boolean('is_favorite')->default(false);
-            $table->timestamp('start_date');
+            $table->timestamps();
             $table->timestamp('end_date')->nullable();
             $table->unique(['profile_id', 'kata_id']);
         });
