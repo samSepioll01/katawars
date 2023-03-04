@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -15,8 +16,6 @@ class Kata extends Model
 
     /**
      * This determines which solutions are associated with a kata.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function solutions(): HasMany
     {
@@ -25,8 +24,6 @@ class Kata extends Model
 
     /**
      * This determines which profiles skipped a Kata.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\BelongToMany
      */
     public function skippedByProfiles(): BelongsToMany
     {
@@ -35,8 +32,6 @@ class Kata extends Model
 
     /**
      * This determines which profiles passed with success a Kata.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\BelongToMany
      */
     public function passedByProfiles(): BelongsToMany
     {
@@ -55,14 +50,20 @@ class Kata extends Model
             ->withPivot('num_orden')->withTimestamps();
     }
 
+    /**
+     * This determines which categories have been assigned to the kata.
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
     // STATIC METHODS.
 
     /**
      * This determines which profiles passed succesly a kata.
-     *
-     * @return Illuminate\Database\Eloquent\Collection
      */
-    public static function favorites($id)
+    public static function favorites($id): Collection
     {
         return self::find($id)?->passedByProfiles()->where('is_favorite', true)->get();
     }

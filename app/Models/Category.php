@@ -4,8 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
     use HasFactory;
+
+    /**
+     * This determines which katas have a category.
+     */
+    public function katas(): BelongsToMany
+    {
+        return $this->belongsToMany(Kata::class);
+    }
 }
