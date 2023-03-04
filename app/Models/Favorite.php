@@ -12,8 +12,6 @@ class Favorite extends Model
 
     /**
      * This determine which profile is associated with a favorite.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function profile(): BelongsTo
     {
@@ -22,8 +20,6 @@ class Favorite extends Model
 
     /**
      * This determines which solution is associated with a favarite.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function solution(): BelongsTo
     {
