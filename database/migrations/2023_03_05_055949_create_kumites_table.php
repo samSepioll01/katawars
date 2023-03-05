@@ -21,7 +21,9 @@ return new class extends Migration
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('opponent_id')->constrained('profiles', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('winner_id')->constrained('profiles', 'id');
+            $table->foreignId('winner_id')->nullable()
+                ->constrained('profiles', 'id')
+                ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
