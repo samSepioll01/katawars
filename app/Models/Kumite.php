@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,7 +30,7 @@ class Kumite extends Model
     /**
      * This determines which profiles were facing each other.
      */
-    public function opponents(): Collection
+    public function opponents(): BelongsTo
     {
         return $this->profile()->union($this->opponent());
     }
