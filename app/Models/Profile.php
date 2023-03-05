@@ -119,4 +119,20 @@ class Profile extends Model
     {
         return $this->belongsToMany(Solution::class, 'solutions');
     }
+
+    /**
+     * This determines which kumites were competed for the profile.
+     */
+    public function kumites(): HasMany
+    {
+        return $this->hasMany(Kumite::class);
+    }
+
+    /**
+     * This determines which opponents were facing against the profile.
+     */
+    public function opponents(): BelongsToMany
+    {
+        return $this->belongsToMany(Profile::class, 'kumites', 'profile_id', 'opponent_id');
+    }
 }

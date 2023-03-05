@@ -58,6 +58,14 @@ class Kata extends Model
         return $this->belongsToMany(Category::class);
     }
 
+    /**
+     * This determines which kumites have been asignned to the kata.
+     */
+    public function kumites(): HasMany
+    {
+        return $this->hasMany(Kumite::class);
+    }
+
     // STATIC METHODS.
 
     /**

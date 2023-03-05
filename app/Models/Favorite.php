@@ -19,7 +19,7 @@ class Favorite extends Model
     }
 
     /**
-     * This determines which solution is associated with a favarite.
+     * This determines which solution is associated with a favorite.
      */
     public function solution(): BelongsTo
     {
