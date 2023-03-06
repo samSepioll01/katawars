@@ -83,12 +83,14 @@ class Profile extends Model
 
     /**
      * This add/remove a kata from profile's favorites list.
-     * MUST BE MODIFICATED FOR PRODUCTION ENVIRONTMENT.
-     * $profileID MUST BE CHANGED FOR auth()->user()->id VALUE.
      */
-    public static function toggleKataToFavorites(int $profileID, int $kataID): void
+    public static function toggleKataToFavorites(
+        int $profileID = null,
+        int $kataID = null,
+    ): void
     {
-        $solution = self::find($profileID)?->passedKatas()->find($kataID)?->pivot;
+        $solution = self::find($profileID ?? auth()->user()->id)
+                            ?->passedKatas()->find($kataID)?->pivot;
         $solution->is_favorite = !$solution->is_favorite;
         $solution->save();
     }
@@ -113,14 +115,6 @@ class Profile extends Model
     }
 
     /**
-     * This determines the likes that the profile gave to solutions of other profiles.
-     */
-    public function likesGivenToSolutions(): BelongsToMany
-    {
-        return $this->belongsToMany(Solution::class, 'solutions');
-    }
-
-    /**
      * This determines which kumites were competed for the profile.
      */
     public function kumites(): HasMany
@@ -133,6 +127,8 @@ class Profile extends Model
      */
     public function opponents(): BelongsToMany
     {
-        return $this->belongsToMany(Profile::class, 'kumites', 'profile_id', 'opponent_id');
+        return $this->belongsToMany(
+            Profile::class, 'kumites', 'profile_id', 'opponent_id'
+        );
     }
 }

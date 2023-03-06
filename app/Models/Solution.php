@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Likeable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Solution extends Model
 {
-    use HasFactory;
+    use HasFactory, Likeable;
 
     /**
      * This determines if the solution has ever been in the profile favorites list.
@@ -25,13 +25,5 @@ class Solution extends Model
     public function kata(): BelongsTo
     {
         return $this->belongsTo(Kata::class);
-    }
-
-    /**
-     * This determines which profiles liked the solution.
-     */
-    public function likedByProfiles(): BelongsToMany
-    {
-        return $this->belongsToMany(Profile::class);
     }
 }
