@@ -5,14 +5,54 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Profile extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'exp',
+        'honor',
+        'is_darkmode',
+        'is_deleted',
+        'is_banned',
+        'rank_id',
+    ];
+
     // RELATIONSHIPS METHODS
+
+    /**
+     * This determines which user is associated to the profile.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'id');
+    }
+
+    /**
+     * This determines the actual rank of the profile.
+     */
+    public function rank()
+    {
+        return $this->belongsTo(Rank::class);
+    }
+
+    /**
+     * This determines which katas belongs to the profile.
+     */
+    public function ownerKatas()
+    {
+        return $this->hasMany(Kata::class);
+    }
 
     /**
      * This determines which katas were skipped by the users
@@ -130,5 +170,90 @@ class Profile extends Model
         return $this->belongsToMany(
             Profile::class, 'kumites', 'profile_id', 'opponent_id'
         );
+    }
+
+    /**
+     * This determines which kumites was won by the profile.
+     */
+    public function wonKumites(): HasMany
+    {
+        return $this->kumites()->where('winner_id', $this->id);
+    }
+
+    /**
+     * This determines which kumites was lost by the profile.
+     */
+    public function lostKumites(): HasMany
+    {
+        return $this->kumites()->where('winner_id', '!=', $this->id);
+    }
+
+    /**
+     * This determines which rival has obtained more victories against
+     * the profile.
+     */
+    public function beastOpponent(): Collection
+    {
+        return $this->lostKumites()
+		        ->select(
+                    "kumites.opponent_id",
+                    DB::raw("count(*) as total_lost"),
+                )
+		        ->groupBy("opponent_id")
+		        ->havingRaw(
+                    "count(*) >= all (
+                        select count(*)
+					      from profiles
+                          join kumites on profiles.id = kumites.profile_id
+					     where profiles.id = ?
+					       and kumites.winner_id != ?
+				      group by opponent_id
+                    )", [ $this->id, $this->id ]
+		        )
+		->get();
+    }
+
+    /**
+     * This determines against which rival the profile has obtained more
+     * victories.
+     */
+    public function beastRivalFor(): Collection
+    {
+        return $this->wonKumites()
+                ->select(
+                    "kumites.opponent_id",
+                    DB::raw("count(*) as total_victories"),
+                )
+                ->groupBy("opponent_id")
+                ->havingRaw(
+                    "count(*) >= all (
+                        select count(*)
+                          from profiles
+                          join kumites on profiles.id = kumites.profile_id
+                         where profiles.id = ?
+                           and kumites.winner_id = ?
+                      group by opponent_id
+                    )", [ $this->id, $this->id ]
+                )
+        ->get();
+    }
+
+    /**
+     * This dertermines which kataways was started by the profile.
+     */
+    public function startedKataways(): BelongsToMany
+    {
+        return $this->belongsToMany(Kataway::class)
+            ->withPivot(['end_date']);
+    }
+
+    /**
+     * This determines which kataways was completed by the profile.
+     */
+    public function completedKataways(): Collection
+    {
+        return $this->startedKataways()->get()
+            ->filter(fn($kataway) => $kataway->pivot->end_date)
+            ->values();
     }
 }

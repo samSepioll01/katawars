@@ -11,6 +11,13 @@ class Favorite extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = ['profile_id', 'solution_id'];
+
+    /**
      * This determine which profile is associated with a favorite.
      */
     public function profile(): BelongsTo

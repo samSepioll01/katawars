@@ -11,6 +11,13 @@ class Category extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = ['name'];
+
+    /**
      * This determines which katas have a category.
      */
     public function katas(): BelongsToMany

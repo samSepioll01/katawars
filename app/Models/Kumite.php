@@ -10,6 +10,17 @@ class Kumite extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'profile_id',
+        'kata_id',
+        'opponent_id',
+        'winner_id',
+    ];
 
     /**
      * This determines which profile has been assigned.

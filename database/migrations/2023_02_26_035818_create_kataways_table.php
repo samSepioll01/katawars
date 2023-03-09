@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kata_kataways', function (Blueprint $table) {
+        Schema::create('kataways', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kata_id')->constrained()
-                ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('kataway_id')->constrained('kata_ways', 'id')
-                ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('title');
+            $table->text('description');
+            $table->string('uri_image');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kata_kataways');
+        Schema::dropIfExists('kataways');
     }
 };

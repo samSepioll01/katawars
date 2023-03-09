@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kataway_profile', function (Blueprint $table) {
+        Schema::create('kata_kataway', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kataway_id')->constrained('kata_ways', 'id')
+            $table->foreignId('kata_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('profile_id')->constrained()
+            $table->foreignId('kataway_id')->constrained('kataways', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
-            $table->timestamp('end_date')->nullable();
-            $table->unique(['kataway_id', 'profile_id']);
         });
     }
 
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kataway_profile');
+        Schema::dropIfExists('kata_kataway');
     }
 };
