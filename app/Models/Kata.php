@@ -32,9 +32,9 @@ class Kata extends Model
     /**
      * This determines which profile is the owner of the kata.
      */
-    public function belongsToProfile()
+    public function owner()
     {
-        return $this->belongsTo(Profile::class);
+        return $this->belongsTo(Profile::class, 'owner_id', 'id');
     }
 
     /**

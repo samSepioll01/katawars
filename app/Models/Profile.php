@@ -41,7 +41,7 @@ class Profile extends Model
     /**
      * This determines the actual rank of the profile.
      */
-    public function rank()
+    public function rank(): BelongsTo
     {
         return $this->belongsTo(Rank::class);
     }
@@ -49,9 +49,9 @@ class Profile extends Model
     /**
      * This determines which katas belongs to the profile.
      */
-    public function ownerKatas()
+    public function ownerKatas(): HasMany
     {
-        return $this->hasMany(Kata::class);
+        return $this->hasMany(Kata::class, 'owner_id', 'id');
     }
 
     /**
@@ -133,8 +133,8 @@ class Profile extends Model
      * This add/remove a kata from profile's favorites list.
      */
     public static function toggleKataToFavorites(
+        int $kataID,
         int $profileID = null,
-        int $kataID = null,
     ): void
     {
         $solution = self::find($profileID ?? auth()->user()->id)
@@ -150,16 +150,6 @@ class Profile extends Model
     public function profileFavoritesHistory(): HasMany
     {
         return $this->hasMany(Favorite::class);
-    }
-
-    /**
-     * This determines which katas has been saved in the profile's saved kata list.
-     * Set the relationship using saved_katas pivot table.
-     */
-    public function savedKatas(): BelongsToMany
-    {
-        return $this->belongsToMany(Kata::class, 'saved_katas')
-            ->withPivot('num_orden')->withTimestamps();
     }
 
     /**
@@ -224,7 +214,7 @@ class Profile extends Model
      */
     private function prepareQuery(
         HasMany $query, string $slug, string $op,
-    )
+    ): HasMany
     {
         return $query->select(
             "kumites.opponent_id",
@@ -291,5 +281,36 @@ class Profile extends Model
         return $this->startedKataways()->get()
             ->filter(fn($kataway) => $kataway->pivot->end_date)
             ->values();
+    }
+
+    /**
+     * This determines which katas has been saved in the profile's saved kata list.
+     * Set the relationship using saved_katas pivot table.
+     */
+    public function savedKatas(): BelongsToMany
+    {
+        return $this->belongsToMany(Kata::class, 'saved_katas')
+            ->withPivot('num_orden')->withTimestamps();
+    }
+
+    /**
+     * Gets a certain number of saved elements manually sorted by the profile.
+     * If savedKataID is omitted, it return a Collection. Kata otherwise.
+     */
+    public static function getSavedKatas(
+        int|bool $savedKataID = false,
+        int $num_elem = -1,
+        string $pivotOrd = 'num_orden',
+        string $pivotDir = 'asc',
+    ): BelongsToMany | Kata | bool
+    {
+        $target = self::find(auth()?->user()?->id)?->savedKatas();
+
+        if (!$target) return false;
+
+        return ($savedKataID)
+            ? $target->find($savedKataID)
+            : $target->take($num_elem)
+                     ->orderByPivot($pivotOrd, $pivotDir);
     }
 }
