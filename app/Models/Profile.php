@@ -55,6 +55,14 @@ class Profile extends Model
     }
 
     /**
+     * This determines which resources have been published by the profile.
+     */
+    public function publishedResources(): HasMany
+    {
+        return $this->hasMany(Resource::class, 'owner_id', 'id');
+    }
+
+    /**
      * This determines which katas were skipped by the users
      * and see their solutions.
      */
@@ -196,8 +204,7 @@ class Profile extends Model
     {
         return $this->prepareQuery(
             $this->lostKumites(),'total_lost', '!='
-        )
-        ->get();
+        )->get();
     }
 
     /**
@@ -208,8 +215,7 @@ class Profile extends Model
     {
         return $this->prepareQuery(
             $this->wonKumites(), 'total_wins', '='
-        )
-        ->get();
+        )->get();
     }
 
     /**

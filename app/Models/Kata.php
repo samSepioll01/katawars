@@ -78,6 +78,14 @@ class Kata extends Model
     }
 
     /**
+     * This determines the resources that have been published in the kata.
+     */
+    public function resources(): HasMany
+    {
+        return $this->hasMany(Resource::class);
+    }
+
+    /**
      * This determines which solutions are associated with a kata.
      */
     public function solutions(): HasMany
