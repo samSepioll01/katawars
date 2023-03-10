@@ -194,48 +194,78 @@ class Profile extends Model
      */
     public function beastOpponent(): Collection
     {
-        return $this->lostKumites()
-		        ->select(
-                    "kumites.opponent_id",
-                    DB::raw("count(*) as total_lost"),
-                )
-		        ->groupBy("opponent_id")
-		        ->havingRaw(
-                    "count(*) >= all (
-                        select count(*)
-					      from profiles
-                          join kumites on profiles.id = kumites.profile_id
-					     where profiles.id = ?
-					       and kumites.winner_id != ?
-				      group by opponent_id
-                    )", [ $this->id, $this->id ]
-		        )
-		->get();
+        return $this->prepareQuery(
+            $this->lostKumites(),'total_lost', '!='
+        )
+        ->get();
     }
 
     /**
      * This determines against which rival the profile has obtained more
      * victories.
      */
-    public function beastRivalFor(): Collection
+    public function mostWinsAgainst(): Collection
     {
-        return $this->wonKumites()
-                ->select(
-                    "kumites.opponent_id",
-                    DB::raw("count(*) as total_victories"),
-                )
-                ->groupBy("opponent_id")
-                ->havingRaw(
-                    "count(*) >= all (
-                        select count(*)
-                          from profiles
-                          join kumites on profiles.id = kumites.profile_id
-                         where profiles.id = ?
-                           and kumites.winner_id = ?
-                      group by opponent_id
-                    )", [ $this->id, $this->id ]
-                )
+        return $this->prepareQuery(
+            $this->wonKumites(), 'total_wins', '='
+        )
         ->get();
+    }
+
+    /**
+     * This determines the custom queries to be used in the beastOpponent()
+     * and mostWinsAgainst() methods.
+     */
+    private function prepareQuery(
+        HasMany $query, string $slug, string $op,
+    )
+    {
+        return $query->select(
+            "kumites.opponent_id",
+            DB::raw("count(*) as $slug"),
+        )
+        ->groupBy("opponent_id")
+        ->havingRaw(
+            "count(*) >= all (
+                select count(*)
+                    from profiles
+                    join kumites on profiles.id = kumites.profile_id
+                    where profiles.id = ?
+                    and kumites.winner_id $op ?
+                group by opponent_id
+            )", [ $this->id, $this->id ]
+        );
+    }
+
+    /**
+     * This determines the head-to-head record of kumite fighters that have
+     * a profile against a particular opponent.
+     */
+    public function headToHeadRecord(int $opponentID): array
+    {
+        $applySentences = function($query, $slug) use ($opponentID) {
+            return $query->select(
+                'opponent_id',
+                DB::raw(("count(*) as $slug"))
+            )
+            ->where('opponent_id', $opponentID)
+            ->groupBy('opponent_id')
+            ->first()
+            ->$slug ?? 0;
+        };
+
+        $opponent = Profile::with(['user', 'rank'])->find($opponentID);
+
+        return [
+            'wins' => $applySentences($this->wonKumites(), 'total_wins'),
+            'lost' => $applySentences($this->lostKumites(), 'total_lost'),
+            'opponentInfo' => [
+                'name' => $opponent->user()->first()->name,
+                'userPhoto' => $opponent->user()->first()->profile_photo_path,
+                'rank' => $opponent->rank()->first()->name,
+                'exp' => $opponent->exp,
+            ],
+        ];
     }
 
     /**
