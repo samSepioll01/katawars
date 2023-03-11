@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\DB;
 
 class Profile extends Model
@@ -60,6 +61,22 @@ class Profile extends Model
     public function publishedResources(): HasMany
     {
         return $this->hasMany(Resource::class, 'owner_id', 'id');
+    }
+
+    /**
+     * This determiens the likes that the profile have been given to the resources.
+     */
+    public function likesGivenToResources(): MorphToMany
+    {
+        return $this->morphedByMany(Resource::class, 'likeables');
+    }
+
+    /**
+     * This determines the likes that profile have been given to the solutions.
+     */
+    public function likesGivenToSolutions(): MorphToMany
+    {
+        return $this->morphedByMany(Solution::class, 'likeables');
     }
 
     /**
@@ -260,6 +277,7 @@ class Profile extends Model
                 'userPhoto' => $opponent->user()->first()->profile_photo_path,
                 'rank' => $opponent->rank()->first()->name,
                 'exp' => $opponent->exp,
+                'honor' => $opponent->honor,
             ],
         ];
     }

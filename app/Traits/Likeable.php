@@ -14,7 +14,7 @@ trait Likeable
      */
     public function likes(): MorphToMany
     {
-        return $this->morphToMany(Profile::class, 'likeable')
+        return $this->morphToMany(Profile::class, 'likeables')
             ->withTimestamps();
     }
 

@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('likeable', function (Blueprint $table) {
+        Schema::create('likeables', function (Blueprint $table) {
             $table->id();
             $table->foreignId('profile_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->morphs('likeable');
+            $table->morphs('likeables');
             $table->timestamps();
-            $table->unique(['likeable_id', 'likeable_type', 'profile_id']);
+            $table->unique(['likeables_id', 'likeables_type', 'profile_id']);
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('likeable');
+        Schema::dropIfExists('likeables');
     }
 };
