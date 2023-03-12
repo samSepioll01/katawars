@@ -72,6 +72,14 @@ class Profile extends Model
     }
 
     /**
+     * This determines which solutions have already been punctuated.
+     */
+    public function solutionsPunctuated(): MorphToMany
+    {
+        return $this->morphedByMany(Solution::class, 'punctuables');
+    }
+
+    /**
      * This determines the solutions of the profile.
      */
     public function solutions(): HasMany
@@ -232,10 +240,9 @@ class Profile extends Model
     }
 
     /**
-     * This determines against which rival the profile has obtained more
-     * victories.
+     * This determines against which rival the profile has obtained more wins.
      */
-    public function mostWinsAgainst(): Collection
+    public function moreWinsAgainst(): Collection
     {
         return $this->prepareQuery(
             $this->wonKumites(), 'total_wins', '='

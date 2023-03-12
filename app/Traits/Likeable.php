@@ -22,18 +22,18 @@ trait Likeable
      * Add a like from a profile for a related Likable model.
      * Return true if successful, false otherwise.
      */
-    public function like($profile = null): bool
+    public function like($profileID = null): bool
     {
-        $profile = $profile ?? auth()->user();
-        $profileExists = Profile::pluck('id')->contains($profile);
+        $profileID = $profileID ?? auth()->user()->id;
+        $profileExists = Profile::pluck('id')->contains($profileID);
 
-        if ($this->likedBy($profile) || !$profileExists
-            || $profile === $this->profile_id
+        if ($this->likedBy($profileID) || !$profileExists
+            || $profileID === $this->profile_id
         ) {
             return false;
         }
 
-        $this->likes()->attach($profile);
+        $this->likes()->attach($profileID);
         return true;
     }
 
@@ -41,18 +41,18 @@ trait Likeable
      * Remove a like from a profile for a related Likeable model.
      * Return 1 if successful, 0 otherwise.
      */
-    public function unlike($profile = null): int
+    public function unlike($profileID = null): int
     {
-        return $this->likes()->detach($profile ?? auth()->user());
+        return $this->likes()->detach($profileID ?? auth()->user()->id);
     }
 
     /**
      * Check if a profile has linked this related Likeable model.
      */
-    public function likedBy($profile = null): bool
+    public function likedBy($profileID = null): bool
     {
         return (bool) $this->likes()
-            ->where('profile_id', $profile ?? auth()->user())
+            ->where('profile_id', $profileID ?? auth()->user()->id)
             ->count();
     }
 

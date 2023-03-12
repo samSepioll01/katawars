@@ -15,9 +15,11 @@ return new class extends Migration
     {
         Schema::create('punctuations', function (Blueprint $table) {
             $table->id();
-            $table->string('denomination')->unique();
+            $table->string('denomination');
+            $table->string('type');
             $table->bigInteger('points');
             $table->timestamps();
+            $table->unique(['denomination', 'type']);
         });
     }
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Likeable;
+use App\Traits\Punctuable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Solution extends Model
 {
-    use HasFactory, Likeable;
+    use HasFactory, Likeable, Punctuable;
 
     /**
      * The attributes that are mass assignable.
