@@ -68,7 +68,8 @@ class Profile extends Model
      */
     public function likesGivenToResources(): MorphToMany
     {
-        return $this->morphedByMany(Resource::class, 'likeables');
+        return $this->morphedByMany(Resource::class, 'likeables')
+            ->withTimestamps();
     }
 
     /**
@@ -76,7 +77,8 @@ class Profile extends Model
      */
     public function likesGivenToSolutions(): MorphToMany
     {
-        return $this->morphedByMany(Solution::class, 'likeables');
+        return $this->morphedByMany(Solution::class, 'likeables')
+            ->withTimestamps();
     }
 
     /**
