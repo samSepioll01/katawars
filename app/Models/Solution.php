@@ -49,4 +49,12 @@ class Solution extends Model
     {
         return $this->belongsTo(Kata::class);
     }
+
+    /**
+     * This determines the owner profile for the solution.
+     */
+    public function profile(): BelongsTo
+    {
+        return $this->belongsTo(Profile::class);
+    }
 }

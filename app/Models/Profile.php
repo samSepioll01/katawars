@@ -82,6 +82,14 @@ class Profile extends Model
     }
 
     /**
+     * This determines the solutions of the profile.
+     */
+    public function solutions(): HasMany
+    {
+        return $this->hasMany(Solution::class);
+    }
+
+    /**
      * This determines which katas were skipped by the users
      * and see their solutions.
      */
@@ -96,6 +104,7 @@ class Profile extends Model
     public function passedKatas(): BelongsToMany
     {
         return $this->belongsToMany(Kata::class, 'solutions')
+            ->as('solution')
             ->withPivot('code', 'chrono', 'is_favorite', 'end_date')
             ->withTimestamps();
     }
