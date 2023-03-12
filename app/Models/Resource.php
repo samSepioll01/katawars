@@ -20,7 +20,7 @@ class Resource extends Model
         'title',
         'description',
         'url',
-        'owner_id',
+        'profile_id',
         'kata_id',
     ];
 
@@ -29,9 +29,9 @@ class Resource extends Model
     /**
      * This determines which profile is the owner of the resource.
      */
-    public function owner(): BelongsTo
+    public function profile(): BelongsTo
     {
-        return $this->belongsTo(Profile::class, 'owner_id', 'id');
+        return $this->belongsTo(Profile::class);
     }
 
     /**

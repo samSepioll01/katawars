@@ -60,7 +60,7 @@ class Profile extends Model
      */
     public function publishedResources(): HasMany
     {
-        return $this->hasMany(Resource::class, 'owner_id', 'id');
+        return $this->hasMany(Resource::class);
     }
 
     /**

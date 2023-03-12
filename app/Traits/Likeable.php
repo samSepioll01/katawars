@@ -27,7 +27,9 @@ trait Likeable
         $profile = $profile ?? auth()->user();
         $profileExists = Profile::pluck('id')->contains($profile);
 
-        if ($this->likedBy($profile) || !$profileExists) {
+        if ($this->likedBy($profile) || !$profileExists
+            || $profile === $this->profile_id
+        ) {
             return false;
         }
 

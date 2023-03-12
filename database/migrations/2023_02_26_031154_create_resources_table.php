@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->string('url');
-            $table->foreignId('owner_id')->constrained('profiles', 'id')
+            $table->foreignId('profile_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('kata_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
