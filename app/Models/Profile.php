@@ -29,8 +29,6 @@ class Profile extends Model
         'rank_id',
     ];
 
-    // RELATIONSHIPS METHODS
-
     /**
      * This determines which user is associated to the profile.
      */
@@ -45,14 +43,6 @@ class Profile extends Model
     public function rank(): BelongsTo
     {
         return $this->belongsTo(Rank::class);
-    }
-
-    /**
-     * This determines which katas belongs to the profile.
-     */
-    public function ownerKatas(): HasMany
-    {
-        return $this->hasMany(Kata::class, 'owner_id', 'id');
     }
 
     /**
@@ -90,6 +80,14 @@ class Profile extends Model
     }
 
     /**
+     * This determines which katas belongs to the profile.
+     */
+    public function ownerKatas(): HasMany
+    {
+        return $this->hasMany(Kata::class, 'owner_id', 'id');
+    }
+
+    /**
      * This determines which katas were skipped by the users
      * and see their solutions.
      */
@@ -105,8 +103,47 @@ class Profile extends Model
     {
         return $this->belongsToMany(Kata::class, 'solutions')
             ->as('solution')
-            ->withPivot('code', 'chrono', 'is_favorite', 'end_date')
+            ->withPivot('code', 'chrono', 'end_date')
             ->withTimestamps();
+    }
+
+    /**
+     * This determines which katas has been saved in the profile's saved kata list.
+     * Set the relationship using saved_katas pivot table.
+     */
+    public function savedKatas(): BelongsToMany
+    {
+        return $this->belongsToMany(Kata::class, 'saved_katas')
+            ->withPivot('num_orden')->withTimestamps();
+    }
+
+    /**
+     * Gets a certain number of saved elements manually sorted by the profile.
+     * If savedKataID is omitted, it return a Collection. Kata otherwise.
+     */
+    public static function getSavedKatas(
+        int|bool $savedKataID = false,
+        int $num_elem = -1,
+        string $pivotOrd = 'num_orden',
+        string $pivotDir = 'asc',
+    ): BelongsToMany | Kata | bool
+    {
+        $target = self::find(auth()?->user()?->id)?->savedKatas();
+
+        if (!$target) return false;
+
+        return ($savedKataID)
+            ? $target->find($savedKataID)
+            : $target->take($num_elem)
+                     ->orderByPivot($pivotOrd, $pivotDir);
+    }
+
+    /**
+     * This determines which katas the user has in their favorites list.
+     */
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
     }
 
     /**
@@ -147,37 +184,6 @@ class Profile extends Model
         return $this->belongsToMany(
             Profile::class, 'followers', 'follower_id', 'profile_id'
         );
-    }
-
-    /**
-     * This determines which katas the user has in their favorites list.
-     */
-    public function favorites(): Collection
-    {
-        return $this->passedKatas()->where('is_favorite', true)->get();
-    }
-
-    /**
-     * This add/remove a kata from profile's favorites list.
-     */
-    public static function toggleKataToFavorites(
-        int $kataID,
-        int $profileID = null,
-    ): void
-    {
-        $solution = self::find($profileID ?? auth()->user()->id)
-                            ?->passedKatas()->find($kataID)?->pivot;
-        $solution->is_favorite = !$solution->is_favorite;
-        $solution->save();
-    }
-
-    /**
-     * This determines which solutions katas has ever been in profile's favorite
-     * list.
-     */
-    public function profileFavoritesHistory(): HasMany
-    {
-        return $this->hasMany(Favorite::class);
     }
 
     /**
@@ -310,36 +316,5 @@ class Profile extends Model
         return $this->startedKataways()->get()
             ->filter(fn($kataway) => $kataway->pivot->end_date)
             ->values();
-    }
-
-    /**
-     * This determines which katas has been saved in the profile's saved kata list.
-     * Set the relationship using saved_katas pivot table.
-     */
-    public function savedKatas(): BelongsToMany
-    {
-        return $this->belongsToMany(Kata::class, 'saved_katas')
-            ->withPivot('num_orden')->withTimestamps();
-    }
-
-    /**
-     * Gets a certain number of saved elements manually sorted by the profile.
-     * If savedKataID is omitted, it return a Collection. Kata otherwise.
-     */
-    public static function getSavedKatas(
-        int|bool $savedKataID = false,
-        int $num_elem = -1,
-        string $pivotOrd = 'num_orden',
-        string $pivotDir = 'asc',
-    ): BelongsToMany | Kata | bool
-    {
-        $target = self::find(auth()?->user()?->id)?->savedKatas();
-
-        if (!$target) return false;
-
-        return ($savedKataID)
-            ? $target->find($savedKataID)
-            : $target->take($num_elem)
-                     ->orderByPivot($pivotOrd, $pivotDir);
     }
 }

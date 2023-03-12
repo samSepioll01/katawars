@@ -107,7 +107,7 @@ class Kata extends Model
     public function passedByProfiles(): BelongsToMany
     {
         return $this->belongsToMany(Profile::class, 'solutions')
-            ->withPivot('code', 'chrono', 'is_favorite', 'end_date')
+            ->withPivot('code', 'chrono', 'end_date')
             ->withTimestamps();
     }
 
@@ -135,15 +135,5 @@ class Kata extends Model
     public function assignedToKataways(): BelongsToMany
     {
         return $this->belongsToMany(Kataway::class);
-    }
-
-    // STATIC METHODS.
-
-    /**
-     * This determines which profiles passed succesly a kata.
-     */
-    public static function favorites($id): Collection
-    {
-        return self::find($id)?->passedByProfiles()->where('is_favorite', true)->get();
     }
 }

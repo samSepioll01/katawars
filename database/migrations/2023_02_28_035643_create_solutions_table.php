@@ -21,7 +21,6 @@ return new class extends Migration
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->text('code');
             $table->string('chrono')->nullable();
-            $table->boolean('is_favorite')->default(false);
             $table->timestamps();
             $table->timestamp('end_date')->nullable();
             $table->unique(['profile_id', 'kata_id']);

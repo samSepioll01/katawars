@@ -22,17 +22,8 @@ class Solution extends Model
         'kata_id',
         'code',
         'chrono',
-        'is_favorite',
         'end_date',
     ];
-
-    /**
-     * This determines if the solution has ever been in the profile favorites list.
-     */
-    public function hasEverBeenAsFavorite(): bool
-    {
-        return $this->favorite()?->first() ? true : false;
-    }
 
     /**
      * This determines the relationship with Favorite class.
