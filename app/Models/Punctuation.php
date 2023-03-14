@@ -11,7 +11,6 @@ class Punctuation extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
      * @var string[]
      */
     protected $fillable = [
@@ -19,4 +18,12 @@ class Punctuation extends Model
         'type',
         'points'
     ];
+
+    /**
+     * This determines all the punctuated records order by punctuation class.
+     */
+    public function punctuatedByClass()
+    {
+        return $this->hasMany(Punct::class);
+    }
 }

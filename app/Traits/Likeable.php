@@ -22,7 +22,7 @@ trait Likeable
     /**
      * Get all likes by profiles for a related Likeable model.
      */
-    public function likedByProfiles(): MorphToMany
+    public function likesByProfiles(): MorphToMany
     {
         return $this->morphToMany(Profile::class, 'likeables')
             ->as('like')
@@ -33,7 +33,7 @@ trait Likeable
      * Add a like from a profile for a related Likable model.
      * Return true if successful, false otherwise.
      */
-    public function like($profileID = null): bool
+    public function like(int $profileID = null): bool
     {
         $profileID = $profileID ?? auth()->user()->id;
         $profileExists = Profile::pluck('id')->contains($profileID);
@@ -44,7 +44,7 @@ trait Likeable
             return false;
         }
 
-        $this->likes()->attach($profileID);
+        $this->likesByProfiles()->attach($profileID);
         return true;
     }
 
@@ -54,7 +54,8 @@ trait Likeable
      */
     public function unlike($profileID = null): int
     {
-        return $this->likes()->detach($profileID ?? auth()->user()->id);
+        return $this->likesByProfiles()
+                    ->detach($profileID ?? auth()->user()->id);
     }
 
     /**
@@ -62,7 +63,7 @@ trait Likeable
      */
     public function likedBy($profileID = null): bool
     {
-        return (bool) $this->likes()
+        return (bool) $this->likesByProfiles()
             ->where('profile_id', $profileID ?? auth()->user()->id)
             ->count();
     }
@@ -91,6 +92,6 @@ trait Likeable
      */
     public function removeAllLikes(): int
     {
-        return $this->likes()->detach();
+        return $this->likesByProfiles()->detach();
     }
 }

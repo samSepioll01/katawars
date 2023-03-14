@@ -58,7 +58,7 @@ class Profile extends Model
      */
     public function allLikes()
     {
-        return $this->hasMany(Like::class, 'profile_id', 'id', 'likeables');
+        return $this->hasMany(Like::class);
     }
 
     /**
@@ -80,11 +80,27 @@ class Profile extends Model
     }
 
     /**
+     * This determines the entities that profile have already been punctuated.
+     */
+    public function allPunctuated()
+    {
+        return $this->hasMany(Punct::class);
+    }
+
+    /**
      * This determines which solutions have already been punctuated.
      */
     public function solutionsPunctuated(): MorphToMany
     {
         return $this->morphedByMany(Solution::class, 'punctuables');
+    }
+
+    /**
+     * This determines which resources have already been punctuated.
+     */
+    public function resourcesPunctuated(): MorphToMany
+    {
+        return $this->morphedByMany(Resource::class, 'punctuables');
     }
 
     /**
