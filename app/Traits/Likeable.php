@@ -3,18 +3,29 @@
 namespace App\Traits;
 
 use App\Models\Profile;
+use App\Models\Like;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait Likeable
 {
 
     /**
-     * Get all likes for a realted Likeable model.
+     * Get all likes for a related Likeable model.
      */
-    public function likes(): MorphToMany
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'likeables');
+    }
+
+    /**
+     * Get all likes by profiles for a related Likeable model.
+     */
+    public function likedByProfiles(): MorphToMany
     {
         return $this->morphToMany(Profile::class, 'likeables')
+            ->as('like')
             ->withTimestamps();
     }
 

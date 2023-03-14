@@ -54,9 +54,17 @@ class Profile extends Model
     }
 
     /**
+     * This determines all the likes that the profile has given.
+     */
+    public function allLikes()
+    {
+        return $this->hasMany(Like::class, 'profile_id', 'id', 'likeables');
+    }
+
+    /**
      * This determiens the likes that the profile have been given to the resources.
      */
-    public function likesGivenToResources(): MorphToMany
+    public function likesToResources(): MorphToMany
     {
         return $this->morphedByMany(Resource::class, 'likeables')
             ->withTimestamps();
@@ -65,7 +73,7 @@ class Profile extends Model
     /**
      * This determines the likes that profile have been given to the solutions.
      */
-    public function likesGivenToSolutions(): MorphToMany
+    public function likesToSolutions(): MorphToMany
     {
         return $this->morphedByMany(Solution::class, 'likeables')
             ->withTimestamps();
