@@ -37,26 +37,18 @@ trait Punctuable
 
     /**
      * Set the punctuation for a punctuable interaction.
-     *
-     * Comprobar BUG - Sólo permite un registro.
-     * Probar si se puede cambiar el profile_id de la relación polimórfica
-     * en vez de registrar el propietario, registrar el que da los puntos.
-     * Así se prodría acceder al propietario para darle lospuntos mediante
-     * el método likeables o algo así.
+     * Return true if the operation was succesfull, false otherwise.
      */
-    public function registerPunctuationTo($votedID = null)
+    public function registerPunctuationTo(int $voterID = null)
     {
-        $votedID = $votedID ?? $this->filterForeignKey();
-        $thisID = ($this::class === Kata::class)
-            ? $this->owner_id
-            : $this->profile_id;
+        $voterID = $voterID ?? auth()->user()->id;
 
-        if ($this->punctuatedBy() || !$this->profileExist($votedID)
-            || $votedID !== $thisID ) {
+        if ($this->punctuatedBy($voterID) || !$this->profileExist($voterID)
+            || $voterID === $this->selectForeignKey() ) {
             return false;
         }
 
-        $this->punctuatedByProfiles()->attach($votedID, [
+        $this->punctuatedByProfiles()->attach($voterID, [
             'punctuation_id' => Punctuation::where(
                 'denomination',
                 $this->denominations[$this::class]
@@ -65,19 +57,19 @@ trait Punctuable
         return true;
     }
 
-    public function assignPunctuationTo(int $votedID = null)
+    public function assignPunctuationTo(int $voterID = null)
     {
         return false;
     }
 
     /**
-     * Check if a profile has already obtained punctuation
+     * Check if a voter profile has already given punctuation
      * for this interaction.
      */
-    public function punctuatedBy(int $profileID = null): bool
+    public function punctuatedBy(int $voterID = null): bool
     {
         return (bool) $this->punctuated()
-            ->where('profile_id', $profileID ?? $this->profile_id)
+            ->where('profile_id', $voterID ?? auth()->user()->id)
             ->count();
     }
 
@@ -87,14 +79,14 @@ trait Punctuable
     }
 
     /**
-     * Check if the passed profile exist in database.
+     * Check if the passed voter profile exist in database.
      */
-    private function profileExist(int $profileID): bool
+    private function profileExist(int $voterID): bool
     {
-        return Profile::pluck('id')->contains($profileID);
+        return Profile::pluck('id')->contains($voterID);
     }
 
-    private function filterForeignKey(): int
+    private function selectForeignKey(): int
     {
         return ($this::class === Kata::class)
             ? $this->owner_id
