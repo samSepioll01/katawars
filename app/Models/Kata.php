@@ -27,8 +27,6 @@ class Kata extends Model
         'rank_id',
     ];
 
-    // RELATIONSHIPS METHODS
-
     /**
      * This determines which profile is the owner of the kata.
      */
