@@ -24,8 +24,6 @@ class Resource extends Model
         'kata_id',
     ];
 
-    // RELATIONSHIP METHODS
-
     /**
      * This determines which profile is the owner of the resource.
      */

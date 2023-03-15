@@ -13,19 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('punctuables', function (Blueprint $table) {
+        Schema::create('scoreables', function (Blueprint $table) {
             $table->id();
             $table->foreignId('profile_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->morphs('punctuables');
-            $table->foreignId('punctuation_id')->constrained()
+            $table->morphs('scoreables');
+            $table->foreignId('score_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
             $table->unique([
                 'profile_id',
-                'punctuables_type',
-                'punctuables_id',
-                'punctuation_id',
+                'scoreables_type',
+                'scoreables_id',
+                'score_id',
             ]);
         });
     }
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('punctuables');
+        Schema::dropIfExists('scoreables');
     }
 };

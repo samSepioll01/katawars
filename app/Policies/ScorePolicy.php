@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Punctuation;
+use App\Models\Score;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PunctuationPolicy
+class ScorePolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class PunctuationPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Punctuation  $punctuation
+     * @param  \App\Models\Score  $score
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Punctuation $punctuation)
+    public function view(User $user, Score $score)
     {
         //
     }
@@ -48,10 +48,10 @@ class PunctuationPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Punctuation  $punctuation
+     * @param  \App\Models\Score  $score
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Punctuation $punctuation)
+    public function update(User $user, Score $score)
     {
         //
     }
@@ -60,10 +60,10 @@ class PunctuationPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Punctuation  $punctuation
+     * @param  \App\Models\Score  $score
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Punctuation $punctuation)
+    public function delete(User $user, Score $score)
     {
         //
     }
@@ -72,10 +72,10 @@ class PunctuationPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Punctuation  $punctuation
+     * @param  \App\Models\Score  $score
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Punctuation $punctuation)
+    public function restore(User $user, Score $score)
     {
         //
     }
@@ -84,10 +84,10 @@ class PunctuationPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Punctuation  $punctuation
+     * @param  \App\Models\Score  $score
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Punctuation $punctuation)
+    public function forceDelete(User $user, Score $score)
     {
         //
     }

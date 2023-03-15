@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePunctuationRequest;
-use App\Http\Requests\UpdatePunctuationRequest;
-use App\Models\Punctuation;
+use App\Http\Requests\StoreScoreRequest;
+use App\Http\Requests\UpdateScoreRequest;
+use App\Models\Score;
 
-class PunctuationController extends Controller
+class ScoreController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class PunctuationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StorePunctuationRequest  $request
+     * @param  \App\Http\Requests\StoreScoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePunctuationRequest $request)
+    public function store(StoreScoreRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class PunctuationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Punctuation  $punctuation
+     * @param  \App\Models\Score  $score
      * @return \Illuminate\Http\Response
      */
-    public function show(Punctuation $punctuation)
+    public function show(Score $score)
     {
         //
     }
@@ -53,10 +53,10 @@ class PunctuationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Punctuation  $punctuation
+     * @param  \App\Models\Score  $score
      * @return \Illuminate\Http\Response
      */
-    public function edit(Punctuation $punctuation)
+    public function edit(Score $score)
     {
         //
     }
@@ -64,11 +64,11 @@ class PunctuationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdatePunctuationRequest  $request
-     * @param  \App\Models\Punctuation  $punctuation
+     * @param  \App\Http\Requests\UpdateScoreRequest  $request
+     * @param  \App\Models\Score  $score
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePunctuationRequest $request, Punctuation $punctuation)
+    public function update(UpdateScoreRequest $request, Score $score)
     {
         //
     }
@@ -76,10 +76,10 @@ class PunctuationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Punctuation  $punctuation
+     * @param  \App\Models\Score  $score
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Punctuation $punctuation)
+    public function destroy(Score $score)
     {
         //
     }

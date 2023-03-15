@@ -4,12 +4,12 @@ namespace App\Traits;
 
 use App\Models\Kata;
 use App\Models\Profile;
-use App\Models\Punct;
-use App\Models\Punctuation;
+use App\Models\Score;
+use App\Models\ScoreRecord;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-trait Punctuable
+trait Scoreable
 {
     private $denominations = [
         'App\Models\Solution' => 'likes',
@@ -20,18 +20,18 @@ trait Punctuable
     /**
      * Get all punctuations for a related Punctuable model.
      */
-    public function punctuated(): MorphMany
+    public function scores(): MorphMany
     {
-        return $this->morphMany(Punct::class, 'punctuables');
+        return $this->morphMany(ScoreRecord::class, 'scoreables');
     }
 
     /**
      * Get all registers that have been punctuated by the profiles.
      */
-    public function punctuatedByProfiles(): MorphToMany
+    public function scoredByProfiles(): MorphToMany
     {
-        return $this->morphToMany(Profile::class, 'punctuables')
-            ->withPivot(['punctuation_id'])
+        return $this->morphToMany(Profile::class, 'scoreables')
+            ->withPivot(['score_id'])
             ->withTimestamps();
     }
 
@@ -39,17 +39,17 @@ trait Punctuable
      * Set the punctuation for a punctuable interaction.
      * Return true if the operation was succesfull, false otherwise.
      */
-    public function registerPunctuationTo(int $voterID = null)
+    public function createScoreRecord(int $voterID = null)
     {
         $voterID = $voterID ?? auth()->user()->id;
 
-        if ($this->punctuatedBy($voterID) || !$this->profileExist($voterID)
+        if ($this->scoredBy($voterID) || !$this->profileExist($voterID)
             || $voterID === $this->selectForeignKey() ) {
             return false;
         }
 
-        $this->punctuatedByProfiles()->attach($voterID, [
-            'punctuation_id' => Punctuation::where(
+        $this->scoredByProfiles()->attach($voterID, [
+            'score_id' => Score::where(
                 'denomination',
                 $this->denominations[$this::class]
             )->first()->id,
@@ -57,7 +57,7 @@ trait Punctuable
         return true;
     }
 
-    public function assignPunctuationTo(int $voterID = null)
+    public function assignScoreTo(int $voterID = null)
     {
         return false;
     }
@@ -66,14 +66,14 @@ trait Punctuable
      * Check if a voter profile has already given punctuation
      * for this interaction.
      */
-    public function punctuatedBy(int $voterID = null): bool
+    public function scoredBy(int $voterID = null): bool
     {
-        return (bool) $this->punctuated()
+        return (bool) $this->scores()
             ->where('profile_id', $voterID ?? auth()->user()->id)
             ->count();
     }
 
-    public function punctuatedCount()
+    public function scoresCount()
     {
         return false;
     }

@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Punctuation>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Score>
  */
-class PunctuationFactory extends Factory
+class ScoreFactory extends Factory
 {
     /**
      * Define the model's default state.

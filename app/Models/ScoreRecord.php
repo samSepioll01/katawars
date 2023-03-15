@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Punct extends Model
+class ScoreRecord extends Model
 {
     use HasFactory;
 
@@ -15,7 +15,7 @@ class Punct extends Model
      * The name of the table for the related model.
      * @var string
      */
-    protected $table = 'punctuables';
+    protected $table = 'scoreables';
 
     /**
      * The attributes that are mass assignable.
@@ -23,9 +23,9 @@ class Punct extends Model
      */
     protected $fillable = [
         'profile_id',
-        'likeables_type',
-        'likeables_id',
-        'punctuation_id',
+        'scoreables_type',
+        'scoreables_id',
+        'score_id',
     ];
 
     /**
@@ -41,15 +41,15 @@ class Punct extends Model
     /**
      * This determines the punctuation assigned to an interaction.
      */
-    public function punctuation(): BelongsTo
+    public function score(): BelongsTo
     {
-        return $this->belongsTo(Punctuation::class);
+        return $this->belongsTo(Score::class);
     }
 
     /**
      * This determines the type of entity which obtained the points.
      */
-    public function likeable(): MorphTo
+    public function scoreable(): MorphTo
     {
         return $this->morphTo($this->table);
     }

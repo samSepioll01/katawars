@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\DB;
 
@@ -80,27 +81,35 @@ class Profile extends Model
     }
 
     /**
-     * This determines the entities that profile have already been punctuated.
+     * This determines the entities that profile have already been scored.
      */
-    public function allPunctuated()
+    public function allScored()
     {
-        return $this->hasMany(Punct::class);
+        return $this->hasMany(ScoreRecord::class);
     }
 
     /**
-     * This determines which solutions have already been punctuated.
+     * This determines which solutions have already been scored.
      */
-    public function solutionsPunctuated(): MorphToMany
+    public function solutionsScored(): MorphToMany
     {
-        return $this->morphedByMany(Solution::class, 'punctuables');
+        return $this->morphedByMany(Solution::class, 'scoreables');
     }
 
     /**
-     * This determines which resources have already been punctuated.
+     * This determines which resources have already been scored.
      */
-    public function resourcesPunctuated(): MorphToMany
+    public function resourcesScored(): MorphToMany
     {
-        return $this->morphedByMany(Resource::class, 'punctuables');
+        return $this->morphedByMany(Resource::class, 'scoreables');
+    }
+
+    /**
+     * This determines which favorites have already been scored.
+     */
+    public function favoritesScored(): MorphToMany
+    {
+        return $this->morphedByMany(Favorite::class, 'scoreables');
     }
 
     /**
@@ -347,5 +356,178 @@ class Profile extends Model
         return $this->startedKataways()->get()
             ->filter(fn($kataway) => $kataway->pivot->end_date)
             ->values();
+    }
+
+    public static function crearPruebas()
+    {
+        Rank::create([
+            'name' => 'white',
+            'level_up' => 450,
+        ]);
+
+        for ($i = 0; $i < 3; $i++) {
+            User::factory()->create();
+            Profile::create([
+                'is_banned' => false,
+                'is_deleted' => false,
+                'is_darkmode' => false,
+                'exp' => 0,
+                'honor' => 0,
+                'rank_id' => 1,
+            ]);
+        }
+
+        Mode::create(['denomination' => 'training']);
+        Language::create([
+            'name' => 'php',
+            'uri_logo' => 'blablabla',
+        ]);
+
+        for ($i = 1; $i <= 2; $i++) {
+            Kata::create([
+                'title' => "kata$i",
+                'description' => "descripcion$i",
+                'owner_id' => 1,
+                'mode_id' => 1,
+                'language_id' => 1,
+                'rank_id' => 1,
+            ]);
+        }
+
+        Profile::first()->passedKatas()->attach(
+            Kata::first()->id,
+            [
+                'code' => 'codigo1 kata1',
+                'chrono' => '00:05:46.23',
+                'end_date' => null,
+            ],
+        );
+
+        Profile::find(2)->passedKatas()->attach(
+            Kata::first()->id,
+            [
+                'code' => 'codigo2 kata1',
+                'chrono' => '00:03:45.17',
+                'end_date' => null,
+            ]
+        );
+
+        Profile::find(2)->passedKatas()->attach(
+            Kata::find(2)->id,
+            [
+                'code' => 'codigo1 kata2',
+                'chrono' => '00:03:45.17',
+                'end_date' => null,
+            ]
+        );
+
+        Favorite::create([
+            'profile_id' => 1,
+            'solution_id' => 1,
+        ]);
+
+        Favorite::create([
+            'profile_id' => 2,
+            'solution_id' => 2,
+        ]);
+
+        Favorite::create([
+            'profile_id' => 2,
+            'solution_id' => 3,
+        ]);
+
+        Profile::find(1)->savedKatas()->attach(
+            Kata::find(1),
+            [
+                'num_orden' => Profile::find(1)->savedKatas()->get()
+                    ->last()?->pivot->num_orden + 1,
+            ],
+        );
+
+        Profile::find(1)->savedKatas()->attach(
+            Kata::find(2),
+            [
+                'num_orden' => Profile::find(1)->savedKatas()->get()
+                    ->last()?->pivot->num_orden + 1,
+            ],
+        );
+
+        Profile::find(2)->savedKatas()->attach(
+            Kata::find(2),
+            [
+                'num_orden' => Profile::find(2)->savedKatas()->get()
+                    ->last()?->pivot->num_orden + 1,
+            ],
+        );
+
+        Kumite::create([
+            'profile_id' => 1,
+            'kata_id' => 1,
+            'opponent_id' => 2,
+            'winner_id' => 1,
+        ]);
+
+        Kumite::create([
+            'profile_id' => 2,
+            'kata_id' => 1,
+            'opponent_id' => 1,
+            'winner_id' => 1,
+        ]);
+
+        Kumite::create([
+            'profile_id' => 1,
+            'kata_id' => 2,
+            'opponent_id' => 2,
+            'winner_id' => 1,
+        ]);
+
+        Kumite::create([
+            'profile_id' => 2,
+            'kata_id' => 2,
+            'opponent_id' => 1,
+            'winner_id' => 1,
+        ]);
+
+        Kumite::create([
+            'profile_id' => 2,
+            'kata_id' => 2,
+            'opponent_id' => 3,
+            'winner_id' => 3,
+        ]);
+
+        Kumite::create([
+            'profile_id' => 3,
+            'kata_id' => 2,
+            'opponent_id' => 2,
+            'winner_id' => 3,
+        ]);
+
+        Resource::create([
+            'title' => 'resource1',
+            'description' => 'description resource1',
+            'url' => 'https://es.geekforgeek.com/invoke-method',
+            'profile_id' => 1,
+            'kata_id' => 1,
+        ]);
+
+        Resource::create([
+            'title' => 'resource2',
+            'description' => 'description for resource2',
+            'url' => 'https://www.php.net/array-intersect',
+            'profile_id' => 1,
+            'kata_id' => 2,
+        ]);
+
+		Score::create([
+			'denomination' => 'likes',
+			'type' => 'honor',
+			'points' => 15,
+		]);
+
+		Score::create([
+			'denomination' => 'add-favorites',
+			'type' => 'honor',
+			'points' => 30,
+        ]);
     }
 }
