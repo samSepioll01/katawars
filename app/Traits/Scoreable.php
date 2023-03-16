@@ -6,6 +6,7 @@ use App\Models\Kata;
 use App\Models\Profile;
 use App\Models\Score;
 use App\Models\ScoreRecord;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -57,9 +58,20 @@ trait Scoreable
         return true;
     }
 
-    public function assignScoreTo(int $voterID = null)
+    /**
+     * Assign the score to the owner of the entity on which the interaction
+     * is performed.
+     */
+    public function assignScore(): void
     {
-        return false;
+        $profile = Profile::find($this->selectForeignKey());
+        $profile->honor += Score::where(
+            'denomination',
+            $this->denominations[$this::class]
+        )
+        ->first()
+        ->points;
+        $profile->save();
     }
 
     /**
@@ -73,9 +85,12 @@ trait Scoreable
             ->count();
     }
 
-    public function scoresCount()
+    /**
+     * Get the number of scored records for this related Scoreable model.
+     */
+    public static function scoredCount($modelID = null): int | null
     {
-        return false;
+        return self::withCount('scores')->find($modelID)?->scores_count;
     }
 
     /**
@@ -86,6 +101,9 @@ trait Scoreable
         return Profile::pluck('id')->contains($voterID);
     }
 
+    /**
+     * This determines which identifier select depending on the model used.
+     */
     private function selectForeignKey(): int
     {
         return ($this::class === Kata::class)
