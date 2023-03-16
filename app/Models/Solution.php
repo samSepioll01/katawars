@@ -7,7 +7,7 @@ use App\Traits\Scoreable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Solution extends Model
 {
@@ -29,9 +29,9 @@ class Solution extends Model
     /**
      * This determines the relationship with Favorite class.
      */
-    public function favorites(): HasMany
+    public function favorite(): HasOne
     {
-        return $this->hasMany(Favorite::class);
+        return $this->hasOne(Favorite::class);
     }
 
     /**
