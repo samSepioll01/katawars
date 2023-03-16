@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,7 +29,7 @@ class Kata extends Model
     /**
      * This determines which profile is the owner of the kata.
      */
-    public function owner()
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(Profile::class, 'owner_id', 'id');
     }
