@@ -17,7 +17,9 @@ class KataWayFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => $this->faker->title(),
+            'description' => $this->faker->paragraph(),
+            'uri_image' => $this->faker->image(),
         ];
     }
 }

@@ -17,7 +17,12 @@ class ProfileFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'exp' => 0,
+            'honor' => 0,
+            'is_darkmode' => false,
+            'is_banned' => false,
+            'is_deleted' => false,
+            'rank_id' => 1,
         ];
     }
 }

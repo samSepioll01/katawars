@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Kata;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class VideoSolutionFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => $this->faker->sentence(6),
+            'youtube_code' => $this->faker->sentence(10),
+            'kata_id' => Kata::all()->random()->id,
         ];
     }
 }

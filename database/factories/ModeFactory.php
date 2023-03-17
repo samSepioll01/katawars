@@ -17,7 +17,7 @@ class ModeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'denomination' => $this->faker->unique()->word(),
         ];
     }
 }

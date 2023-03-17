@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('ranks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->bigInteger('level_up');
             $table->timestamps();
         });

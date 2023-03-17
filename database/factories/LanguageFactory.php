@@ -17,7 +17,8 @@ class LanguageFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->unique()->word(),
+            'uri_logo' => $this->faker->image(),
         ];
     }
 }

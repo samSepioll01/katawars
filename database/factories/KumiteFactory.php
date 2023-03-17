@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Kata;
+use App\Models\Profile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,14 @@ class KumiteFactory extends Factory
      */
     public function definition()
     {
+        $profileID = Profile::all()->random()->id;
+        $opponentID = Profile::all()->random()->id;
+
         return [
-            //
+            'profile_id' => $profileID,
+            'kata_id' => Kata::all()->random()->id,
+            'opponent_id' => $opponentID,
+            'winner_id' => collect($profileID, $opponentID)->random(),
         ];
     }
 }

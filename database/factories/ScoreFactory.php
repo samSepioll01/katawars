@@ -17,7 +17,9 @@ class ScoreFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'denomination' => $this->faker->unique()->word(),
+            'type' => $this->faker->word(),
+            'points' => $this->faker->numberBetween(15, 100),
         ];
     }
 }

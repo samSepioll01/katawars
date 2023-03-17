@@ -17,7 +17,8 @@ class HelpFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => $this->faker->title(),
+            'description' => $this->faker->paragraph(),
         ];
     }
 }

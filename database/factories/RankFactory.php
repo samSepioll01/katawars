@@ -17,7 +17,8 @@ class RankFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->unique()->word(),
+            'level_up' => $this->faker->numberBetween(100, 1000),
         ];
     }
 }
