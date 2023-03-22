@@ -18,13 +18,21 @@ class Kata extends Model
      * @var string[]
      */
     protected $fillable = [
-        'title',
-        'description',
+        'challenge_id',
         'owner_id',
-        'mode_id',
         'language_id',
         'rank_id',
+        'mode_id',
     ];
+
+    /**
+     * This determines which challenge is associated to the kata.
+     * Challenge model contains the title, description, slug for the kata.
+     */
+    public function challenge(): BelongsTo
+    {
+        return $this->belongsTo(Challenge::class);
+    }
 
     /**
      * This determines which profile is the owner of the kata.

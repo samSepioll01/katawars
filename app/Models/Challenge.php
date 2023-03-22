@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Language extends Model
+class Challenge extends Model
 {
     use HasFactory;
 
@@ -16,14 +16,15 @@ class Language extends Model
      * @var string[]
      */
     protected $fillable = [
-        'name',
-        'extension',
-        'bg_gradient',
-        'uri_logo',
+        'title',
+        'description',
+        'slug',
+        'examples',
+        'notes',
     ];
 
     /**
-     * This determinines which katas belongs to a language.
+     * This determines which katas are associated to the challenge.
      */
     public function katas(): HasMany
     {

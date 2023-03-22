@@ -18,8 +18,10 @@ class KumiteFactory extends Factory
      */
     public function definition()
     {
-        $profileID = Profile::all()->random()->id;
-        $opponentID = Profile::all()->random()->id;
+        do {
+            $profileID = Profile::all()->random()->id;
+            $opponentID = Profile::all()->random()->id;
+        } while ($profileID !== $opponentID);
 
         return [
             'profile_id' => $profileID,

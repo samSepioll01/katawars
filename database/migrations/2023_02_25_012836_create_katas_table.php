@@ -15,17 +15,18 @@ return new class extends Migration
     {
         Schema::create('katas', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
+            $table->foreignId('challenge_id')->constrained()
+                ->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('owner_id')->constrained('profiles', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('mode_id')->constrained('modes', 'id')
+            $table->foreignId('language_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('language_id')->constrained('languages', 'id')
+            $table->foreignId('rank_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('rank_id')->constrained('ranks', 'id')
+            $table->foreignId('mode_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
+            $table->unique(['challenge_id', 'language_id']);
         });
     }
 

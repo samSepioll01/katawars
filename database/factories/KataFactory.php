@@ -2,8 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Challenge;
 use App\Models\Language;
+use App\Models\Mode;
 use App\Models\Profile;
+use App\Models\Rank;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,12 +22,11 @@ class KataFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->title(),
-            'description' => $this->faker->paragraph(),
+            'challenge_id' => Challenge::all()->random()->id,
             'owner_id' => Profile::all()->random()->id,
-            'mode_id' => 1,
+            'mode_id' => Mode::all()->random()->id,
             'language_id' => Language::all()->random()->id,
-            'rank_id' => 1,
+            'rank_id' => Rank::all()->random()->id,
         ];
     }
 }
