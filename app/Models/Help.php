@@ -14,5 +14,5 @@ class Help extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['title', 'description'];
+    protected $fillable = ['title', 'description', 'section'];
 }

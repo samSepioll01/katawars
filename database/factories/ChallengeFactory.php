@@ -17,6 +17,7 @@ class ChallengeFactory extends Factory
     public function definition()
     {
         return [
+            'url' => $this->faker->url(),
             'title' => $this->faker->title(),
             'description' => $this->faker->paragraph(6),
             'slug' => $this->faker->word(),

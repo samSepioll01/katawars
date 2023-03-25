@@ -7,10 +7,15 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Challenge;
 use App\Models\Help;
+use App\Models\Kata;
 use App\Models\Language;
 use App\Models\Mode;
+use App\Models\Profile;
 use App\Models\Rank;
+use App\Models\Resource;
+use App\Models\Score;
 use App\Models\User;
+use App\Models\VideoSolution;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
 
@@ -23,9 +28,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->generateRanks();
+        $this->generateUsersProfilesRolesPermissions(10);
+        $this->generateModes();
+        $this->generateLanguages();
+        $this->generateHelps();
+        $this->generateCategories();
+        $this->generateChallengesKatas(10);
+        $this->generateVideoSolutions();
+        $this->generateResources(10);
+        $this->generateScores();
+    }
 
-        // CREAR ROLES Y PERMISOS
-
+    /**
+     * Generate the ranks for the profile and katas.
+     */
+    private function generateRanks(): void
+    {
         Rank::create(['name' => 'white', 'level_up' => 100]);
         Rank::create(['name' => 'yellow', 'level_up' => 200]);
         Rank::create(['name' => 'orange', 'level_up' => 300]);
@@ -33,44 +52,79 @@ class DatabaseSeeder extends Seeder
         Rank::create(['name' => 'blue', 'level_up' => 500]);
         Rank::create(['name' => 'brown', 'level_up' => 600]);
         Rank::create(['name' => 'black', 'level_up' => 700]);
+    }
+
+    /**
+     * Generate the users, profiles, roles and permision.
+     * Assign the permisions to the role and the role to the users.
+     */
+    private function generateUsersProfilesRolesPermissions(int $userSeeds): void
+    {
+        // CREAR ROLES Y PERMISOS
 
         // CREAR ADMIN Y ASIGNAR ROLES
 
-        User::factory(10)->create();
+        // Profiles is created associate in the KataFactory.
+        User::factory($userSeeds)->create();
 
         // ASIGNAR ROLES A USUARIOS
+    }
 
+    /**
+     * Generate the modes for the katas.
+     */
+    private function generateModes(): void
+    {
         Mode::create(['denomination' => 'training']);
         Mode::create(['denomination' => 'blitz']);
         Mode::create(['denomination' => 'kumite']);
+    }
 
+    /**
+     * Generate the avaliable languages for the katas.
+     */
+    private function generateLanguages(): void
+    {
         Language::create([
             'name' => 'PHP',
             'extension' => '.php',
-            'bg_gradient' => '',
+            'bg_gradient' => 'bg-gradient-to-tl from-indigo-600 to-violet-600',
             'uri_logo' => '',
         ]);
 
         Language::create([
             'name' => 'Python',
             'extension' => '.py',
-            'bg_gradient' => '',
+            'bg_gradient' => 'bg-gradient-to-br from-indigo-700 to-sky-600',
             'uri_logo' => '',
         ]);
 
         Language::create([
             'name' => 'Javascript',
             'extension' => '.js',
-            'bg_gradient' => '',
+            'bg_gradient' => 'bg-gradient-to-br from-yellow-600 to-amber-400',
             'uri_logo' => '',
         ]);
+    }
 
-        Language::create([
-            'name' => 'Java',
-            'extension' => '.java',
-            'bg_gradient' => '',
-            'uri_logo' => '',
-        ]);
+    /**
+     * Generate content for the Help section.
+     */
+    private function generateHelps(): void
+    {
+
+        $generateLanguagesHTML = function (Collection $languages, bool $hasImages = false)
+        {
+            [$returnHTML, $size, $languageImage] = ['', '25px', ''];
+
+            foreach ($languages as $language) {
+                if ($hasImages) {
+                    $languageImage = "<img src='$language->uri_logo' class='w-[$size] h-[$size] rounded-all' />";
+                }
+                $returnHTML .= "<li>$languageImage $language->name.</li>";
+            }
+            return $returnHTML;
+        };
 
         Help::create([
             'title' => 'What are Katas?',
@@ -145,7 +199,7 @@ class DatabaseSeeder extends Seeder
             'section' => 'general',
         ]);
 
-        $returnHTML = $this->generateLanguagesHTML(Language::all());
+        $returnHTML = $generateLanguagesHTML(Language::all());
 
         Help::create([
             'title' => 'What languages are available actually?',
@@ -246,7 +300,13 @@ class DatabaseSeeder extends Seeder
             'description' => 'When the user deletes an account, the profile associated with the account is blocked. From that moment on, the user’s associated data such as photos, username and other activity will no longer be visible to other members of the community. The user will no longer be able to access their account from the login. The platform will store the data for the appropriate legal time for its request by the competent authorities.',
             'section' => 'profile',
         ]);
+    }
 
+    /**
+     * Generate all the Categories for the Katas.
+     */
+    private function generateCategories(): void
+    {
         Category::create(['name' => 'algebra']);
         Category::create(['name' => 'algorithms']);
         Category::create(['name' => 'arrays']);
@@ -269,24 +329,155 @@ class DatabaseSeeder extends Seeder
         Category::create(['name' => 'sorting']);
         Category::create(['name' => 'strings']);
         Category::create(['name' => 'validation']);
-
-
-
-
     }
 
-    private function generateLanguagesHTML(Collection $languages, $images = false)
+    /**
+     * Generate the challenges and as many katas as there are languages.
+     */
+    private function generateChallengesKatas(int $seeds = 10): void
     {
-        $returnHTML = '';
-        $size = '25px';
+        Challenge::factory($seeds)->create();
 
-        foreach($languages as $language) {
-            if ($images) {
-                $languageImage = "<img src='$language->uri_logo' class='w-[$size] h-[$size] rounded-all' />";
+        for ($i = 0; $i < $seeds; $i++) {
+
+            for ($j = 0; $j < Language::all()->count(); $j++) {
+
+                Kata::create([
+                    'challenge_id' => $i + 1,
+                    'owner_id' => Profile::all()->random()->id,
+                    'mode_id' => 1,
+                    'language_id' => $j + 1,
+                    'rank_id' => 1,
+                ]);
             }
-            $returnHTML .= "<li>$languageImage $language->name.</li>";
         }
+    }
 
-        return $returnHTML;
+    /**
+     * Generate the video solutions for the katas that have been skipped.
+     */
+    private function generateVideoSolutions(): void
+    {
+        VideoSolution::create([
+            'title' => 'VideoSolution 1',
+            'youtube_code' => "<iframe width='560' height='315' src='https://www.youtube.com/embed/BRI8wqUMdao' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
+            'kata_id' => 1,
+        ]);
+
+        VideoSolution::create([
+            'title' => 'VideoSolution 2',
+            'youtube_code' => "<iframe width='560' height='315' src='https://www.youtube.com/embed/fk6uS1Bq8mg' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
+            'kata_id' => 2,
+        ]);
+    }
+
+    /**
+     * Generate the resources for the katas.
+     */
+    private function generateResources(int $seeds): void
+    {
+        Resource::factory($seeds)->create();
+    }
+
+    /**
+     * Generate the scores for the application.
+     */
+    private function generateScores(): void
+    {
+        Score::create([
+            'denomination' => 'follower',
+            'type' => 'honor',
+            'points' => 30,
+        ]);
+
+        Score::create([
+            'denomination' => 'training',
+            'type' => 'exp',
+            'points' => 10,
+        ]);
+
+        Score::create([
+            'denomination' => 'passed kata to owner',
+            'type' => 'honor',
+            'points' => 5,
+        ]);
+
+        Score::create([
+            'denomination' => 'blitz',
+            'type' => 'exp',
+            'points' => 30,
+        ]);
+
+        Score::create([
+            'denomination' => 'kumite',
+            'type' => 'exp',
+            'points' => 50,
+        ]);
+
+        Score::create([
+            'denomination' => 'like',
+            'type' => 'honor',
+            'points' => 10,
+        ]);
+
+        Score::create([
+            'denomination' => 'add favorites',
+            'type' => 'honor',
+            'points' => 30,
+        ]);
+
+        Score::create([
+            'denomination' => 'create resource',
+            'type' => 'honor',
+            'points' => 10,
+        ]);
+
+        Score::create([
+            'denomination' => 'complete kataway',
+            'type' => 'exp',
+            'points' => 100,
+        ]);
+
+        Score::create([
+            'denomination' => 'create kata',
+            'type' => 'honor',
+            'points' => 100,
+        ]);
+
+        Score::create([
+            'denomination' => 'level-up yellow',
+            'type' => 'honor',
+            'points' => 100,
+        ]);
+
+        Score::create([
+            'denomination' => 'level-up orange',
+            'type' => 'honor',
+            'points' => 250,
+        ]);
+
+        Score::create([
+            'denomination' => 'level-up green',
+            'type' => 'honor',
+            'points' => 500,
+        ]);
+
+        Score::create([
+            'denomination' => 'level-up blue',
+            'type' => 'honor',
+            'points' => 1000,
+        ]);
+
+        Score::create([
+            'denomination' => 'level-up brown',
+            'type' => 'honor',
+            'points' => 1500,
+        ]);
+
+        Score::create([
+            'denomination' => 'level-up black',
+            'type' => 'honor',
+            'points' => 3000,
+        ]);
     }
 }

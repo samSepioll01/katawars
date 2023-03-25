@@ -24,9 +24,9 @@ class KataFactory extends Factory
         return [
             'challenge_id' => Challenge::all()->random()->id,
             'owner_id' => Profile::all()->random()->id,
-            'mode_id' => Mode::all()->random()->id,
+            'mode_id' => 1,
             'language_id' => Language::all()->random()->id,
-            'rank_id' => Rank::all()->random()->id,
+            'rank_id' => 1,
         ];
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('video_solutions', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('youtube_code');
+            $table->text('youtube_code');
             $table->foreignId('kata_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
