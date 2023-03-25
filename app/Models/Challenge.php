@@ -16,6 +16,7 @@ class Challenge extends Model
      * @var string[]
      */
     protected $fillable = [
+        'url',
         'title',
         'description',
         'slug',

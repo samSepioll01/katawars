@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('challenges', function (Blueprint $table) {
             $table->id();
+            $table->string('url')->unique();
             $table->string('title');
             $table->text('description');
             $table->string('slug')->unique();
