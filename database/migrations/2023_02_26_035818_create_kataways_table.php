@@ -15,9 +15,11 @@ return new class extends Migration
     {
         Schema::create('kataways', function (Blueprint $table) {
             $table->id();
+            $table->string('url')->unique();
+            $table->string('slug')->unique();
             $table->string('title');
             $table->text('description');
-            $table->string('uri_image');
+            $table->string('uri_image')->unique();
             $table->timestamps();
         });
     }

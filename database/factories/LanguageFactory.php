@@ -18,7 +18,7 @@ class LanguageFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->word(),
-            'uri_logo' => $this->faker->image(),
+            'uri_logo' => $this->faker->unique()->image(),
         ];
     }
 }

@@ -17,7 +17,7 @@ class ProfileFactory extends Factory
     public function definition()
     {
         return [
-            'url' => $this->faker->url(),
+            'url' => $this->faker->unique()->url(),
             'exp' => 0,
             'honor' => 0,
             'is_darkmode' => false,

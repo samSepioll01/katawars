@@ -23,6 +23,7 @@ class Kata extends Model
         'language_id',
         'rank_id',
         'mode_id',
+        'uri_test',
     ];
 
     /**

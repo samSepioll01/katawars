@@ -21,7 +21,7 @@ class ResourceFactory extends Factory
         return [
             'title' => $this->faker->sentence(6),
             'description' => $this->faker->paragraph(3),
-            'url' => $this->faker->url(),
+            'url' => $this->faker->unique()->url(),
             'profile_id' => Profile::all()->random()->id,
             'kata_id' => Kata::all()->random()->id,
         ];

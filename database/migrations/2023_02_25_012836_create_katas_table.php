@@ -25,6 +25,7 @@ return new class extends Migration
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('mode_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('uri_test')->unique();
             $table->timestamps();
             $table->unique(['challenge_id', 'language_id']);
         });

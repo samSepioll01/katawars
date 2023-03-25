@@ -16,6 +16,8 @@ class Kataway extends Model
      * @var string[]
      */
     protected $fillable = [
+        'url',
+        'slug',
         'title',
         'description',
         'uri_image',
