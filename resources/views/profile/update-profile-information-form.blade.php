@@ -81,6 +81,18 @@
                 @endif
             @endif
         </div>
+
+        <!-- Bio -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-jet-label for="bio" value="{{ __('Bio') }}" />
+
+            <x-profile.bio>
+                {{ auth()->user()->bio }}
+            </x-profile.bio>
+
+            <x-jet-input-error for="bio" class="mt-2" />
+
+        </div>
     </x-slot>
 
     <x-slot name="actions">
