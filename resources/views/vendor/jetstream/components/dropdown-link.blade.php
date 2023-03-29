@@ -1,1 +1,19 @@
-<a {{ $attributes->merge(['class' => 'block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition']) }}>{{ $slot }}</a>
+@props([
+    'baseClasses' => 'w-full inline-flex block p-2 leading-5 text-sm tracking-wide rounded-md text-slate-800 hover:bg-gray-200
+                     dark:hover:bg-slate-700 dark:hover:text-slate-300 dark:text-slate-500 transition',
+    'button' => '',
+])
+
+@php
+    $button = $button === 'true' ? true : false;
+@endphp
+
+@if ($button)
+    <button {{ $attributes->merge(['class' => $baseClasses]) }}>
+        {{ $slot }}
+    </button>
+@else
+    <a {{ $attributes->merge(['class' => $baseClasses]) }}>
+        {{ $slot }}
+    </a>
+@endif

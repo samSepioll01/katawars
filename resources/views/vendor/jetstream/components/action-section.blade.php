@@ -5,7 +5,7 @@
     </x-jet-section-title>
 
     <div class="mt-5 md:mt-0 md:col-span-2">
-        <div class="px-4 py-5 sm:p-6 bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6 shadow-md sm:rounded-lg bg-slate-50 dark:bg-slate-900/40 border border-gray-200 dark:border-slate-800/10">
             {{ $content }}
         </div>
     </div>
