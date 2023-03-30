@@ -7,7 +7,7 @@
 
 <div class="min-h-screen flex justify-center 2xl:items-center pt-0 sm:pt-6 transition-all">
 
-    <div class="max-w-6xl md:h-[530px] @if($url) lg:w-3/4 @else lg:w-1/3 @endif flex flex-col justify-center md:flex-row border border-gray-200
+    <div class="max-w-7xl md:h-[530px] 2xl:h-[650px] @if($url) lg:w-5/6 @else lg:w-1/2 @endif flex flex-col justify-center md:flex-row border border-gray-200
               dark:border-gray-800 rounded-lg sm:shadow-md bg-slate-50 dark:bg-slate-900"
     >
         @if ($url)
@@ -44,7 +44,7 @@
             </div>
 
 
-            <div class="w-full max-w-lg mt-6 px-6 py-4 bg-slate-50 dark:bg-slate-900 overflow-hidden sm:rounded-lg">
+            <div class="w-full max-w-lg mt-6 px-6 py-4 bg-slate-50 dark:bg-slate-900 sm:rounded-lg md:overflow-y-auto 2xl:overflow-hidden scrollbar-inner-menu">
                 {{ $slot }}
             </div>
         </div>
