@@ -174,7 +174,17 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{ 'block': responsiveOpen, 'hidden': !responsiveOpen }" class="hidden sm:hidden">
+    <div
+        :class="{ 'block': responsiveOpen, 'hidden': !responsiveOpen }"
+        class="hidden sm:hidden"
+        @resize.window="
+            width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+            if (width > 640 && responsiveOpen) {
+                responsiveOpen = false;
+                transformHub(DOMelems.responsiveHub, responsiveOpen);
+            }
+        "
+    >
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 max-h-[80vh] overflow-y-auto scrollbar-inner-menu">
@@ -248,7 +258,7 @@
                     <x-layout.dropdown-separator />
 
                     <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
-                        {{ __('Configuration') }}
+                        {{ __('Settings') }}
                     </x-jet-responsive-nav-link>
 
                     <x-jet-responsive-nav-link @click="idiom = !idiom" id="idioms" @click.away="idiom = false" @close.stop="idiom = false" class="cursor-pointer">

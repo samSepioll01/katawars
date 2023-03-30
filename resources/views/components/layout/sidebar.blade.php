@@ -1,6 +1,6 @@
 <div
     x-data="{
-        hub: document.querySelector('.hub'),
+        hub: DOMelems.sidebarHub,
     }"
     x-init="$watch('sidebarOpen', value => {
         if (value) {
