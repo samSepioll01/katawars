@@ -42,7 +42,7 @@
         "
         x-on:close.stop="sidebarOpen = false"
         x-on:keydown.escape.window="sidebarOpen = false"
-        class="sidebar h-screen overflow-y-auto scrollbar-inner-menu w-64 z-10 p-4 absolute top-0 pt-20
+        class="sidebar h-screen overflow-y-auto scrollbar-inner-menu w-64 z-10 p-4 fixed pt-10 pb-20
              bg-slate-50 dark:bg-gray-900 transform shadow-outter-sm shadow-gray-400 dark:shadow-gray-700 transition-all"
         x-transition:enter="ease-fast-slide duration-800"
         x-transition:enter-start="-translate-x-64"
