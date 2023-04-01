@@ -4,41 +4,34 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
+        <title>{{ config('app.name', 'KataWars') }}</title>
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
-
+        <link rel="shortcut icon" type="image/svg" href="/storage/logo/logo7.svg"/>
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+        <!-- Import method throught Vite port without type module attribute -->
+        <script src="{{ env('APP_VITE_URL') }}/resources/js/hubsidebar.js" async></script>
         <!-- Styles -->
         @livewireStyles
     </head>
-    <body class="font-sans antialiased">
+    <body x-data="hubSidebar()" :class="{ 'overflow-hidden': responsiveOpen}"
+          class="bg-slate-100 dark:bg-gradient-to-tr dark:from-cyan-700 dark:via-cyan-500 dark:to-violet-500 transition-all duration-300"
+    >
         <x-jet-banner />
 
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+        @livewire('navigation-menu')
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
+        <x-layout.sidebar>
+            <x-layout.sidebar-content />
+        </x-layout.sidebar>
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
-
+        <main class="font-sans text-gray-900 antialiased dark:bg-slate-900/70">
+            {{ $slot }}
+        </main>
+        <x-layout.footer />
         @stack('modals')
-
         @livewireScripts
     </body>
 </html>
