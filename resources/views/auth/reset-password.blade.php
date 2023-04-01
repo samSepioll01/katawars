@@ -1,7 +1,13 @@
+@php
+    $url = Request::routeIs('password.reset');
+    $type = $url ? 'text' : 'icon';
+    $width = $url ? 'w-72' : 'w-10';
+@endphp
+
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <x-logo class="rounded w-10 transition-all" type="icon"/>
+            <x-logo class="{{ $width }} rounded transition-all" type="{{$type}}"/>
         </x-slot>
 
         <x-jet-validation-errors class="mb-4" />

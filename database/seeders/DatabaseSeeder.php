@@ -16,6 +16,7 @@ use App\Models\Resource;
 use App\Models\Score;
 use App\Models\User;
 use App\Models\VideoSolution;
+use Faker\Factory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
 
@@ -348,6 +349,7 @@ class DatabaseSeeder extends Seeder
                     'mode_id' => 1,
                     'language_id' => $j + 1,
                     'rank_id' => 1,
+                    'uri_test' => Factory::create()->unique()->url(),
                 ]);
             }
         }
