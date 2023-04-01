@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\appThemeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', [appThemeController::class, 'initialConfig'])->name('home');
+Route::post('/save-theme', [appThemeController::class, 'saveModifiedTheme'])
+    ->name('save-theme');
+
 Route::get('/privacy-policy', fn() => view('policy'))->name('privacy-policy');
 Route::get('/terms-of-service', fn() => view('terms'))->name('terms-service');
 
@@ -22,7 +26,10 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/user/dashboard', function () {
-        return view('profile.dashboard');
-    })->name('dashboard');
+    Route::get('/user/dashboard', [appThemeController::class, 'authUserConfig'])
+        ->name('dashboard');
+
+    Route::get('/user', function() {
+        return redirect()->route('dashboard');
+    });
 });
