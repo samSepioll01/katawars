@@ -3,11 +3,13 @@
     Request::routeIs('register') ? $url = '/storage/images/pinkmeduse.webp' : null;
     Request::routeIs('password.request') ? $url = '/storage/images/interestellar.webp' : null;
     $url = $url ?? false;
+    $width = $url ? 'lg:w-5/6' : 'lg:w-1/2';
+    $resetLink = Request::routeIs('password.reset');
 @endphp
 
 <div class="min-h-screen flex justify-center 2xl:items-center pt-0 sm:pt-6 transition-all">
 
-    <div class="max-w-7xl md:h-[530px] 2xl:h-[650px] @if($url) lg:w-5/6 @else lg:w-1/2 @endif flex flex-col justify-center md:flex-row border border-gray-200
+    <div class="{{ $width }} w-full max-w-7xl md:h-[530px] 2xl:h-[650px] flex flex-col justify-center md:flex-row border border-gray-200
               dark:border-gray-800 rounded-lg sm:shadow-md bg-slate-50 dark:bg-slate-900"
     >
         @if ($url)
@@ -20,7 +22,7 @@
             </div>
         @endif
 
-        <div class="@if($url) md:w-1/2 @endif my-4 md:mr-4 flex flex-col sm:justify-evenly items-center bg-slate-50 dark:bg-slate-900 border border-transparent @if($url) md:border-l-gray-200 md:dark:border-l-gray-600 @endif">
+        <div class="@if($url) md:w-1/2 @endif @if($resetLink) w-full @endif my-4 md:mr-4 flex flex-col sm:justify-evenly items-center bg-slate-50 dark:bg-slate-900 border border-transparent @if($url) md:border-l-gray-200 md:dark:border-l-gray-600 @endif">
 
             <div class="w-full flex flex-row justify-center items-end">
                 <div class="transition-all px-5">
