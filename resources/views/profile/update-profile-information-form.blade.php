@@ -38,15 +38,19 @@
                     </span>
                 </div>
 
-                <x-jet-secondary-button class="mt-2 mr-2" type="button" x-on:click.prevent="$refs.photo.click()">
-                    {{ __('Select A New Photo') }}
-                </x-jet-secondary-button>
+                <div class="p-2 flex justify-center">
+                    <div class="w-full flex justify-center xl:flex xl:justify-between">
+                        <x-jet-secondary-button type="button" class="mr-2 w-48 hover:shadow-md" x-on:click.prevent="$refs.photo.click()">
+                            {{ __('Select A New Photo') }}
+                        </x-jet-secondary-button>
 
-                @if ($this->user->profile_photo_path)
-                    <x-jet-secondary-button type="button" class="mt-2" wire:click="deleteProfilePhoto">
-                        {{ __('Remove Photo') }}
-                    </x-jet-secondary-button>
-                @endif
+                        @if ($this->user->profile_photo_path)
+                            <x-jet-secondary-button type="button" class="w-48 flex justify-center hover:shadow-md" wire:click="deleteProfilePhoto">
+                                {{ __('Remove Photo') }}
+                            </x-jet-secondary-button>
+                        @endif
+                    </div>
+                </div>
 
                 <x-jet-input-error for="photo" class="mt-2" />
             </div>
@@ -66,10 +70,10 @@
             <x-jet-input-error for="email" class="mt-2" />
 
             @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! $this->user->hasVerifiedEmail())
-                <p class="text-sm mt-2">
+                <p class="text-sm mt-2 dark:text-slate-100">
                     {{ __('Your email address is unverified.') }}
 
-                    <button type="button" class="underline text-sm text-gray-600 hover:text-gray-900" wire:click.prevent="sendEmailVerification">
+                    <button type="button" class="underline text-sm text-gray-600 hover:text-violet-700 dark:text-cyan-700 dark:hover:text-cyan-400" wire:click.prevent="sendEmailVerification">
                         {{ __('Click here to re-send the verification email.') }}
                     </button>
                 </p>
@@ -96,7 +100,7 @@
     </x-slot>
 
     <x-slot name="actions">
-        <x-jet-action-message class="mr-3" on="saved">
+        <x-jet-action-message class="mr-3 dark:text-slate-100" on="saved">
             {{ __('Saved.') }}
         </x-jet-action-message>
 
