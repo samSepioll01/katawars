@@ -1,9 +1,7 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <a href="{{ route('home') }}">
-                <x-logo class="rounded w-72 transition-all" type="text"/>
-            </a>
+            <x-jet-authentication-card-logo />
         </x-slot>
 
         <div x-data="{ recovery: false }">
