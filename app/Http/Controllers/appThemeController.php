@@ -32,7 +32,7 @@ class appThemeController extends Controller
      */
     public function initialConfig()
     {
-        return true;
+        return view('welcome')->render();
     }
 
     /**
