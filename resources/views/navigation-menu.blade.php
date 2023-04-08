@@ -45,7 +45,7 @@
                                             url('/storage/icons/modo-nocturno.png')
                                     }}
                                 @else
-                                    {{ session('urlModeIcon') ?? url('/storage/icons/modo-nocturno.png') }}
+                                    {{ session('urlModeIcon') ?? url('/storage/icons/brillo.png') }}
                                 @endauth"
                             alt="Change Theme Mode"
                     >

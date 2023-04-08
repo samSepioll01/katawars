@@ -86,11 +86,6 @@
         border-radius: 10px;
     }
 
-    .scrollbar-light::-webkit-scrollbar-button {
-        background-color: rgb(255 255 255 / 0.9);
-        height: 64px;
-    }
-
     /* Scrollbar settings to Dropdown and Side Menu */
 
     .scrollbar-inner-menu::-webkit-scrollbar {

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 
 class appThemeController extends Controller
 {
+
     /**
      * @var Array Contain the information about modes configurations.
      */
@@ -32,7 +32,12 @@ class appThemeController extends Controller
      */
     public function initialConfig()
     {
-        return view('welcome')->render();
+        // Difference between first time git in app vs get in previously.
+        $this->setSessionTheme(
+            session()->missing('theme') ? 'dark' : null
+        );
+
+        return auth()->check() ? redirect()->route('dashboard') : view('welcome')->render();
     }
 
     /**
@@ -44,17 +49,28 @@ class appThemeController extends Controller
     }
 
     /**
-     * Handles operations to persist the data from manual interface theme changes.
+     * Handles operations to persist data from manual interface theme change.
      */
     public function saveModifiedTheme()
     {
-        return true;
+        if (request()->ajax()) {
+
+            if (auth()->check()) {
+                $profile = auth()->user()->profile;
+                $profile->is_darkmode = request()->theme === 'dark' ? true : false;
+                $profile->save();
+            }
+
+            $this->setSessionTheme(request()->theme);
+
+            return response()->json(['success' => true, 'theme' => request()->theme]);
+        }
     }
 
     /**
-     * Set the config for the user session or for a named theme passed.
+     * Set the config theme for the user session or for a named theme passed.
      */
-    private function setSessionTheme(string|null $theme = null)
+    private function setSessionTheme($theme = null)
     {
         session($this->modesValues[$theme ?? session('theme')]);
     }
