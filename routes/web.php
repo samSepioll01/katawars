@@ -26,7 +26,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/user/dashboard', [appThemeController::class, 'authUserConfig'])
+    Route::get('/user/dashboard', [appThemeController::class, 'authUserThemeConfig'])
         ->name('dashboard');
 
     Route::get('/user', function() {
