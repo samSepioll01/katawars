@@ -36,29 +36,18 @@
 
             <div class="w-full flex items-center justify-center sm:justify-end ml-6">
 
-                <x-jet-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        Cambiar Modo
-                    </x-slot>
-                    <x-slot name="content">
-                        <div class="flex flex-row">
-                            <div>Imagen1</div>
-                            <div>Imagen2</div>
-                        </div>
-                    </x-slot>
-                </x-jet-dropdown>
-
+                <!-- Change Mode Button -->
                 <button id="btn-mode" class="h-7 w-7">
                     <img id="mode-icon"
-                         src="@auth
+                            src="@auth
                                     {{ auth()->user()->profile->is_darkmode ?
                                             url('/storage/icons/brillo.png') :
                                             url('/storage/icons/modo-nocturno.png')
                                     }}
-                              @else
-                                    {{ session('urlModeIcon') ?? url('/storage/icons/brillo.png') }}
-                              @endauth"
-                         alt="Change Theme Mode"
+                                @else
+                                    {{ session('urlModeIcon') ?? url('/storage/icons/modo-nocturno.png') }}
+                                @endauth"
+                            alt="Change Theme Mode"
                     >
                 </button>
 
