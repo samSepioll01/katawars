@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PunctuationSeeder extends Seeder
+class ScoreSeeder extends Seeder
 {
     /**
      * Run the database seeds.
