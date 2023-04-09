@@ -37,5 +37,8 @@
         <x-layout.footer />
         @stack('modals')
         @livewireScripts
+        <script>
+            window.Laravel = {!! json_encode(['userId' => auth()->check() ? auth()->user()->id : null]) !!}
+        </script>
     </body>
 </html>

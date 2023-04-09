@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ThemeModeUpdated;
 
 class appThemeController extends Controller
 {
@@ -62,6 +63,10 @@ class appThemeController extends Controller
             }
 
             $this->setSessionTheme(request()->theme);
+
+            event( (new ThemeModeUpdated(auth()->user()))
+                ->dontBroadcastToCurrentUser()
+            );
 
             return response()->json(['success' => true, 'theme' => request()->theme]);
         }

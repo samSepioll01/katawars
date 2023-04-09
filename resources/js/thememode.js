@@ -76,3 +76,16 @@ btnChangeMode.addEventListener('click', eClick => {
         sendAxiosChangeThemeRequest('dark');
     }
 });
+
+if (window.Laravel?.userId) {
+
+    window.Echo.private(`theme.user.${window.Laravel.userId}`)
+        .listen('ThemeModeUpdated', (eEcho) => {
+            changeTheme(eEcho.theme);
+        });
+} else {
+    window.Echo.channel(`theme.${csrf_token}`)
+        .listen('ThemeModeUpdated', (eEcho) => {
+            changeTheme(eEcho.theme);
+        });
+}
