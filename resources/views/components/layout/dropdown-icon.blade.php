@@ -25,8 +25,9 @@
 
 @php
     $sidebar = $sidebar ? true : false;
+    $width = $sidebar ? 'w-8' : 'w-5';
 @endphp
 
 <div {{ $attributes->merge(['class' => 'pr-2']) }}>
-    <img class="@if($sidebar) w-8 @else w-5 @endif" src="{{ $icons[$srcPath] }}" alt="Dropdown Icons"/>
+    <img class="{{ $width }}" src="{{ $icons[$srcPath] }}" alt="Dropdown Icons"/>
 </div>
