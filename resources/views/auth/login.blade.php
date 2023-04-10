@@ -40,5 +40,8 @@
                 </x-jet-button>
             </div>
         </form>
+
+        <x-utilities.btn-github-login />
+
     </x-jet-authentication-card>
 </x-guest-layout>
