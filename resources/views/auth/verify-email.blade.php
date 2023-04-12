@@ -28,14 +28,14 @@
             <div>
                 <a
                     href="{{ route('profile.show') }}"
-                    class="underline text-sm text-gray-600 hover:text-gray-900"
+                    class="verify-email-link"
                 >
                     {{ __('Edit Profile') }}</a>
 
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf
 
-                    <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 ml-2">
+                    <button type="submit" class="verify-email-link ml-2">
                         {{ __('Log Out') }}
                     </button>
                 </form>

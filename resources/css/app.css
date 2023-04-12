@@ -6,7 +6,19 @@
 
 @layer utilities {
 
-    /* Scrollbar settings to Dark Mode */
+    /* Mozilla Firefox scrollbar styles */
+
+    .moz-scrollbar-dark {
+        scrollbar-width: thin;
+        scrollbar-color: #8d8e8f #061527;
+    }
+
+    .moz-scrollbar-light {
+        scrollbar-width: thin;
+        scrollbar-color: #cccdce #fff;
+    }
+
+    /* Dark Mode scrollbar styles - others browsers */
 
     .scrollbar-dark::-webkit-scrollbar {
         -webkit-appearance: none;
@@ -47,7 +59,7 @@
 
 
 
-    /* Scrollbar settings to Light Mode */
+    /* Light Mode scrollbar styles - other browsers */
 
     .scrollbar-light::-webkit-scrollbar {
         -webkit-appearance: none;
@@ -86,7 +98,7 @@
         border-radius: 10px;
     }
 
-    /* Scrollbar settings to Dropdown and Side Menu */
+    /* Dropdown and Side Menu inner scrollbar styles */
 
     .scrollbar-inner-menu::-webkit-scrollbar {
         -webkit-appearance: none;
@@ -124,6 +136,10 @@
         height: 0px;
     }
 
+    /*
+        Custom ellipsis effect to break very long text rows.
+        The final number of the class means in which line the ellipsis effect appears.
+    */
     .text-ellipsis-1 {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -301,5 +317,9 @@
 
     .ease-fast-slide {
         @apply ease-[cubic-bezier(.53,.42,.59,.14)];
+    }
+
+    .verify-email-link {
+        @apply underline text-sm text-gray-600 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors duration-300;
     }
 }
