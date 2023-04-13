@@ -2,16 +2,11 @@
 
 namespace App\Actions\Fortify;
 
+use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
-use Illuminate\Support\Str;
 use App\Models\Profile;
-use App\Models\User;
-use Exception;
-use Illuminate\Database\QueryException;
-use Illuminate\Validation\ValidationException;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -25,13 +20,13 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     public function update($user, array $input)
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id), false],
+            'name' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
             'bio' => ['nullable', 'max:255', 'string'],
         ])->validateWithBag('updateProfileInformation');
 
-        $this->validateUrlProfile($user, $input['name']);
+        Profile::validateUrlProfile($input['name'], $user);
 
         if (isset($input['photo'])) {
             $user->updateProfilePhoto($input['photo']);
@@ -66,27 +61,5 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         ])->save();
 
         $user->sendEmailVerificationNotification();
-    }
-
-    /**
-     * Validate that the new nickname is abailable to generate url slug to the user's profile.
-     */
-    protected function validateUrlProfile(User $user, string $inputName): void
-    {
-        $slug = Str::slug($inputName);
-        $url = url("/users/$slug");
-
-        try {
-            $profile = $user->profile;
-            $profile->url = $url;
-            $profile->save();
-
-        } catch (QueryException $e) {
-            throw ValidationException::withMessages(
-                [
-                    'name' => "The name has already been taken. This is showed as your main page nickname."
-                ]
-            );
-        }
     }
 }
