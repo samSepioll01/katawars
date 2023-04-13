@@ -4,7 +4,7 @@
     </div>
 
     <div class="mt-8 text-2xl dark:text-slate-100">
-        Welcome to your Jetstream application, PACO!
+        Welcome to your Jetstream application, {{ \Illuminate\Support\Str::upper(auth()->user()->name) }}!
     </div>
 
     <div class="mt-6 text-gray-500">

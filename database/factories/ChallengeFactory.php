@@ -17,16 +17,16 @@ class ChallengeFactory extends Factory
      */
     public function definition()
     {
-        $words = '';
-        foreach ($this->faker->unique()->words(2) as $elem) {
-            $words .= $elem . ' ';
-        }
-
         return [
             'url' => $this->faker->unique()->url(),
             'title' => $this->faker->title(),
             'description' => $this->faker->paragraph(6),
-            'slug' => Str::slug($words, '-'),
+            'slug' => Str::slug(
+                collect(
+                    $this->faker->unique()->words(2)
+                )
+                ->join(' ')
+            ),
             'examples' => $this->faker->text(1000),
             'notes' => $this->faker->paragraph(2)
         ];

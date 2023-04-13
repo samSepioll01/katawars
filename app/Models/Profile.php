@@ -21,6 +21,7 @@ class Profile extends Model
      * @var string[]
      */
     protected $fillable = [
+        'slug',
         'url',
         'exp',
         'honor',

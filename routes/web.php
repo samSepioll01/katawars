@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\appThemeController;
+use App\Http\Controllers\Auth\GitHubLoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,12 +15,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Guest
+
 Route::get('/', [appThemeController::class, 'initialConfig'])->name('home');
+Route::get('/privacy-policy', fn() => view('policy'))->name('privacy-policy');
+Route::get('/terms-of-service', fn() => view('terms'))->name('terms-service');
+
+// Layout Change Theme
+
 Route::post('/save-theme', [appThemeController::class, 'saveModifiedTheme'])
     ->name('save-theme');
 
-Route::get('/privacy-policy', fn() => view('policy'))->name('privacy-policy');
-Route::get('/terms-of-service', fn() => view('terms'))->name('terms-service');
+// GitHub Login
+
+Route::get('/login/github', [GitHubLoginController::class, 'redirectToProvider']);
+Route::get('/login/github/callback', [GitHubLoginController::class, 'handleProviderCallback']);
+
+// Auth User
 
 Route::middleware([
     'auth:sanctum',

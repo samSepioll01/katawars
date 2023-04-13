@@ -1,5 +1,5 @@
 <div class="p-5 mt-5">
-    <a href="" class="text-slate-400 hover:text-slate-100">
+    <a href="/login/github" class="text-slate-400 hover:text-slate-100">
         <div class="p-2 flex flex-row rounded-3xl border border-gray-800 dark:border-gray-800 bg-gray-900 dark:bg-black hover:bg-gradient-to-r hover:from-gray-900 hover:to-cyan-900/30">
             <div class="w-1/4 flex justify-center items-center">
                 <svg class="" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
