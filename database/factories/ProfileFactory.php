@@ -17,11 +17,13 @@ class ProfileFactory extends Factory
      */
     public function definition()
     {
+        $slug = Str::slug(
+            collect($this->faker->unique()->words(2))->join(' ')
+        );
+
         return [
-            'slug' => Str::slug(
-                collect($this->faker->unique()->words(2))->join(' ')
-            ),
-            'url' => $this->faker->unique()->url(),
+            'slug' => $slug,
+            'url' => url("/users/$slug"),
             'exp' => 0,
             'honor' => 0,
             'is_darkmode' => false,
