@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
             <x-logo class="rounded w-72 transition-all" type="text"/>
@@ -42,4 +42,4 @@
             </div>
         </div>
     </x-jet-authentication-card>
-</x-guest-layout>
+</x-app-layout>
