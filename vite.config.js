@@ -6,6 +6,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
+                'resources/css/mail.css',
                 'resources/js/app.js',
                 'resources/js/thememode.js',
             ],

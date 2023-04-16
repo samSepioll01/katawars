@@ -29,7 +29,7 @@ Route::post('/save-theme', [appThemeController::class, 'saveModifiedTheme'])
 // GitHub Login
 
 Route::get('/login/github', [GitHubLoginController::class, 'redirectToProvider']);
-Route::get('/login/github/callback', [GitHubLoginController::class, 'handleProviderCallback']);
+Route::get('/login/github/callback/{sync?}', [GitHubLoginController::class, 'handleProviderCallback']);
 
 // Auth User
 

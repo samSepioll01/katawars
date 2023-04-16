@@ -1,4 +1,4 @@
-<div class="p-5 mt-5">
+<div class="p-5 mt-5" name="github">
     <a href="/login/github" class="text-slate-400 hover:text-slate-100">
         <div class="p-2 flex flex-row rounded-3xl border border-gray-800 dark:border-gray-800 bg-gray-900 dark:bg-black hover:bg-gradient-to-r hover:from-gray-900 hover:to-cyan-900/30">
             <div class="w-1/4 flex justify-center items-center">

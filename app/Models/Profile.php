@@ -376,8 +376,10 @@ class Profile extends Model
                        This is showed as your main page nickname."
         ];
 
-        if (Profile::where('slug', $slug)->exists()) {
-            throw ValidationException::withMessages($errorBag);
+        if (auth()->user()?->name !== $inputName) {
+            if (Profile::where('slug', $slug)->exists()) {
+                throw ValidationException::withMessages($errorBag);
+            }
         }
 
         if ($user) {

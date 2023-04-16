@@ -25,7 +25,11 @@ class DeleteUser implements DeletesUsers
         //$user->tokens->each->delete();
 
         if ($user->email_verified_at) {
-            $user->delete();
+            if ($user->github_id) {
+                $user->forceDelete();
+            } else {
+                $user->delete();
+            }
         } else {
             $profile->delete();
             $user->forceDelete();
