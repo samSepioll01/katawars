@@ -28,7 +28,8 @@ Route::post('/save-theme', [appThemeController::class, 'saveModifiedTheme'])
 
 // GitHub Login
 
-Route::get('/login/github', [GitHubLoginController::class, 'redirectToProvider']);
+Route::get('/login/github', [GitHubLoginController::class, 'redirectToProvider'])
+    ->name('github.login');
 Route::get('/login/github/callback', [GitHubLoginController::class, 'handleProviderCallback']);
 
 // Auth User
@@ -45,5 +46,6 @@ Route::middleware([
         return redirect()->route('dashboard');
     });
 
-    Route::get('/user/profile/sync/github', [GitHubLoginController::class, 'redirectToProvider']);
+    Route::get('/user/profile/sync/github', [GitHubLoginController::class, 'redirectToProvider'])
+        ->name('github.sync');
 });

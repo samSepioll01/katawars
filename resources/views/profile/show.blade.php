@@ -35,9 +35,8 @@
 
             <x-jet-section-border />
             <div class="mt-10 sm:mt-0">
-                <a href="{{ url('/user/profile/sync/github') }}">Sync With GitHub</a>
+                @livewire('git-hub-sync-account')
             </div>
-
 
             @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
                 <x-jet-section-border />
