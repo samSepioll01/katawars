@@ -30,7 +30,7 @@ class GitHubLoginController extends Controller
     public function handleProviderCallback()
     {
 
-        //dd(request()->session()->get('_previous.url'));
+        dd(request()->session()->get('_previous.url'));
         try {
             $githubUser = Socialite::driver('github')->user();
         } catch (InvalidStateException $e) {
