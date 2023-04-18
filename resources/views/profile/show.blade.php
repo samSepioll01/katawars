@@ -47,4 +47,11 @@
             @endif
         </div>
     </div>
+
+    @if (session()->has('syncStatus'))
+        <x-layout.flash type="{{ session('syncStatus') }}">
+            {{ session('syncMessage') }}
+        </x-layout.flash>
+    @endif
+
 </x-app-layout>

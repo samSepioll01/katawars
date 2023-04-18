@@ -4,7 +4,7 @@
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Synchronize the data from your GitHub account as an external provider to your local account.') }}
+        {{ __('Synchronize the data from your GitHub account with your local account by using GitHub as an external provider.') }}
     </x-slot>
 
     <x-slot name="content">
@@ -17,9 +17,6 @@
                 {{ __('Sync With GitHub') }}
             </x-jet-button>
 
-            <x-jet-action-message class="ml-3" on="loggedOut">
-                {{ __('Done.') }}
-            </x-jet-action-message>
         </div>
 
         <!-- Log Out Other Devices Confirmation Modal -->
@@ -31,7 +28,7 @@
             <x-slot name="content">
                 {{ __('Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.') }}
 
-                <div class="mt-4" x-data="{}" x-on:confirming-logout-other-browser-sessions.window="setTimeout(() => $refs.password.focus(), 250)">
+                <div class="mt-4" x-data="{}" x-on:confirming-github-sync-account.window="setTimeout(() => $refs.password.focus(), 250)">
                     <x-jet-input type="password" class="mt-1 block w-3/4"
                                 placeholder="{{ __('Password') }}"
                                 x-ref="password"

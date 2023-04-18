@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Mail\GitHubLoginPasswordMail;
 use App\Models\Profile;
 use App\Models\User;
+use Laravel\Socialite\Two\User as GithubUser;
+use Exception;
+use GuzzleHttp\Exception\ClientException;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -50,6 +53,16 @@ class GitHubLoginController extends Controller
             $githubUser = Socialite::driver('github')->user();
         } catch (InvalidStateException $e) {
             return redirect()->route('login');
+
+        } catch (ClientException $e) {
+            return redirect()->route('profile.show')
+                ->with([
+                    'syncMessage' => 'Synchtonization Cancelled.',
+                    'syncStatus' => 'error',
+                ]);
+
+        } catch (Exception $e) {
+            return redirect('/');
         }
 
         $emailExists = User::where('email', $githubUser->getEmail())->exists();
@@ -57,6 +70,7 @@ class GitHubLoginController extends Controller
         $isSameUser = User::where('email', $githubUser->getEmail())
             ->first()?->id === $userHasGitHub?->id;
 
+        // Case login or register with github account.
         if ($previousURL === $this->allowsURL['login']) {
 
             if ($emailExists && $userHasGitHub && $isSameUser) {
@@ -85,10 +99,32 @@ class GitHubLoginController extends Controller
             return redirect()->route('dashboard');
         }
 
+        // Case synchronization
         if ($previousURL === $this->allowsURL['sync']) {
-            dd($previousURL, $githubUser);
-        }
 
+            [$message, $status] = ['', ''];
+
+            if (!auth()->user()->github_id) {
+                if (auth()->user()->email === $githubUser->getEmail()) {
+                    $this->syncGitHubAccount($githubUser);
+                } else {
+                    $status = 'error';
+                    $message = "Account Synchronization Failed.
+                                External and local emails don't match.
+                                You must update manually some of both
+                                before they match and then try again.";
+                }
+            }
+
+            $message = 'GitHub Account Synchronized Succesfully.';
+            $status = 'success';
+
+            return redirect()->route('profile.show')
+                ->with([
+                    'syncStatus' => $status,
+                    'syncMessage' => $message,
+                ]);
+        }
     }
 
     // Auxiliar Functions
@@ -160,13 +196,39 @@ class GitHubLoginController extends Controller
     }
 
     /**
-     *
+     * Synchronize data from Github account locally.
+     * @param GithubUser $githubUser
+     * @return void
      */
-    private function syncGitHubAccount()
+    private function syncGitHubAccount(GithubUser $githubUser): void
     {
-        // Sincorniza la cuenta localmente cuando el usuario ha estado registrado previamente y hace clic en sincronizar.
+        $name = $githubUser->getNickname();
+        $user = User::find(auth()->user()->id);
+        $profile = $user->profile;
 
+        $userWithSameName = User::where('name', $name);
 
+        if ($userWithSameName->exists()) {
+            if ($user->id !== $userWithSameName->first()->id) {
+                $name = User::generateUniqueName($name);
+            }
+        }
+
+        $user->name = $name;
+        $user->bio = $githubUser['bio'] ?? $user->bio;
+        $user->profile_photo_path = $githubUser->getAvatar();
+        $user->github_id = $githubUser->getId();
+        $user->github_repos_url = $githubUser['repos_url'];
+        $user->github_token = $githubUser->token;
+        $user->github_refresh_token = $githubUser->refreshToken;
+        $user->github_expires_in = $githubUser->expiresIn;
+        $user->save();
+
+        $slug = Str::slug($user->name);
+
+        $profile->slug = $slug;
+        $profile->url = url("/users/$slug");
+        $profile->save();
     }
 
     /**
