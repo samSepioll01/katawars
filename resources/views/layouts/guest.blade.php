@@ -5,7 +5,7 @@
         @auth
             {{ auth()->user()->profile->is_darkmode ? 'dark' : ''  }}
         @else
-            {{ session('theme') ?? '' }}
+            {{ session('theme') ?? 'dark' }}
         @endauth
     "
 >
