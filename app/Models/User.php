@@ -127,6 +127,15 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         }
 
+        // Sanitize the generated string by setting the lenght
+        // constraint for that field.
+        if (strlen($res) > 255) {
+            $res = substr($res, 0, 250);
+            if (self::where('name', $res)->exists()) {
+                $res = Hash::make($res);
+            }
+        }
+
         return $res;
     }
 }
