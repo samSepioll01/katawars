@@ -103,7 +103,7 @@ class User extends Authenticatable implements MustVerifyEmail
         // by incrementally cutting the seed.
         if (self::where('name', $name)->exists()) {
             for ($i = 1; $i < 15; $i++) {
-                $res = $name . substr( (string) $seed, 0, $i);
+                $res = $name . substr( (string) $seed, 8);
                 if (self::where('name', $res)->doesntExist()) {
                     break;
                 }

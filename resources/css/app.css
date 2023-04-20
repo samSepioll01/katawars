@@ -322,4 +322,8 @@
     .verify-email-link {
         @apply underline text-sm text-gray-600 hover:text-violet-700 dark:text-slate-400 dark:hover:text-slate-50 transition-colors duration-300;
     }
+
+    .dark-placeholder::placeholder {
+        @apply text-slate-300;
+    }
 }

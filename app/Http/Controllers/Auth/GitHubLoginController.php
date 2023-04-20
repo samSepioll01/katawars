@@ -13,7 +13,9 @@ use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Laravel\Socialite\Two\InvalidStateException;
 
 class GitHubLoginController extends Controller
@@ -65,13 +67,34 @@ class GitHubLoginController extends Controller
             return redirect('/');
         }
 
-        $emailExists = User::where('email', $githubUser->getEmail())->exists();
-        $userHasGitHub = User::where('github_id', $githubUser->getId())->first();
-        $isSameUser = User::where('email', $githubUser->getEmail())
-            ->first()?->id === $userHasGitHub?->id;
+        if ($this->filterGitHubUser($githubUser)->fails()) {
+
+            if ($previousURL === $this->allowsURL['login']) {
+                return redirect()->route('login')
+                ->withErrors([
+                    'message' => [
+                        'GitHub is not available in this momment.',
+                        'Sorry, try later.'
+                    ]
+                ]);
+            }
+
+            if ($previousURL === $this->allowsURL['sync']) {
+                return redirect()->route('profile.show')
+                    ->with([
+                        'syncMessage' => 'Oops! Something went wrong with GitHub. Sorry try later.',
+                        'syncStatus' => 'error',
+                    ]);
+            }
+        }
 
         // Case login or register with github account.
         if ($previousURL === $this->allowsURL['login']) {
+
+            $emailExists = User::where('email', $githubUser->getEmail())->exists();
+            $userHasGitHub = User::where('github_id', $githubUser->getId())->first();
+            $isSameUser = User::where('email', $githubUser->getEmail())
+                ->first()?->id === $userHasGitHub?->id;
 
             if ($emailExists && $userHasGitHub && $isSameUser) {
                 $user = $this->updateGitHubLogin($githubUser);
@@ -104,20 +127,20 @@ class GitHubLoginController extends Controller
 
             [$message, $status] = ['', ''];
 
-            if (!auth()->user()->github_id) {
-                if (auth()->user()->email === $githubUser->getEmail()) {
-                    $this->syncGitHubAccount($githubUser);
-                } else {
-                    $status = 'error';
-                    $message = "Account Synchronization Failed.
-                                External and local emails don't match.
-                                You must update manually some of both
-                                before they match and then try again.";
-                }
-            }
+            if (auth()->user()->email === $githubUser->getEmail()) {
 
-            $message = 'GitHub Account Synchronized Succesfully.';
-            $status = 'success';
+                $this->syncGitHubAccount($githubUser);
+
+                $message = 'GitHub Account Synchronized Succesfully.';
+                $status = 'success';
+
+            } else {
+                $status = 'error';
+                $message = "Account Synchronization Failed.
+                            External and local emails don't match.
+                            You must update manually some of both
+                            before they match and then try again.";
+            }
 
             return redirect()->route('profile.show')
                 ->with([
@@ -167,6 +190,7 @@ class GitHubLoginController extends Controller
             'bio' => $githubUser->user['bio'],
             'profile_photo_path' => $githubUser->getAvatar(),
             'github_id' => $githubUser->getId(),
+            'github_url' => $githubUser->user['html_url'],
             'github_repos_url' => $githubUser->user['repos_url'],
             'github_token' => $githubUser->token,
             'github_refresh_token' => $githubUser->refreshToken,
@@ -210,7 +234,7 @@ class GitHubLoginController extends Controller
 
         if ($userWithSameName->exists()) {
             if ($user->id !== $userWithSameName->first()->id) {
-                $name = User::generateUniqueName($name);
+                $name = auth()->user()->name;
             }
         }
 
@@ -249,4 +273,52 @@ class GitHubLoginController extends Controller
         );
     }
 
+    /**
+     * Filter and set the constraints for the fields that will be used.
+     */
+    private function filterGitHubUser($githubUser)
+    {
+
+        $githubUser2Validate = [
+            'github_id' => $githubUser->getId(),
+            'name' => $githubUser->getNickname(),
+            'email' => $githubUser->getEmail(),
+            'bio' => $githubUser->user['bio'],
+            'avatar_url' => $githubUser->user['avatar_url'],
+            'html_url' => $githubUser->user['html_url'],
+            'repos_url' => $githubUser->user['repos_url'],
+            'token' => $githubUser->token,
+            'refreshToken' => $githubUser->refreshToken,
+            'expiresIn' => $githubUser->expiresIn,
+        ];
+
+        return Validator::make($githubUser2Validate, [
+            'github_id' => [
+                'required',
+                'integer',
+                auth()->check()
+                    ? Rule::unique('users')
+                        ->ignore(auth()->user()->github_id, 'github_id')
+                    : '',
+            ],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'string',
+                'max:255',
+                'email',
+                auth()->check()
+                    ? Rule::unique('users')
+                        ->ignore(auth()->user()->email, 'email')
+                    : '',
+            ],
+            'bio' => [ 'string', 'nullable', 'max:255'],
+            'avatar_url' => ['string', 'nullable', 'max:2048', 'url'],
+            'html_url' => ['string', 'required', 'max:2048', 'url'],
+            'repos_url' => ['string', 'required', 'max:2048', 'url'],
+            'token' => ['string', 'required', 'max:255'],
+            'refreshToken' => ['string', 'nullable', 'max:255'],
+            'expiresIn' => ['string', 'nullable', 'max:255'],
+        ]);
+    }
 }
