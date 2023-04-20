@@ -302,16 +302,7 @@ class GitHubLoginController extends Controller
                     : '',
             ],
             'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'max:255',
-                'email',
-                auth()->check()
-                    ? Rule::unique('users')
-                        ->ignore(auth()->user()->email, 'email')
-                    : '',
-            ],
+            'email' => ['required', 'string', 'max:255', 'email'],
             'bio' => [ 'string', 'nullable', 'max:255'],
             'avatar_url' => ['string', 'nullable', 'max:2048', 'url'],
             'html_url' => ['string', 'required', 'max:2048', 'url'],
