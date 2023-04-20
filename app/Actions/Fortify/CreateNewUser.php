@@ -22,6 +22,8 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input)
     {
+        Profile::validateUrlProfile($input['name']);
+
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -36,9 +38,10 @@ class CreateNewUser implements CreatesNewUsers
             'bio' => '',
         ]);
 
-        $slug = Str::slug($user->name);
+        $slug = Str::slug($input['name']);
 
         Profile::create([
+            'slug' => $slug,
             'url' => url("/users/$slug"),
             'exp' => 0,
             'honor' => 0,

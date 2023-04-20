@@ -18,9 +18,21 @@ class DeleteUser implements DeletesUsers
         $profile = Profile::find($user->id);
         $profile->is_deleted = true;
         $profile->updated_at = now();
+        $profile->slug = null;
+        $profile->url = null;
         $profile->save();
         //$user->deleteProfilePhoto();
         //$user->tokens->each->delete();
-        $user->delete();
+
+        if ($user->email_verified_at) {
+            if ($user->github_id) {
+                $user->forceDelete();
+            } else {
+                $user->delete();
+            }
+        } else {
+            $profile->delete();
+            $user->forceDelete();
+        }
     }
 }

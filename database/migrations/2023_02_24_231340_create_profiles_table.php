@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('url')->unique();
+            $table->string('url')->unique()->nullable();
+            $table->string('slug')->unique()->nullable();
             $table->bigInteger('exp');
             $table->bigInteger('honor');
             $table->boolean('is_darkmode');

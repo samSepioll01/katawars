@@ -53,7 +53,10 @@ $width = $widths[$width];
             class=" {{ $width }} {{ $alignmentClasses }} {{ $dropdownClasses }}"
             style="display: none;"
     >
-        <div id="dropdown-content" class="{{ $contentClasses }} max-h-[81vh] overflow-y-auto scrollbar-inner-menu">
+        <div
+            id="dropdown-content"
+            class="{{ $contentClasses }} max-h-[81vh] overflow-y-auto scrollbar-inner-menu moz-scrollbar-light dark:moz-scrollbar-dark"
+        >
             {{ $content }}
         </div>
     </div>

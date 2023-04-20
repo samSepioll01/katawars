@@ -2,14 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
 
 class Profile extends Model
 {
@@ -21,6 +26,7 @@ class Profile extends Model
      * @var string[]
      */
     protected $fillable = [
+        'slug',
         'url',
         'exp',
         'honor',
@@ -356,5 +362,33 @@ class Profile extends Model
         return $this->startedKataways()->get()
             ->filter(fn($kataway) => $kataway->pivot->end_date)
             ->values();
+    }
+
+    /**
+     * Validate that the new nickname is abailable to generate url slug to the user's profile.
+     */
+    public static function validateUrlProfile(string $inputName, User $user = null): void
+    {
+        $slug = Str::slug($inputName);
+        $url = url("/users/$slug");
+        $errorBag = [
+            'name' => "The name has already been taken.
+                       This is showed as your main page nickname."
+        ];
+
+        $profileSameSlug = Profile::where('slug', $slug);
+
+        if ($profileSameSlug->exists()) {
+            if (auth()->user()?->id !== $profileSameSlug->first()->user->id) {
+                throw ValidationException::withMessages($errorBag);
+            }
+        }
+
+        if ($user) {
+            $profile = $user->profile;
+            $profile->slug = $slug;
+            $profile->url = $url;
+            $profile->save();
+        }
     }
 }

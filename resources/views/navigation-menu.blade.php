@@ -39,14 +39,14 @@
                 <!-- Change Mode Button -->
                 <button id="btn-mode" class="h-7 w-7">
                     <img id="mode-icon"
-                            src="@auth
+                            src="@if (auth()->user()?->email_verified_at)
                                     {{ auth()->user()->profile->is_darkmode ?
                                             url('/storage/icons/brillo.png') :
                                             url('/storage/icons/modo-nocturno.png')
                                     }}
                                 @else
                                     {{ session('urlModeIcon') ?? url('/storage/icons/brillo.png') }}
-                                @endauth"
+                                @endif"
                             alt="Change Theme Mode"
                     >
                 </button>

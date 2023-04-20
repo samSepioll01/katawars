@@ -2,10 +2,11 @@
 
 namespace App\Actions\Fortify;
 
+use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use App\Models\Profile;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -19,11 +20,13 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     public function update($user, array $input)
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
             'bio' => ['nullable', 'max:255', 'string'],
         ])->validateWithBag('updateProfileInformation');
+
+        Profile::validateUrlProfile($input['name'], $user);
 
         if (isset($input['photo'])) {
             $user->updateProfilePhoto($input['photo']);

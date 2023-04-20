@@ -33,6 +33,11 @@
                 @livewire('profile.logout-other-browser-sessions-form')
             </div>
 
+            <x-jet-section-border />
+            <div class="mt-10 sm:mt-0">
+                @livewire('git-hub-sync-account')
+            </div>
+
             @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
                 <x-jet-section-border />
 
@@ -42,4 +47,11 @@
             @endif
         </div>
     </div>
+
+    @if (session()->has('syncStatus'))
+        <x-layout.flash type="{{ session('syncStatus') }}">
+            {{ session('syncMessage') }}
+        </x-layout.flash>
+    @endif
+
 </x-app-layout>

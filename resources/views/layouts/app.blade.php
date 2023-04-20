@@ -1,5 +1,14 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ auth()->user()->profile->is_darkmode ? 'dark' : '' }}">
+<html
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    class="
+            @if (auth()->user()?->email_verified_at)
+                {{ auth()->user()->profile->is_darkmode ? 'dark' : '' }}
+            @else
+                {{ session('theme') ?? '' }}
+            @endif
+    "
+>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +30,12 @@
     </head>
     <body x-data="hubSidebar()" :class="{ 'overflow-hidden': responsiveOpen}"
           class="bg-slate-100 dark:bg-gradient-to-tr dark:from-cyan-700 dark:via-cyan-500 dark:to-violet-500 transition-all duration-300
-          {{ auth()->user()->profile->is_darkmode ? 'scrollbar-dark' : 'scrollbar-light' }}"
+            @if (auth()->user()?->email_verified_at)
+                {{ auth()->user()->profile->is_darkmode ? 'scrollbar-dark' : 'scrollbar-light' }}
+            @else
+                {{ session('theme') === 'dark' ? 'scrollbar-dark' :  'scrollbar-light' }}
+            @endif
+          "
     >
         <x-jet-banner />
         @livewire('navigation-menu')

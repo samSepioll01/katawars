@@ -38,7 +38,9 @@ class appThemeController extends Controller
             session()->missing('theme') ? 'dark' : null
         );
 
-        return auth()->check() ? redirect()->route('dashboard') : view('welcome')->render();
+        return auth()->check()
+            ? redirect()->route('dashboard')
+            : view('welcome')->render();
     }
 
     /**
@@ -46,6 +48,16 @@ class appThemeController extends Controller
      */
     public function authUserThemeConfig()
     {
+        $user = auth()->user();
+
+        // Hold the theme selected by the guest user for 1 minute.
+        // After, hold the theme selected by the auth user.
+        if ($user->created_at->diffInMinutes() < 1) {
+            $profile = $user->profile;
+            $profile->is_darkmode = session('theme') === 'dark' ? true : false;
+            $profile->save();
+        }
+
         return view('profile.dashboard')->render();
     }
 
@@ -68,7 +80,12 @@ class appThemeController extends Controller
                 ->dontBroadcastToCurrentUser()
             );
 
-            return response()->json(['success' => true, 'theme' => request()->theme]);
+            return response()->json(
+                [
+                    'success' => true,
+                    'theme' => request()->theme,
+                ]
+            );
         }
     }
 
