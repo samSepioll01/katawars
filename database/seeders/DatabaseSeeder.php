@@ -263,7 +263,7 @@ class DatabaseSeeder extends Seeder
         Help::create([
             'title' => 'How do I change my bio?',
             'description' => 'You must click on the navbar Avatar > Settings > Scroll to Profile Information Section > Bio > Type your new bio > Save.',
-            'section' => 'settings',
+            'section' => 'profile',
         ]);
 
         Help::create([
@@ -285,8 +285,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Help::create([
-            'title' => 'How to migrate my GitHub account data and my associated progress to a local account?',
-            'description' => 'Click Avatar > Settings > Scroll to Migrate GitHub Section > Migrate account locally.',
+            'title' => 'How synchronize my GitHub account data to a local account and hold my progress?',
+            'description' => 'Click Avatar > Settings > Scroll to Sync with GitHub Account Section > Sync With GitHub. You must check that both your GitHub and local email are matching.',
             'section' => 'profile',
         ]);
 

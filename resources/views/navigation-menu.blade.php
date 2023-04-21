@@ -151,7 +151,7 @@
                                         {{ __('Donate') }}
                                     </x-jet-dropdown-link>
 
-                                    <x-jet-dropdown-link href="{{ route('dashboard') }}">
+                                    <x-jet-dropdown-link href="{{ route('help') }}">
                                         <x-layout.dropdown-icon srcPath="help" />
                                         {{ __('Help') }}
                                     </x-jet-dropdown-link>
@@ -290,7 +290,7 @@
                         {{ __('Donate') }}
                     </x-jet-responsive-nav-link>
 
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
+                    <x-jet-responsive-nav-link href="{{ route('help') }}">
                         {{ __('Help') }}
                     </x-jet-responsive-nav-link>
 

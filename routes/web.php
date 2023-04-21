@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\appThemeController;
 use App\Http\Controllers\Auth\GitHubLoginController;
+use App\Http\Controllers\HelpController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [appThemeController::class, 'initialConfig'])->name('home');
 Route::get('/privacy-policy', fn() => view('policy'))->name('privacy-policy');
 Route::get('/terms-of-service', fn() => view('terms'))->name('terms-service');
+Route::get('/help', [HelpController::class, 'index'])->name('help');
 
 // Layout Change Theme
 
