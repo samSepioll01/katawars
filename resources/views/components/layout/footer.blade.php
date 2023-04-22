@@ -12,6 +12,7 @@
 
 
     <div class="py-5 md:pb-2 flex flex-col md:flex-row justify-evenly items-center text-slate-700 dark:text-slate-400">
+        <a href="{{ route('help') }}" class="py-2 dark:hover:text-slate-100 hover:text-violet-700 transition-colors duration-300">Help</a>
         <a href="{{ route('privacy-policy') }}" class="py-2 dark:hover:text-slate-100 hover:text-violet-700 transition-colors duration-300">Privacy Policy</a>
         <a href="{{ route('terms-service') }}" class="py-2 dark:hover:text-slate-100 hover:text-violet-700 transition-colors duration-300">Term of Service</a>
         <a href="https://github.com/samSepioll01/katawars" target="_blank" class="py-2 hover:scale-125 transition-all duration-300">

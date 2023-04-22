@@ -90,21 +90,21 @@ class DatabaseSeeder extends Seeder
             'name' => 'PHP',
             'extension' => '.php',
             'bg_gradient' => 'bg-gradient-to-tl from-indigo-600 to-violet-600',
-            'uri_logo' => '',
+            'uri_logo' => url('storage/languages/php.svg'),
         ]);
 
         Language::create([
             'name' => 'Python',
             'extension' => '.py',
             'bg_gradient' => 'bg-gradient-to-br from-indigo-700 to-sky-600',
-            'uri_logo' => '',
+            'uri_logo' => url('storage/languages/python.png'),
         ]);
 
         Language::create([
             'name' => 'Javascript',
             'extension' => '.js',
             'bg_gradient' => 'bg-gradient-to-br from-yellow-600 to-amber-400',
-            'uri_logo' => '',
+            'uri_logo' => url('storage/languages/js.svg'),
         ]);
     }
 
@@ -114,15 +114,25 @@ class DatabaseSeeder extends Seeder
     private function generateHelps(): void
     {
 
-        $generateLanguagesHTML = function (Collection $languages, bool $hasImages = false)
+        /**
+         * Generate list of availables languages.
+         * @param Collection $languages
+         * @return string
+         */
+        $generateLanguagesHTML = function (Collection $languages): string
         {
-            [$returnHTML, $size, $languageImage] = ['', '25px', ''];
+            $returnHTML = '';
 
             foreach ($languages as $language) {
-                if ($hasImages) {
-                    $languageImage = "<img src='$language->uri_logo' class='w-[$size] h-[$size] rounded-all' />";
-                }
-                $returnHTML .= "<li>$languageImage $language->name.</li>";
+
+                $returnHTML .= <<<EOT
+                    <li class="flex flex-row items-center">
+                        <div class="w-full h-16 flex flex-row items-center">
+                            <div class="px-5"><img src="$language->uri_logo" class="w-8 h-8" /></div>
+                            <div class="px-5">$language->name</div>
+                        </div>
+                    </li>
+                EOT;
             }
             return $returnHTML;
         };
@@ -200,7 +210,7 @@ class DatabaseSeeder extends Seeder
             'section' => 'general',
         ]);
 
-        $returnHTML = $generateLanguagesHTML(Language::all());
+        $returnHTML = $generateLanguagesHTML(Language::all(), true);
 
         Help::create([
             'title' => 'What languages are available actually?',
@@ -225,7 +235,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Help::create([
-            'title' => "I can't overcome a Kata. How do I see the solutions of other users and what happens if I see them?",
+            'title' => "What can I do if I can't overcome a Kata?",
             'description' => 'Keep calm. Katawars is for learning and one of the best ways is to see the code of others. When you can’t overcome a Kata, on the main page of the Kata go to the Solutions tab. There you will be shown the blocked content and you will be able to see a button in the center of the section called See Solutions. This button serves to unlock the solutions in exchange for HONOR points. From that moment on, you will be able to see the solutions of other users, but you will not be able to overcome the Kata or, therefore, add any score.',
             'section' => 'general',
         ]);
@@ -263,7 +273,7 @@ class DatabaseSeeder extends Seeder
         Help::create([
             'title' => 'How do I change my bio?',
             'description' => 'You must click on the navbar Avatar > Settings > Scroll to Profile Information Section > Bio > Type your new bio > Save.',
-            'section' => 'settings',
+            'section' => 'profile',
         ]);
 
         Help::create([
@@ -285,8 +295,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Help::create([
-            'title' => 'How to migrate my GitHub account data and my associated progress to a local account?',
-            'description' => 'Click Avatar > Settings > Scroll to Migrate GitHub Section > Migrate account locally.',
+            'title' => 'How synchronize my GitHub account locally?',
+            'description' => 'Click Avatar > Settings > Scroll to Sync with GitHub Account Section > Sync With GitHub. You must check that both your GitHub and local email are matching.',
             'section' => 'profile',
         ]);
 

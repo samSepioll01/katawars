@@ -15,7 +15,11 @@ class HelpController extends Controller
      */
     public function index()
     {
-        //
+        return view('help', [
+            'sections' => Help::distinct()->pluck('section'),
+            'helps' => Help::all(),
+            'updatedAt' => Help::orderBy('updated_at')->first()->updated_at,
+        ])->render();
     }
 
     /**
