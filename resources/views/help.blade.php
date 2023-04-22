@@ -13,9 +13,9 @@
 
                     @foreach ($sections as $section)
 
-                        <div name="section" class="py-5">
-                            <div name="section__title">
-                                <h1 class="text-slate-200">{{ Str::title($section) }}</h1>
+                        <div class="section py-5">
+                            <div class="section__title">
+                                <h1 class="dark:text-slate-200">{{ Str::title($section) }}</h1>
                             </div>
 
                             @foreach ($helps->where('section', $section) as $help)

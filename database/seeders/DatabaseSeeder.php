@@ -90,21 +90,21 @@ class DatabaseSeeder extends Seeder
             'name' => 'PHP',
             'extension' => '.php',
             'bg_gradient' => 'bg-gradient-to-tl from-indigo-600 to-violet-600',
-            'uri_logo' => '',
+            'uri_logo' => url('storage/languages/php.svg'),
         ]);
 
         Language::create([
             'name' => 'Python',
             'extension' => '.py',
             'bg_gradient' => 'bg-gradient-to-br from-indigo-700 to-sky-600',
-            'uri_logo' => '',
+            'uri_logo' => url('storage/languages/python.png'),
         ]);
 
         Language::create([
             'name' => 'Javascript',
             'extension' => '.js',
             'bg_gradient' => 'bg-gradient-to-br from-yellow-600 to-amber-400',
-            'uri_logo' => '',
+            'uri_logo' => url('storage/languages/js.svg'),
         ]);
     }
 
@@ -117,18 +117,22 @@ class DatabaseSeeder extends Seeder
         /**
          * Generate list of availables languages.
          * @param Collection $languages
-         * @param bool $hasImages Choose if languages are printed with language logo.
          * @return string
          */
-        $generateLanguagesHTML = function (Collection $languages, bool $hasImages = false): string
+        $generateLanguagesHTML = function (Collection $languages): string
         {
-            [$returnHTML, $size, $languageImage] = ['', '25px', ''];
+            $returnHTML = '';
 
             foreach ($languages as $language) {
-                if ($hasImages) {
-                    $languageImage = "<img src='$language->uri_logo' class='w-[$size] h-[$size] rounded-all' />";
-                }
-                $returnHTML .= "<li>$languageImage $language->name.</li>";
+
+                $returnHTML .= <<<EOT
+                    <li class="flex flex-row items-center">
+                        <div class="w-full h-16 flex flex-row items-center">
+                            <div class="px-5"><img src="$language->uri_logo" class="w-8 h-8" /></div>
+                            <div class="px-5">$language->name</div>
+                        </div>
+                    </li>
+                EOT;
             }
             return $returnHTML;
         };
@@ -206,7 +210,7 @@ class DatabaseSeeder extends Seeder
             'section' => 'general',
         ]);
 
-        $returnHTML = $generateLanguagesHTML(Language::all());
+        $returnHTML = $generateLanguagesHTML(Language::all(), true);
 
         Help::create([
             'title' => 'What languages are available actually?',
