@@ -114,7 +114,13 @@ class DatabaseSeeder extends Seeder
     private function generateHelps(): void
     {
 
-        $generateLanguagesHTML = function (Collection $languages, bool $hasImages = false)
+        /**
+         * Generate list of availables languages.
+         * @param Collection $languages
+         * @param bool $hasImages Choose if languages are printed with language logo.
+         * @return string
+         */
+        $generateLanguagesHTML = function (Collection $languages, bool $hasImages = false): string
         {
             [$returnHTML, $size, $languageImage] = ['', '25px', ''];
 
@@ -225,7 +231,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Help::create([
-            'title' => "I can't overcome a Kata. How do I see the solutions of other users and what happens if I see them?",
+            'title' => "What can I do if I can't overcome a Kata?",
             'description' => 'Keep calm. Katawars is for learning and one of the best ways is to see the code of others. When you can’t overcome a Kata, on the main page of the Kata go to the Solutions tab. There you will be shown the blocked content and you will be able to see a button in the center of the section called See Solutions. This button serves to unlock the solutions in exchange for HONOR points. From that moment on, you will be able to see the solutions of other users, but you will not be able to overcome the Kata or, therefore, add any score.',
             'section' => 'general',
         ]);
@@ -285,7 +291,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Help::create([
-            'title' => 'How synchronize my GitHub account data to a local account and hold my progress?',
+            'title' => 'How synchronize my GitHub account locally?',
             'description' => 'Click Avatar > Settings > Scroll to Sync with GitHub Account Section > Sync With GitHub. You must check that both your GitHub and local email are matching.',
             'section' => 'profile',
         ]);
