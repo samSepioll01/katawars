@@ -18,8 +18,10 @@
 
     </style>
     @vite(['resources/js/app.js', 'resources/css/app.css'])
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js" integrity="sha512-6lplKUSl86rUVprDIjiW8DuOniNX8UDoRATqZSds/7t6zCQZfaCe3e5zcGaQwxa8Kpn5RTM9Fvl3X2lLV4grPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" integrity="sha512-cyzxRvewl+FOKTtpBzYjW6x6IAYUCZy3sGP40hn+DQkqeluGRCax7qztK2ImL64SA+C7kVWdLI6wvdlStawhyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- CDNs
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js" integrity="sha512-6lplKUSl86rUVprDIjiW8DuOniNX8UDoRATqZSds/7t6zCQZfaCe3e5zcGaQwxa8Kpn5RTM9Fvl3X2lLV4grPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" integrity="sha512-cyzxRvewl+FOKTtpBzYjW6x6IAYUCZy3sGP40hn+DQkqeluGRCax7qztK2ImL64SA+C7kVWdLI6wvdlStawhyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    --}}
 </head>
 <body>
 
@@ -27,9 +29,10 @@
 
         <div class="p-16">
 
-            <form method="post" class="flex justify-center items-center">
+            <div class="flex flex-col justify-center items-center">
                 <input type="file" name="image" class="image"/>
-            </form>
+                <p id="error-file" class="text-red-600 text-sm"></p>
+            </div>
         </div>
 
 
@@ -50,24 +53,63 @@
 
         const imageInput = document.querySelector('.image');
         const image = document.getElementById('image');
-        const cropper = new Cropper(
-            image,
-            {
-                aspectRatio: 1,
-                viewMode: 3,
-                preview: '.preview',
-            }
-        );
+        let cropper, iodine;
+
+        window.addEventListener('load', function() {
+            Iodine = new Iodine();
+            Iodine.rule('fileType', (type) => {
+                return ['image/png', 'image/jpeg'].includes(type);
+            });
+            Iodine.rule('fileMaxSize', (size) => {
+                return parseInt(size) < 1000000;
+            });
+            Iodine.setErrorMessages({
+                fileType: `[FIELD] must be a valid image format (png, jpeg, jpg).`,
+                fileMaxSize: `[FIELD] must be less than 1M.`,
+            });
+            Iodine.setDefaultFieldName('File');
+
+
+            cropper = new Cropper(
+                image,
+                {
+                    aspectRatio: 1,
+                    viewMode: 3,
+                    preview: '.preview',
+                }
+            );
+        });
 
         imageInput.addEventListener('change', (eChange) => {
 
+            let errorFile = document.getElementById('error-file');
             let files = eChange.target.files;
-            let file, reader;
 
             if (files && files.length > 0) {
 
-                file = files[0];
-                reader = new FileReader();
+                let file = files[0];
+                console.log(file);
+
+                let validations = {
+                    type: Iodine.assert(file.type, ['fileType']),
+                    size: Iodine.assert(file.size, ['fileMaxSize']),
+                }
+
+
+                if (!validations.type.valid) {
+
+                    errorFile.textContent = validations.type.error;
+                    return false;
+                }
+
+                if (!validations.size.valid) {
+                    errorFile.textContent = validations.size.error;
+                    return false;
+                }
+
+                errorFile.textContent = '';
+
+                let reader = new FileReader();
                 reader.onload = (eReaderLoad) => {
 
                     if (image.classList.contains('hidden')) {
