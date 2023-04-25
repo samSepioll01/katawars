@@ -15,6 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -71,6 +72,27 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Get the URL to the user's profile photo.
+     *
+     * @return string
+     */
+    public function getProfilePhotoUrlAttribute()
+    {
+        $url = $this->profile_photo_path
+                    ? Storage::disk($this->profilePhotoDisk())
+                        ->url($this->profile_photo_path)
+                    : $this->defaultProfilePhotoUrl();
+
+        if ( filter_var( $url, FILTER_VALIDATE_URL ) ) {
+            if ( substr_count( $url, 'http') > 1 ) {
+                $url = $this->profile_photo_path;
+            }
+        }
+
+        return $url;
+    }
 
     /**
      * This determines which profile is associated to the user.

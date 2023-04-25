@@ -32,7 +32,7 @@
                         <img
                             src="{{ $this->user->profile_photo_url }}"
                             alt="{{ $this->user->name }}"
-                            class="rounded-full h-28 w-28 object-cover"
+                            class="rounded-full h-32 w-32 object-cover"
                         >
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                 <div class="flex justify-center">
                     <!-- New Profile Photo Preview -->
                     <div class="mt-2" x-show="photoPreview" style="display: none;">
-                        <span class="block rounded-full w-28 h-28 bg-cover bg-no-repeat bg-center"
+                        <span class="block rounded-full w-32 h-32 bg-cover bg-no-repeat bg-center"
                             x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                         </span>
                     </div>

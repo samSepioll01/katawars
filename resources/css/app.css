@@ -10,6 +10,11 @@
 
     /* Mozilla Firefox scrollbar styles */
 
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #ff01c2ff #cccdce;
+    }
+
     .moz-scrollbar-dark {
         scrollbar-width: thin;
         scrollbar-color: #8d8e8f #061527;
