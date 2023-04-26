@@ -118,4 +118,25 @@
             {{ __('Save') }}
         </x-jet-button>
     </x-slot>
+
+    <x-slot name="modal">
+
+        <x-layout.modal>
+            <x-slot name="title">
+                {{ __('Are you sure?') }}
+            </x-slot>
+
+            <x-slot name="body">
+                {{ __('If you proceed, your account will be deleted entirely.') }}
+            </x-slot>
+
+            <x-slot name="footer">
+                <x-jet-danger-button class="focus:ring-0">Cancel</x-jet-danger-button>
+                <x-jet-button class="dark:bg-violet-800/90">Accept</x-jet-button>
+            </x-slot>
+
+        </x-layout.modal>
+
+    </x-slot>
+
 </x-jet-form-section>
