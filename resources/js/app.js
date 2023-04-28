@@ -16,3 +16,13 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 
 Alpine.start();
+
+window.$modals = {
+    show(name) {
+        window.dispatchEvent(
+            new CustomEvent('modal', {
+                detail: name,
+            })
+        );
+    },
+}

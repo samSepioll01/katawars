@@ -10,16 +10,17 @@
     <x-slot name="form">
         <!-- Profile Photo -->
         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-            <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 xl:col-span-4">
+            <div x-data="{photoName: null, photoPreview: null, photoCropper: null}" class="col-span-6 xl:col-span-4">
                 <!-- Profile Photo File Input -->
                 <input type="file" class="hidden"
-                            wire:model="photo"
+                            wire:model.defer="photo"
                             x-ref="photo"
                             x-on:change="
                                     photoName = $refs.photo.files[0].name;
                                     const reader = new FileReader();
                                     reader.onload = (e) => {
-                                        photoPreview = e.target.result;
+                                        photoCropper = e.target.result;
+                                        $modals.show('cropper-modal');
                                     };
                                     reader.readAsDataURL($refs.photo.files[0]);
                             " />
@@ -49,10 +50,15 @@
 
 
                 <div class="p-2 flex justify-center">
-                    <div class="w-full flex justify-center xl:flex xl:justify-between">
-                        <x-jet-secondary-button type="button" class="mr-2 w-48 hover:shadow-md" x-on:click.prevent="$refs.photo.click()">
+                    <div class="w-full flex justify-evenly xl:flex xl:justify-between">
+                        <x-jet-secondary-button
+                            type="button"
+                            class="mr-2 w-48 hover:shadow-md"
+                            x-on:click.prevent="$refs.photo.click()"
+                        >
                             {{ __('Select A New Photo') }}
                         </x-jet-secondary-button>
+
 
                         @if ($this->user->profile_photo_path)
                             <x-jet-secondary-button type="button" class="w-48 flex justify-center hover:shadow-md" wire:click="deleteProfilePhoto">
@@ -61,8 +67,38 @@
                         @endif
                     </div>
                 </div>
-
+                <p id="error-file" class="text-red-600 text-sm px-2"></p>
                 <x-jet-input-error for="photo" class="mt-2" />
+
+                {{-- Cropper Modal --}}
+
+                <div>
+
+                    <x-layout.modal name="cropper-modal">
+                        <x-slot name="title">
+                            {{ __('Modal 1') }}
+                        </x-slot>
+
+                        <x-slot name="body">
+                            {{ __('If you proceed, your account will be deleted entirely.') }}
+                            <div class="flex justify-center">
+                                <!-- Cropper Photo Preview -->
+                                <div class="mt-2" x-show="photoCropper" style="display: none;">
+                                    <span class="block rounded-full w-32 h-32 bg-cover bg-no-repeat bg-center"
+                                        x-bind:style="'background-image: url(\'' + photoCropper + '\');'">
+                                    </span>
+                                </div>
+                            </div>
+                        </x-slot>
+
+                        <x-slot name="footer">
+                            <x-jet-danger-button class="focus:ring-0" @click.prevent="show = false">Cancel</x-jet-danger-button>
+                            <x-jet-button @click.prevent="show = false">Accept</x-jet-button>
+                        </x-slot>
+                    </x-layout.modal>
+
+                </div>
+
             </div>
         @endif
 
@@ -117,25 +153,7 @@
         <x-jet-button wire:loading.attr="disabled" wire:target="photo">
             {{ __('Save') }}
         </x-jet-button>
-    </x-slot>
 
-    <x-slot name="modal">
-
-        <x-layout.modal>
-            <x-slot name="title">
-                {{ __('Are you sure?') }}
-            </x-slot>
-
-            <x-slot name="body">
-                {{ __('If you proceed, your account will be deleted entirely.') }}
-            </x-slot>
-
-            <x-slot name="footer">
-                <x-jet-danger-button class="focus:ring-0">Cancel</x-jet-danger-button>
-                <x-jet-button class="dark:bg-violet-800/90">Accept</x-jet-button>
-            </x-slot>
-
-        </x-layout.modal>
 
     </x-slot>
 

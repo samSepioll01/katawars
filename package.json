@@ -18,6 +18,7 @@
     },
     "dependencies": {
         "@caneara/iodine": "^8.3.0",
+        "caniuse-lite": "^1.0.30001481",
         "cropperjs": "^1.5.13",
         "laravel-echo": "^1.15.0",
         "pusher-js": "^8.0.2"

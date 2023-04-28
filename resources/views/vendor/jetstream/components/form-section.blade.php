@@ -20,9 +20,5 @@
                 </div>
             @endif
         </form>
-
-        @if (isset($modal))
-            {{ $modal }}
-        @endif
     </div>
 </div>
