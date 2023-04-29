@@ -7,7 +7,12 @@
         'lg' => 'sm:max-w-lg',
         'xl' => 'sm:max-w-xl',
         '2xl' => 'sm:max-w-2xl',
-    ][$maxWidth ?? '2xl'];
+        '3xl' => 'sm:max-w-3xl',
+        '4xl' => 'sm:max-w-4xl',
+        '5xl' => 'sm:max-w-5xl',
+        '6xl' => 'sm:max-w-6xl',
+        '7xl' => 'sm:max-w-7xl',
+    ][$maxWidth ?? '7xl'];
 @endphp
 
 <div id="{{ $name }}"
@@ -62,7 +67,7 @@
     </div>
 
     <div
-        class="bg-white/90 dark:bg-gray-900/90 shadow-md p-4 max-h-[400px] m-auto rounded-md fixed inset-0 z-10 {{ $maxWidth }}"
+        class="bg-white/90 dark:bg-gray-900/90 shadow-md p-4 scrollbar-inner-menu xl:max-h-[500px] 2xl:max-h-[700px] overflow-y-auto m-auto rounded-md fixed inset-0 z-10 {{ $maxWidth }}"
         x-transition:enter="ease-out duration-300"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"
@@ -77,7 +82,7 @@
                 </h3>
             </header>
 
-            <main class="my-4 text-slate-50">
+            <main class=" text-slate-50">
                 {{ $body }}
             </main>
 

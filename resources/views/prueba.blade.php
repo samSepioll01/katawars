@@ -38,7 +38,7 @@
 
         <div class="flex flex-row justify-between items-center w-11/12 border border-blue-600">
             <div class="border border-blue-600 w-3/4">
-                <img id="image" src="" alt="" class="hidden max-w-full w-full h-full" >
+                <img id="imagecropper" src="" alt="" class="hidden max-w-full w-full h-full" >
             </div>
 
 
@@ -52,7 +52,7 @@
     <script>
 
         const imageInput = document.querySelector('.image');
-        const image = document.getElementById('image');
+        const image = document.getElementById('imagecropper');
         let cropper, iodine;
 
         window.addEventListener('load', function() {

@@ -195,6 +195,16 @@
     .transform-origin-50 {
         transform-origin: 50%;
     }
+
+    /* Cropper Photo Preview Target */
+    .preview {
+        overflow: hidden;
+        width: 240px;
+        height: 240px;
+        margin: 10px;
+        border-radius: 50%;
+        border: 1px solid red;
+    }
 }
 
 @layer components {

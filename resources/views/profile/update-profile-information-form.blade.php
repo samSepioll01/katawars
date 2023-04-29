@@ -12,10 +12,10 @@
         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
             <div x-data="{photoName: null, photoPreview: null, photoCropper: null}" class="col-span-6 xl:col-span-4">
                 <!-- Profile Photo File Input -->
-                <input type="file" class="hidden"
+                <input type="file" class="hidden imageinput"
                             wire:model.defer="photo"
                             x-ref="photo"
-                            x-on:change="
+                            {{-- x-on:change="
                                     photoName = $refs.photo.files[0].name;
                                     const reader = new FileReader();
                                     reader.onload = (e) => {
@@ -23,7 +23,8 @@
                                         $modals.show('cropper-modal');
                                     };
                                     reader.readAsDataURL($refs.photo.files[0]);
-                            " />
+                            " --}}
+                />
 
                 <x-jet-label for="photo" value="{{ __('Photo') }}" />
 
@@ -48,7 +49,6 @@
                     </div>
                 </div>
 
-
                 <div class="p-2 flex justify-center">
                     <div class="w-full flex justify-evenly xl:flex xl:justify-between">
                         <x-jet-secondary-button
@@ -67,39 +67,45 @@
                         @endif
                     </div>
                 </div>
-                <p id="error-file" class="text-red-600 text-sm px-2"></p>
+
                 <x-jet-input-error for="photo" class="mt-2" />
+                <p id="error-file" class="text-red-600 text-sm p-2" wire:ignore></p>
+            </div>
 
-                {{-- Cropper Modal --}}
+            {{-- Cropper Modal --}}
+            <div wire:ignore>
+                <x-layout.modal name="cropper-modal">
+                    <x-slot name="title">
+                        {{ __('Modal 1') }}
+                    </x-slot>
 
-                <div>
+                    <x-slot name="body">
+                        {{ __('If you proceed, your account will be deleted entirely.') }}
+                        <div class="flex justify-center">
 
-                    <x-layout.modal name="cropper-modal">
-                        <x-slot name="title">
-                            {{ __('Modal 1') }}
-                        </x-slot>
+                            <div class="flex flex-col md:flex-row justify-between items-center border border-blue-600">
+                                <div class="border border-blue-600">
+                                    <img id="cropperimage" src="" alt="" class="block h-[500px]" wire:ignore>
+                                </div>
 
-                        <x-slot name="body">
-                            {{ __('If you proceed, your account will be deleted entirely.') }}
-                            <div class="flex justify-center">
-                                <!-- Cropper Photo Preview -->
-                                <div class="mt-2" x-show="photoCropper" style="display: none;">
-                                    <span class="block rounded-full w-32 h-32 bg-cover bg-no-repeat bg-center"
-                                        x-bind:style="'background-image: url(\'' + photoCropper + '\');'">
-                                    </span>
+                                <div class="">
+                                    <div class="preview"></div>
                                 </div>
                             </div>
-                        </x-slot>
 
-                        <x-slot name="footer">
-                            <x-jet-danger-button class="focus:ring-0" @click.prevent="show = false">Cancel</x-jet-danger-button>
-                            <x-jet-button @click.prevent="show = false">Accept</x-jet-button>
-                        </x-slot>
-                    </x-layout.modal>
+                        </div>
+                    </x-slot>
 
-                </div>
+                    <x-slot name="footer">
+                        <x-jet-danger-button class="focus:ring-0" @click.prevent="show = false">Cancel</x-jet-danger-button>
+                        <x-jet-button @click.prevent="show = false">Accept</x-jet-button>
+                    </x-slot>
+                </x-layout.modal>
 
             </div>
+
+            @vite(['resources/js/cropperprofilephoto.js'])
+
         @endif
 
         <!-- Name -->
