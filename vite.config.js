@@ -9,7 +9,6 @@ export default defineConfig({
                 'resources/css/mail.css',
                 'resources/js/app.js',
                 'resources/js/thememode.js',
-                'resources/js/cropperprofilephoto.js',
             ],
             refresh: [
                 ...refreshPaths,

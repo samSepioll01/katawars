@@ -75,9 +75,9 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
     >
-        <div class="flex flex-col justify-between h-full">
+        <div class="flex flex-col justify-evenly min-h-[300px] sm:h-full">
             <header>
-                <h3 class="font-bold text-lg dark:text-slate-50">
+                <h3 class="font-bold text-lg dark:text-slate-50 p-5">
                     {{ $title }}
                 </h3>
             </header>
@@ -86,11 +86,9 @@
                 {{ $body }}
             </main>
 
-            <footer class="flex flex-row justify-evenly items-center">
+            <footer class="flex flex-row justify-evenly items-center p-5">
                 {{ $footer }}
             </footer>
         </div>
-
     </div>
-
 </div>

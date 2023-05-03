@@ -6,10 +6,31 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Spatie\Image\Image;
 
 class UpdateProfileInformationForm extends Component
 {
     use WithFileUploads;
+
+    /**
+     * The position for x edge of the crop image.
+     */
+    public $x;
+
+    /**
+     * The position for y edge of the crop image.
+     */
+    public $y;
+
+    /**
+     * The width of the crop image.
+     */
+    public $width;
+
+    /**
+     * The height of the crop image.
+     */
+    public $height;
 
     /**
      * The component's state.
@@ -43,6 +64,30 @@ class UpdateProfileInformationForm extends Component
     }
 
     /**
+     * Set the values for the crop image.
+     *
+     * @param array $cropperData
+     * @return void
+     */
+    public function setCropperValues($cropperData)
+    {
+        $this->x = $cropperData['x'];
+        $this->y = $cropperData['y'];
+        $this->width = $cropperData['width'];
+        $this->height = $cropperData['height'];
+    }
+
+    /**
+     * Reset photo value.
+     *
+     * @return void
+     */
+    public function resetPhoto()
+    {
+        $this->photo = null;
+    }
+
+    /**
      * Update the user's profile information.
      *
      * @param  \Laravel\Fortify\Contracts\UpdatesUserProfileInformation  $updater
@@ -51,6 +96,14 @@ class UpdateProfileInformationForm extends Component
     public function updateProfileInformation(UpdatesUserProfileInformation $updater)
     {
         $this->resetErrorBag();
+
+        if (isset($this->photo)) {
+            Image::load($this->photo->path())
+                ->manualCrop($this->width, $this->height, $this->x, $this->y)
+                ->save();
+            session()->flash('syncStatus', 'success');
+            session()->flash('syncMessage', 'Profile Photo Updated Successful!');
+        }
 
         $updater->update(
             Auth::user(),
@@ -109,6 +162,6 @@ class UpdateProfileInformationForm extends Component
      */
     public function render()
     {
-        return view('profile.update-profile-information-form');
+        return view('livewire.update-profile-information-form');
     }
 }

@@ -1,4 +1,4 @@
-<x-jet-form-section submit="updateProfileInformation">
+<x-jet-form-section submit="updateProfileInformation" id="profileInformationForm">
     <x-slot name="title">
         {{ __('Profile Information') }}
     </x-slot>
@@ -10,20 +10,23 @@
     <x-slot name="form">
         <!-- Profile Photo -->
         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-            <div x-data="{photoName: null, photoPreview: null, photoCropper: null}" class="col-span-6 xl:col-span-4">
+            <div
+                x-data="{photoName: null, photoPreview: null}"
+                class="col-span-6 xl:col-span-4"
+            >
+
                 <!-- Profile Photo File Input -->
-                <input type="file" class="hidden imageinput"
+                <input type="file" class="hidden"
                             wire:model.defer="photo"
                             x-ref="photo"
-                            {{-- x-on:change="
-                                    photoName = $refs.photo.files[0].name;
-                                    const reader = new FileReader();
-                                    reader.onload = (e) => {
-                                        photoCropper = e.target.result;
-                                        $modals.show('cropper-modal');
-                                    };
-                                    reader.readAsDataURL($refs.photo.files[0]);
-                            " --}}
+                            x-on:change="
+                                photoName = $refs.photo.files[0].name;
+                                reader = new FileReader();
+                                reader.onload = (e) => {
+                                    photoPreview = e.target.result;
+                                };
+                                reader.readAsDataURL($refs.photo.files[0]);
+                            "
                 />
 
                 <x-jet-label for="photo" value="{{ __('Photo') }}" />
@@ -38,7 +41,6 @@
                         >
                     </div>
                 </div>
-
 
                 <div class="flex justify-center">
                     <!-- New Profile Photo Preview -->
@@ -69,43 +71,7 @@
                 </div>
 
                 <x-jet-input-error for="photo" class="mt-2" />
-                <p id="error-file" class="text-red-600 text-sm p-2" wire:ignore></p>
             </div>
-
-            {{-- Cropper Modal --}}
-            <div wire:ignore>
-                <x-layout.modal name="cropper-modal">
-                    <x-slot name="title">
-                        {{ __('Modal 1') }}
-                    </x-slot>
-
-                    <x-slot name="body">
-                        {{ __('If you proceed, your account will be deleted entirely.') }}
-                        <div class="flex justify-center">
-
-                            <div class="flex flex-col md:flex-row justify-between items-center border border-blue-600">
-                                <div class="border border-blue-600">
-                                    <img id="cropperimage" src="" alt="" class="block h-[500px]" wire:ignore>
-                                </div>
-
-                                <div class="">
-                                    <div class="preview"></div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </x-slot>
-
-                    <x-slot name="footer">
-                        <x-jet-danger-button class="focus:ring-0" @click.prevent="show = false">Cancel</x-jet-danger-button>
-                        <x-jet-button @click.prevent="show = false">Accept</x-jet-button>
-                    </x-slot>
-                </x-layout.modal>
-
-            </div>
-
-            @vite(['resources/js/cropperprofilephoto.js'])
-
         @endif
 
         <!-- Name -->
