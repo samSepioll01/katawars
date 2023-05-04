@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/socialite": "^5.6",
         "laravel/tinker": "^2.7",
+        "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.5",
         "pusher/pusher-php-server": "^7.2",
         "spatie/image": "^2.2",

@@ -97,13 +97,13 @@ class UpdateProfileInformationForm extends Component
     {
         $this->resetErrorBag();
 
-        if (isset($this->photo)) {
-            Image::load($this->photo->path())
-                ->manualCrop($this->width, $this->height, $this->x, $this->y)
-                ->save();
-            session()->flash('syncStatus', 'success');
-            session()->flash('syncMessage', 'Profile Photo Updated Successful!');
-        }
+        // if (isset($this->photo)) {
+        //     Image::load($this->photo->path())
+        //         ->manualCrop($this->width, $this->height, $this->x, $this->y)
+        //         ->save();
+        //     session()->flash('syncStatus', 'success');
+        //     session()->flash('syncMessage', 'Profile Photo Updated Successful!');
+        // }
 
         $updater->update(
             Auth::user(),

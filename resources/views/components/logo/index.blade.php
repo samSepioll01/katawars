@@ -7,5 +7,5 @@
 ])
 
 <div>
-    <img src="{{ url("/storage/logo/$logo[$type]") }}" alt="Katawars Logo" {{ $attributes }} />
+    <img src="{{ env('AWS_APP_URL') }}/logo/{{$logo[$type]}}" alt="Katawars Logo" {{ $attributes }} />
 </div>

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\Profile;
+use Illuminate\Support\Facades\Storage;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -29,7 +30,18 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         Profile::validateUrlProfile($input['name'], $user);
 
         if (isset($input['photo'])) {
+
+            // $previous = auth()->user()->profile_photo_path;
+
             $user->updateProfilePhoto($input['photo']);
+
+            // $filePath = auth()->user()->profile_photo_path;
+            // $file = Storage::disk('public')->get($filePath);
+            // Storage::disk('s3')->put('/' . $filePath, $file);
+
+            // if ($previous) {
+            //     Storage::disk('s3')->delete($previous);
+            // }
         }
 
         if ($input['email'] !== $user->email &&
