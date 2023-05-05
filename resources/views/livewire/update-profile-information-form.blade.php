@@ -31,10 +31,10 @@
                         return parseInt(size) < 1000000;
                     });
                     iodine.setErrorMessages({
-                        fileType: `[FIELD] must be a valid image format (png, jpeg, jpg).`,
-                        fileMaxSize: `[FIELD] must be less than 1M.`,
+                        fileType: `The [FIELD] must be a valid image format (png, jpeg, jpg).`,
+                        fileMaxSize: `The [FIELD] must not be greater than 1024 kilobytes.`,
                     });
-                    iodine.setDefaultFieldName('File');
+                    iodine.setDefaultFieldName('photo');
                 "
                 class="col-span-6 xl:col-span-4"
             >
@@ -57,7 +57,7 @@
                                             $aux.createElement(
                                                 'p',
                                                 {
-                                                    class: ['text-red-600', 'text-sm', 'p-2'],
+                                                    class: ['text-red-600', 'text-sm'],
                                                 },
                                                 validation.error,
                                             )
@@ -172,9 +172,7 @@
                 </div>
 
                 <x-jet-input-error for="photo" class="mt-2" />
-                <div x-ref="conterror" wire:ignore>
-                    {{-- <p x-ref="errorfile" class="text-red-600 text-sm p-2" wire:ignore></p> --}}
-                </div>
+                <div x-ref="conterror" class="mt-2" wire:ignore></div>
 
             </div>
 
