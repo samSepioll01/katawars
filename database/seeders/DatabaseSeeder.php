@@ -90,21 +90,21 @@ class DatabaseSeeder extends Seeder
             'name' => 'PHP',
             'extension' => '.php',
             'bg_gradient' => 'bg-gradient-to-tl from-indigo-600 to-violet-600',
-            'uri_logo' => url('storage/languages/php.svg'),
+            'uri_logo' => env('AWS_APP_URL') . '/languages/php.svg',
         ]);
 
         Language::create([
             'name' => 'Python',
             'extension' => '.py',
             'bg_gradient' => 'bg-gradient-to-br from-indigo-700 to-sky-600',
-            'uri_logo' => url('storage/languages/python.png'),
+            'uri_logo' => env('AWS_APP_URL') . '/languages/python.png',
         ]);
 
         Language::create([
             'name' => 'Javascript',
             'extension' => '.js',
             'bg_gradient' => 'bg-gradient-to-br from-yellow-600 to-amber-400',
-            'uri_logo' => url('storage/languages/js.svg'),
+            'uri_logo' => env('AWS_APP_URL') . '/languages/js.svg',
         ]);
     }
 

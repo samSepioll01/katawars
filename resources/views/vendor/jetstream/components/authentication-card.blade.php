@@ -1,7 +1,7 @@
 @php
-    Request::routeIs('login') ? $url = '/storage/images/login.webp' : null;
-    Request::routeIs('register') ? $url = '/storage/images/pinkmeduse.webp' : null;
-    Request::routeIs('password.request') ? $url = '/storage/images/interestellar.webp' : null;
+    Request::routeIs('login') ? $url = env('AWS_APP_URL') . '/images/login.webp' : null;
+    Request::routeIs('register') ? $url = env('AWS_APP_URL') . '/images/pinkmeduse.webp' : null;
+    Request::routeIs('password.request') ? $url = env('AWS_APP_URL') . '/images/interestellar.webp' : null;
     $url = $url ?? false;
     $width = $url ? 'lg:w-5/6' : 'lg:w-1/2';
     $resetLink = Request::routeIs('password.reset');

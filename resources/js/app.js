@@ -17,6 +17,21 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
+window.$katawars = {
+    AWS_APP_URL: 'https://s3.eu-south-2.amazonaws.com/katawars.es/app',
+}
+
+window.$katawars.S3 = {
+    icons: {
+        lightMode: $katawars.AWS_APP_URL + '/icons/brillo.png',
+        darkMode: $katawars.AWS_APP_URL + '/icons/modo-nocturno.png',
+        favoritesOn: $katawars.AWS_APP_URL + '/icons/favoritos1.png',
+        favoritesOff: $katawars.AWS_APP_URL + '/icons/favoritos2.png',
+        markerOn: $katawars.AWS_APP_URL + '/icons/marcador2.png',
+
+    },
+}
+
 window.$modals = {
     show(name) {
         window.dispatchEvent(

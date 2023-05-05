@@ -23,69 +23,64 @@
 
                 <x-utilities.bg-fluor-backmenu />
 
-                <div class="card-info">
-                    <div class="card-info-icon">
-                        <img src="{{ url('/storage/icons/codificacion.png') }}" alt="Coding icon">
-                    </div>
-                    <h3 class="card-info-title">Sharpen your coding skills</h3>
-                    <p class="card-info-text">
+                <x-utilities.card-info card="codificacion">
+                    <x-slot name="title">
+                        Sharpen your coding skills
+                    </x-slot>
+                    <x-slot name="text">
                         Challenge yourself on small coding exercises called "kata". Each kata is crafted by the community to help you strengthen different coding skills. Master programming techniques in different languages.
-                    </p>
-                </div>
+                    </x-slot>
+                </x-utilities.card-info>
 
-                <div class="card-info">
-                    <div class="card-info-icon">
-                        <img src="{{ url('/storage/icons/medalla-de-oro.png') }}" alt="Rank and Honor">
-                    </div>
-                    <h3 class="card-info-title">Earn ranks and honor</h3>
-                    <p class="card-info-text">
+                <x-utilities.card-info card="ranks">
+                    <x-slot name="title">
+                        Earn ranks and honor
+                    </x-slot>
+                    <x-slot name="text">
                         Kata code challenges are ranked just like belts in martial arts. As you complete higher-ranked katas, you level up your profile and push your software development skills to your highest potential.
-                    </p>
-                </div>
+                    </x-slot>
+                </x-utilities.card-info>
 
-                <div class="card-info">
-                    <div class="card-info-icon">
-                        <img src="{{ url('/storage/icons/interpersonales.png') }}" alt="Feedback icon">
-                    </div>
-                    <h3 class="card-info-title">Get community feedback</h3>
-                    <p class="card-info-text">
+                <x-utilities.card-info card="feedback">
+                    <x-slot name="title">
+                        Get community feedback
+                    </x-slot>
+                    <x-slot name="text">
                         Review resources contributed by other users or add them yourself to help others. Solve kata and see the solutions provided by users to learn new approaches to overcoming challenges.
-                    </p>
-                </div>
+                    </x-slot>
+                </x-utilities.card-info>
 
-                <div class="card-info">
-                    <div class="card-info-icon">
-                        <img src="{{ url('/storage/icons/pensamiento-critico.png') }}" alt="Perspectives icon">
-                    </div>
-                    <h3 class="card-info-title">Get new perspectives</h3>
-                    <p class="card-info-text">
+                <x-utilities.card-info card="perspectives">
+                    <x-slot name="title">
+                        Get new perspectives
+                    </x-slot>
+                    <x-slot name="text">
                         Solve challenges then view how others solved the same challenge. Pickup new techniques from some of the most skilled developers in the world.
-                    </p>
-                </div>
+                    </x-slot>
+                </x-utilities.card-info>
 
-                <div class="card-info">
-                    <div class="card-info-icon">
-                        <img src="{{ url('/storage/icons/gestion-del-tiempo.png') }}" alt="Coding time icon">
-                    </div>
-                    <h3 class="card-info-title">Increase your coding speed</h3>
-                    <p class="card-info-text">
+                <x-utilities.card-info card="codingspeed">
+                    <x-slot name="title">
+                        Increase your coding speed
+                    </x-slot>
+                    <x-slot name="text">
                         Perform the katas in Blitz mode and try to validate your code in the shortest time possible to get a better ranking, as well as get more honor and experience.
-                    </p>
-                </div>
+                    </x-slot>
+                </x-utilities.card-info>
 
-                <div class="card-info">
-                    <div class="card-info-icon">
-                        <img src="{{ url('/storage/icons/disputar.png') }}" alt="Clashes icon">
-                    </div>
-                    <h3 class="card-info-title">Compete throught clashes</h3>
-                    <p class="card-info-text">
+                <x-utilities.card-info card="challenges">
+                    <x-slot name="title">
+                        Compete throught clashes
+                    </x-slot>
+                    <x-slot name="text">
                         Compete against your friends, colleagues, and the community at large. Allow competition to motivate you  towards mastering your craft.
-                    </p>
-                </div>
+                    </x-slot>
+                </x-utilities.card-info>
+
             </div>
         </section>
 
-        <section class="min-h-screen w-full mt-16 py-16 parallax-bluegirl">
+        <section class="min-h-screen w-full mt-16 py-16 parallax-bluegirl" style="background-image: url('{{ env('AWS_APP_URL') }}/images/chicaazul.webp');">
             <div class="parallax-inner-container">
                 <h1 class="parallax-header">
                     An engaged software development community
@@ -111,7 +106,7 @@
             </div>
         </section>
 
-        <section class="min-h-screen w-full py-16 parallax-hexagon">
+        <section class="min-h-screen w-full py-16 parallax-hexagon" style="background-image: url('{{ env('AWS_APP_URL') }}/images/hexagon.webp');">
             <div class="parallax-inner-container">
                 <h1 class="parallax-header">
                     Create your own kata
@@ -128,7 +123,7 @@
                         </div>
 
                         <div class="parallax-code-body">
-                            <img src="{{ url('/storage/images/knightsofniclass.png') }}" alt="Code Kata - Knights Of Ni! Test" />
+                            <img src="{{ env('AWS_APP_URL') }}/images/knightsofniclass.png" alt="Code Kata - Knights Of Ni! Test" />
                         </div>
                     </div>
 
@@ -139,7 +134,7 @@
                         </div>
 
                         <div class="parallax-code-body">
-                            <img src="{{ url('/storage/images/knightsofnitest.png') }}" alt="Code Kata - Knights Of Ni! Class" />
+                            <img src="{{ env('AWS_APP_URL') }}/images/knightsofnitest.png" alt="Code Kata - Knights Of Ni! Class" />
                         </div>
                     </div>
 
