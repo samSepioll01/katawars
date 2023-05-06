@@ -49,6 +49,7 @@
                             src="{{ $this->user->profile_photo_url }}"
                             alt="{{ $this->user->name }}"
                             class="rounded-full h-32 w-32 object-cover"
+                            x-on:update-profile-photo.window="$el.src = $event.detail;"
                         >
                     </div>
                 </div>

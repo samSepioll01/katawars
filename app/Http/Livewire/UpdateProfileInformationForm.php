@@ -164,6 +164,8 @@ class UpdateProfileInformationForm extends Component
         $user->profile_photo_path = $photoUrl;
         $user->save();
 
+        $this->dispatchBrowserEvent('update-profile-photo', $photoUrl);
+
         $this->emit('refresh-navigation-menu');
     }
 
