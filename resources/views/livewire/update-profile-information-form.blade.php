@@ -48,8 +48,17 @@
                         <img
                             src="{{ $this->user->profile_photo_url }}"
                             alt="{{ $this->user->name }}"
-                            class="rounded-full h-32 w-32 object-cover"
-                            x-on:update-profile-photo.window="$el.src = $event.detail;"
+                            class="rounded-full h-32 w-32 xl:h-40 xl:w-40 2xl:h-44 2xl:w-44 object-cover transition-all duration-300"
+                            x-on:update-profile-photo.window="
+                                $el.style.opacity = 0;
+                                setTimeout( () => {
+                                    $el.src = $event.detail;
+                                }, 200);
+                                setTimeout( () => {
+                                    $el.style.opacity = 100;
+                                }, 300)
+                            "
+                            style=""
                         >
                     </div>
                 </div>
@@ -141,7 +150,13 @@
                     <div class="flex flex-row justify-evenly items-center py-2">
                         @foreach ($profilePhotos as $photo)
                             <div class="rounded-md">
-                                <img src="{{ env('AWS_PROFILE_URL') . '/' . $photo }}" wire:click="choosePhoto($event.target.src)" class="w-20 h-20 cursor-pointer rounded-md" alt="Thumbnail">
+                                <img
+                                    src="{{ env('AWS_PROFILE_URL') . '/' . $photo }}"
+                                    wire:click="choosePhoto($event.target.src)"
+                                    class="w-20 h-20 cursor-pointer rounded-md transition-all duration-500"
+                                    :class="{'profile-thumbnail-selected': $el.src === @this.selectedPhoto}"
+                                    alt="Thumbnail"
+                                >
                             </div>
                         @endforeach
                     </div>

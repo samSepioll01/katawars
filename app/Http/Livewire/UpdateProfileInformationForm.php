@@ -49,6 +49,9 @@ class UpdateProfileInformationForm extends Component
      */
     public $photo;
 
+
+    public $selectedPhoto;
+
     /**
      * The url of the user's thumbnails selected to be new avatar.
      *
@@ -71,6 +74,7 @@ class UpdateProfileInformationForm extends Component
     public function mount()
     {
         $this->state = Auth::user()->withoutRelations()->toArray();
+        $this->selectedPhoto = Auth::user()->profile_photo_url;
     }
 
 
@@ -163,6 +167,8 @@ class UpdateProfileInformationForm extends Component
         $user = User::find(Auth::user()->id);
         $user->profile_photo_path = $photoUrl;
         $user->save();
+
+        $this->selectedPhoto = $photoUrl;
 
         $this->dispatchBrowserEvent('update-profile-photo', $photoUrl);
 
