@@ -45,9 +45,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 // Can fail if external service is offline.
                 Storage::disk('s3')->put('/' . $filePath, $file);
 
-                if ($previous) {
-                    Storage::disk('s3')->delete($previous);
-                }
+                // if ($previous) {
+                //     Storage::disk('s3')->delete($previous);
+                // }
 
                 $user->profile_photo_path = $filePath;
                 $user->save();

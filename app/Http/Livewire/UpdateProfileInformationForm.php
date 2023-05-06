@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Spatie\Image\Image;
+use Illuminate\Support\Str;
 
 class UpdateProfileInformationForm extends Component
 {
@@ -47,6 +50,13 @@ class UpdateProfileInformationForm extends Component
     public $photo;
 
     /**
+     * The url of the user's thumbnails selected to be new avatar.
+     *
+     * @var string
+     */
+    public $photoUrl;
+
+    /**
      * Determine if the verification email was sent.
      *
      * @var bool
@@ -62,6 +72,8 @@ class UpdateProfileInformationForm extends Component
     {
         $this->state = Auth::user()->withoutRelations()->toArray();
     }
+
+
 
     /**
      * Set the values for the crop image.
@@ -120,6 +132,42 @@ class UpdateProfileInformationForm extends Component
     }
 
     /**
+     * Set the new avatar between user's profile photos.
+     *
+     * @param string $photoUrl
+     * @return void
+     */
+    public function choosePhoto(string $photoUrl)
+    {
+        $this->photoUrl = $photoUrl;
+        $message = 'Oops! Some was wrong. Please, try later.';
+
+        $this->resetErrorBag();
+        $this->validate([
+            'photoUrl' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($message) {
+
+                    if (!Str::contains($value, env('AWS_PROFILE_URL'))) {
+                        $fail($message);
+
+                    } else if (!Str::contains($value, auth()->user()->profile->slug)) {
+                        $fail($message);
+                    }
+                },
+            ],
+        ]);
+
+        $user = User::find(Auth::user()->id);
+        $user->profile_photo_path = $photoUrl;
+        $user->save();
+
+        $this->emit('refresh-navigation-menu');
+    }
+
+    /**
      * Delete user's profile photo.
      *
      * @return void
@@ -161,6 +209,10 @@ class UpdateProfileInformationForm extends Component
      */
     public function render()
     {
-        return view('livewire.update-profile-information-form');
+        $userDir = Auth::user()->profile->slug;
+        $photos = Storage::disk('s3')->files("profile-photos/$userDir");
+        return view('livewire.update-profile-information-form', [
+            'profilePhotos' => $photos,
+        ]);
     }
 }

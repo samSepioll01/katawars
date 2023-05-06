@@ -132,6 +132,21 @@
                 </div>
 
                 <x-jet-input-error for="photo" class="mt-2" />
+
+                <div class="max-h-44 w-full py-5 flex flex-col" x-show="{{count($profilePhotos) > 1 ? true : false}}">
+                    <div class="p-2">
+                        <x-jet-label value="{{ __('Last Photos') }}" />
+                    </div>
+                    <div class="flex flex-row justify-evenly items-center py-2">
+                        @foreach ($profilePhotos as $photo)
+                            <div class="rounded-md">
+                                <img src="{{ env('AWS_PROFILE_URL') . '/' . $photo }}" wire:click="choosePhoto($event.target.src)" class="w-20 h-20 cursor-pointer rounded-md" alt="Thumbnail">
+                            </div>
+                        @endforeach
+                    </div>
+
+                </div>
+                <x-jet-input-error for="photoUrl" class="mt-2" />
             </div>
 
         @endif
@@ -184,7 +199,7 @@
             {{ __('Saved.') }}
         </x-jet-action-message>
 
-        <x-jet-button wire:loading.attr="disabled" wire:target="photo">
+        <x-jet-button>
             {{ __('Save') }}
         </x-jet-button>
     </x-slot>
