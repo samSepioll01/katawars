@@ -30,7 +30,6 @@
                             wire:model.defer="photo"
                             x-ref="photo"
                             x-on:change="
-                                $refs.conterror.innerHTML = '';
                                 photoName = $refs.photo.files[0].name;
                                 reader = new FileReader();
                                 reader.onload = (e) => {
