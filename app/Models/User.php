@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Faker\Factory as Faker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Jetstream\Features;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -81,8 +82,11 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getProfilePhotoUrlAttribute()
     {
+        // Override public disk configuration to s3, otherwise hold it.
+        $disk = config('jetstream.profile_photo_disk') !== 'public' ?: 's3';
+
         $url = $this->profile_photo_path
-                    ? Storage::disk($this->profilePhotoDisk())
+                    ? Storage::disk($disk)
                         ->url($this->profile_photo_path)
                     : $this->defaultProfilePhotoUrl();
 
@@ -115,6 +119,30 @@ class User extends Authenticatable implements MustVerifyEmail
                 Storage::disk($this->profilePhotoDisk())->delete($previous);
             }
         });
+    }
+
+    /**
+     * Delete the user's profile photo.
+     *
+     * @return void
+     */
+    public function deleteProfilePhoto(string $disk = null)
+    {
+        $disk = $disk ?? $this->profilePhotoDisk();
+
+        if (! Features::managesProfilePhotos()) {
+            return;
+        }
+
+        if (is_null($this->profile_photo_path)) {
+            return;
+        }
+
+        Storage::disk($disk)->delete($this->profile_photo_path);
+
+        $this->forceFill([
+            'profile_photo_path' => null,
+        ])->save();
     }
 
     /**

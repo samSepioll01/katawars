@@ -5,9 +5,10 @@ namespace App\Actions\Fortify;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Models\Profile;
-use Illuminate\Support\Facades\Storage;
+use Exception;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -31,17 +32,42 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
         if (isset($input['photo'])) {
 
-            // $previous = auth()->user()->profile_photo_path;
+            // Handler if try upload image to S3 without internet conexion.
+            try {
 
-            $user->updateProfilePhoto($input['photo']);
+                $previous = $user->profile_photo_path;
 
-            // $filePath = auth()->user()->profile_photo_path;
-            // $file = Storage::disk('public')->get($filePath);
-            // Storage::disk('s3')->put('/' . $filePath, $file);
+                $user->updateProfilePhoto($input['photo']);
 
-            // if ($previous) {
-            //     Storage::disk('s3')->delete($previous);
-            // }
+                $filePath = $user->profile_photo_path;
+                $file = Storage::disk('public')->get($filePath);
+
+                // Can fail if external service is offline.
+                Storage::disk('s3')->put('/' . $filePath, $file);
+
+                if ($previous) {
+                    Storage::disk('s3')->delete($previous);
+                }
+
+                $user->profile_photo_path = $filePath;
+                $user->save();
+
+                Storage::disk('public')->delete($filePath);
+
+            } catch (Exception $e) {
+
+                // Undo the update for profile photo.
+                $user->profile_photo_path = $previous;
+                $user->save();
+
+                session()->flash('syncStatus', 'error');
+                session()->flash('syncMessage', 'Oops! Some was wrong. Try upload profile photo later.');
+                return redirect()->back();
+            }
+
+            session()->flash('syncStatus', 'success');
+            session()->flash('syncMessage', 'Profile Photo Updated Successfully!');
+
         }
 
         if ($input['email'] !== $user->email &&

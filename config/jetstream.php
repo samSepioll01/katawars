@@ -76,6 +76,6 @@ return [
     |
     */
 
-    'profile_photo_disk' => 's3',
+    'profile_photo_disk' => 'public',
 
 ];

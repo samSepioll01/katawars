@@ -22,60 +22,22 @@
                             preview: '.preview',
                         }
                     );
-
-                    iodine = new Iodine();
-                    iodine.rule('fileType', (type) => {
-                        return ['image/png', 'image/jpeg'].includes(type);
-                    });
-                    iodine.rule('fileMaxSize', (size) => {
-                        return parseInt(size) < 1000000;
-                    });
-                    iodine.setErrorMessages({
-                        fileType: `The [FIELD] must be a valid image format (png, jpeg, jpg).`,
-                        fileMaxSize: `The [FIELD] must not be greater than 1024 kilobytes.`,
-                    });
-                    iodine.setDefaultFieldName('photo');
                 "
                 class="col-span-6 xl:col-span-4"
             >
-
                 <!-- Profile Photo File Input -->
-                <input type="file" class="hidden imageinput"
+                <input type="file" class="hidden"
                             wire:model.defer="photo"
                             x-ref="photo"
                             x-on:change="
-                                validations = [
-                                    iodine.assert($refs.photo.files[0].type, ['fileType']),
-                                    iodine.assert($refs.photo.files[0].size, ['fileMaxSize']),
-                                ];
-
                                 $refs.conterror.innerHTML = '';
-
-                                validations.forEach(validation => {
-                                    if (!validation.valid) {
-                                        $refs.conterror.appendChild(
-                                            $aux.createElement(
-                                                'p',
-                                                {
-                                                    class: ['text-red-600', 'text-sm'],
-                                                },
-                                                validation.error,
-                                            )
-                                        );
-                                    }
-                                });
-
-                                if (validations.every(validation => validation.valid)) {
-                                    $refs.conterror.innerHTML = '';
-                                    photoName = $refs.photo.files[0].name;
-                                    reader = new FileReader();
-                                    reader.onload = (e) => {
-                                        cropper.replace(e.target.result);
-                                        $modals.show('cropper-modal');
-                                    };
-                                    reader.readAsDataURL($refs.photo.files[0]);
-                                }
-
+                                photoName = $refs.photo.files[0].name;
+                                reader = new FileReader();
+                                reader.onload = (e) => {
+                                    cropper.replace(e.target.result);
+                                    $modals.show('cropper-modal');
+                                };
+                                reader.readAsDataURL($refs.photo.files[0]);
                             "
                 />
 
@@ -162,7 +124,6 @@
                             {{ __('Select A New Photo') }}
                         </x-jet-secondary-button>
 
-
                         @if ($this->user->profile_photo_path)
                             <x-jet-secondary-button type="button" class="w-48 flex justify-center hover:shadow-md" wire:click="deleteProfilePhoto">
                                 {{ __('Remove Photo') }}
@@ -172,8 +133,6 @@
                 </div>
 
                 <x-jet-input-error for="photo" class="mt-2" />
-                <div x-ref="conterror" class="mt-2" wire:ignore></div>
-
             </div>
 
         @endif
@@ -229,9 +188,6 @@
         <x-jet-button wire:loading.attr="disabled" wire:target="photo">
             {{ __('Save') }}
         </x-jet-button>
-
-
     </x-slot>
 
 </x-jet-form-section>
-
