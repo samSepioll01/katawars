@@ -240,7 +240,6 @@ class GitHubLoginController extends Controller
 
         $user->name = $name;
         $user->bio = $githubUser['bio'] ?? $user->bio;
-        $user->deleteProfilePhoto('s3');
         $user->profile_photo_path = $githubUser->getAvatar();
         $user->github_id = $githubUser->getId();
         $user->github_repos_url = $githubUser['repos_url'];

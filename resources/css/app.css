@@ -343,7 +343,7 @@
         @apply text-slate-300;
     }
 
-    .profile-thumbnail-selected {
+    .thumbnail-selected {
         @apply outline-none ring-2 ring-violet-600 scale-110 shadow-2xl shadow-violet-600
                 dark:ring-cyan-500 dark:shadow-cyan-400
     }

@@ -143,36 +143,39 @@ class UpdateProfileInformationForm extends Component
      */
     public function choosePhoto(string $photoUrl)
     {
-        $this->photoUrl = $photoUrl;
-        $message = 'Oops! Some was wrong. Please, try later.';
+        if (Auth::user()->profile_photo_url !== $photoUrl) {
 
-        $this->resetErrorBag();
-        $this->validate([
-            'photoUrl' => [
-                'required',
-                'string',
-                'max:255',
-                function ($attribute, $value, $fail) use ($message) {
+            $this->photoUrl = $photoUrl;
+            $message = 'Oops! Some was wrong. Please, try later.';
 
-                    if (!Str::contains($value, env('AWS_PROFILE_URL'))) {
-                        $fail($message);
+            $this->resetErrorBag();
+            $this->validate([
+                'photoUrl' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    function ($attribute, $value, $fail) use ($message) {
 
-                    } else if (!Str::contains($value, auth()->user()->profile->slug)) {
-                        $fail($message);
-                    }
-                },
-            ],
-        ]);
+                        if (!Str::contains($value, env('AWS_PROFILE_URL'))) {
+                            $fail($message);
 
-        $user = User::find(Auth::user()->id);
-        $user->profile_photo_path = $photoUrl;
-        $user->save();
+                        } else if (!Str::contains($value, auth()->user()->profile->slug)) {
+                            $fail($message);
+                        }
+                    },
+                ],
+            ]);
 
-        $this->selectedPhoto = $photoUrl;
+            $user = User::find(Auth::user()->id);
+            $user->profile_photo_path = $photoUrl;
+            $user->save();
 
-        $this->dispatchBrowserEvent('update-profile-photo', $photoUrl);
+            $this->selectedPhoto = $photoUrl;
 
-        $this->emit('refresh-navigation-menu');
+            $this->dispatchBrowserEvent('update-profile-photo', $photoUrl);
+
+            $this->emit('refresh-navigation-menu');
+        }
     }
 
     /**
@@ -219,8 +222,16 @@ class UpdateProfileInformationForm extends Component
     {
         $userDir = Auth::user()->profile->slug;
         $photos = Storage::disk('s3')->files("profile-photos/$userDir");
+
+        $photos = collect($photos)->map(function ($photo) {
+            return [
+                'path' => $photo,
+                'lastModified' => Storage::disk('s3')->lastModified($photo),
+            ];
+        });
+
         return view('livewire.update-profile-information-form', [
-            'profilePhotos' => $photos,
+            'profilePhotos' => $photos->sortByDesc('lastModified'),
         ]);
     }
 }

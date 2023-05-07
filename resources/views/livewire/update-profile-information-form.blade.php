@@ -151,10 +151,10 @@
                         @foreach ($profilePhotos as $photo)
                             <div class="rounded-md">
                                 <img
-                                    src="{{ env('AWS_PROFILE_URL') . '/' . $photo }}"
+                                    src="{{ env('AWS_PROFILE_URL') . '/' . $photo['path'] }}"
                                     wire:click="choosePhoto($event.target.src)"
                                     class="w-20 h-20 cursor-pointer rounded-md transition-all duration-500"
-                                    :class="{'profile-thumbnail-selected': $el.src === @this.selectedPhoto}"
+                                    :class="{'thumbnail-selected': $el.src === @this.selectedPhoto,}"
                                     alt="Thumbnail"
                                 >
                             </div>
