@@ -129,6 +129,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function deleteProfilePhoto(string $disk = null)
     {
         $disk = $disk ?? $this->profilePhotoDisk();
+        $path = str_replace(
+            env('AWS_PROFILE_URL'), '', $this->profile_photo_path
+        );
 
         if (! Features::managesProfilePhotos()) {
             return;
@@ -138,11 +141,7 @@ class User extends Authenticatable implements MustVerifyEmail
             return;
         }
 
-        Storage::disk($disk)->delete($this->profile_photo_path);
-
-        $this->forceFill([
-            'profile_photo_path' => null,
-        ])->save();
+        Storage::disk($disk)->delete($path);
     }
 
     /**

@@ -14,6 +14,20 @@
             <div
                 x-data="{photoName: null, photoPreview: null}"
                 x-init="
+                    iodine = new Iodine();
+                    iodine.rule('fileType', (type) => {
+                        return ['image/png', 'image/jpeg'].includes(type);
+                    });
+                    iodine.rule('fileMaxSize', (size) => {
+                        return parseInt(size) < 1000000;
+                    });
+
+                    iodine.setErrorMessages({
+                        fileType: `The [FIELD] must be a valid image format (png, jpeg, jpg).`,
+                        fileMaxSize: `The [FIELD] must not be greater than 1024 kilobytes.`,
+                    });
+                    iodine.setDefaultFieldName('photo');
+
                     cropper = new Cropper(
                         document.getElementById('cropperimage'),
                         {
@@ -30,13 +44,20 @@
                             wire:model.defer="photo"
                             x-ref="photo"
                             x-on:change="
-                                photoName = $refs.photo.files[0].name;
-                                reader = new FileReader();
-                                reader.onload = (e) => {
-                                    cropper.replace(e.target.result);
-                                    $modals.show('cropper-modal');
+                                validations = {
+                                    'type': iodine.assert($refs.photo.files[0].type, ['fileType']),
+                                    'size': iodine.assert($refs.photo.files[0].size, ['fileMaxSize']),
                                 };
-                                reader.readAsDataURL($refs.photo.files[0]);
+
+                                if (validations.type.valid && validations.size.valid) {
+                                    photoName = $refs.photo.files[0].name;
+                                    reader = new FileReader();
+                                    reader.onload = (e) => {
+                                        cropper.replace(e.target.result);
+                                        $modals.show('cropper-modal');
+                                    };
+                                    reader.readAsDataURL($refs.photo.files[0]);
+                                }
                             "
                 />
 
@@ -47,16 +68,12 @@
                     <div class="p-2" x-show="! photoPreview">
                         <img
                             src="{{ $this->user->profile_photo_url }}"
+                            x-ref="profilephoto"
                             alt="{{ $this->user->name }}"
-                            class="rounded-full h-32 w-32 xl:h-40 xl:w-40 2xl:h-44 2xl:w-44 object-cover transition-all duration-300"
+                            class="rounded-full h-32 w-32 xl:h-40 xl:w-40 2xl:h-44 2xl:w-44 object-cover transition-all duration-500"
                             x-on:update-profile-photo.window="
-                                $el.style.opacity = 0;
-                                setTimeout( () => {
-                                    $el.src = $event.detail;
-                                }, 200);
-                                setTimeout( () => {
-                                    $el.style.opacity = 100;
-                                }, 300)
+                                $el.src = $event.detail;
+                                $el.style.opacity = 100;
                             "
                             style=""
                         >
@@ -134,7 +151,17 @@
                         </x-jet-secondary-button>
 
                         @if ($this->user->profile_photo_path)
-                            <x-jet-secondary-button type="button" class="w-48 flex justify-center hover:shadow-md" wire:click="deleteProfilePhoto">
+                            <x-jet-secondary-button
+                                type="button"
+                                class="w-48 flex justify-center hover:shadow-md"
+                                x-on:click="
+                                    $refs.profilephoto.opacity = 0;
+                                    thumbnail = document.querySelector('.thumbnail-selected');
+                                    thumbnail.classList.remove('thumbnail-selected');
+                                    setTimeout(() => thumbnail.style.opacity = 0, 400);
+                                    $wire.deleteProfilePhoto();
+                                "
+                            >
                                 {{ __('Remove Photo') }}
                             </x-jet-secondary-button>
                         @endif
@@ -147,12 +174,15 @@
                     <div class="p-2">
                         <x-jet-label value="{{ __('Last Photos') }}" />
                     </div>
-                    <div class="flex flex-row justify-evenly items-center py-2">
+                    <div class="flex flex-row justify-evenly items-center py-2" x-ref="conthumbnails">
                         @foreach ($profilePhotos as $photo)
                             <div class="rounded-md">
                                 <img
                                     src="{{ env('AWS_PROFILE_URL') . '/' . $photo['path'] }}"
-                                    wire:click="choosePhoto($event.target.src)"
+                                    x-on:click="
+                                        $refs.profilephoto.style.opacity = 0;
+                                        $wire.choosePhoto($event.target.src);
+                                    "
                                     class="w-20 h-20 cursor-pointer rounded-md transition-all duration-500"
                                     :class="{'thumbnail-selected': $el.src === @this.selectedPhoto,}"
                                     alt="Thumbnail"
@@ -215,7 +245,7 @@
             {{ __('Saved.') }}
         </x-jet-action-message>
 
-        <x-jet-button>
+        <x-jet-button wire:loading.attr="disabled" wire:target="photo">
             {{ __('Save') }}
         </x-jet-button>
     </x-slot>

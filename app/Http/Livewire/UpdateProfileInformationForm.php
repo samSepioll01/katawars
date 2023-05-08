@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
@@ -179,6 +180,30 @@ class UpdateProfileInformationForm extends Component
     }
 
     /**
+     * Get the user profile photos from S3.
+     *
+     * @param bool $withDate
+     * @return array|Collection
+     */
+    public function getProfilePhotos(bool $withDate = false)
+    {
+        $photos = Storage::disk('s3')->files(
+            'profile-photos/' . Auth::user()->profile->slug
+        );
+
+        if ($withDate) {
+            $photos = collect($photos)->map(function ($photo) {
+                return [
+                    'path' => $photo,
+                    'lastModified' => Storage::disk('s3')->lastModified($photo),
+                ];
+            });
+        }
+
+        return $photos;
+    }
+
+    /**
      * Delete user's profile photo.
      *
      * @return void
@@ -188,7 +213,22 @@ class UpdateProfileInformationForm extends Component
         $user = Auth::user();
         $user->deleteProfilePhoto('s3');
 
+        $photos = $this->getProfilePhotos(true)->sortByDesc('lastModified');
+
+        count($photos)
+            ? $user->profile_photo_path = $photos->first()['path']
+            : $user->profile_photo_path = null;
+
+        $user->save();
+
+        $this->selectedPhoto = $user->profile_photo_url;
+
+        $this->dispatchBrowserEvent(
+            'update-profile-photo',
+            $user->profile_photo_url
+        );
         $this->emit('refresh-navigation-menu');
+
     }
 
     /**
@@ -220,16 +260,7 @@ class UpdateProfileInformationForm extends Component
      */
     public function render()
     {
-        $userDir = Auth::user()->profile->slug;
-        $photos = Storage::disk('s3')->files("profile-photos/$userDir");
-
-        $photos = collect($photos)->map(function ($photo) {
-            return [
-                'path' => $photo,
-                'lastModified' => Storage::disk('s3')->lastModified($photo),
-            ];
-        });
-
+        $photos = $this->getProfilePhotos(true);
         return view('livewire.update-profile-information-form', [
             'profilePhotos' => $photos->sortByDesc('lastModified'),
         ]);
