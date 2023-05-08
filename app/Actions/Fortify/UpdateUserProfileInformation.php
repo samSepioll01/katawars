@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Models\Profile;
 use App\Traits\AuxiliarFunctions;
-use Exception;
-use Illuminate\Support\Facades\Auth;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -36,53 +34,31 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
         if (isset($input['photo'])) {
 
-            // Handler if try upload image to S3 without internet conexion.
-            try {
+            $user->updateProfilePhoto($input['photo']);
 
-                $previous = $user->profile_photo_path;
+            $filePath = $user->profile_photo_path;
+            $file = Storage::disk('public')->get($filePath);
+            $S3photos = $this->getProfilePhotos(true);
 
-                $user->updateProfilePhoto($input['photo']);
+            if (count($S3photos) === 5) {
 
-                $filePath = $user->profile_photo_path;
-                $file = Storage::disk('public')->get($filePath);
+                $S3path = $this->filterS3Path(
+                    $S3photos->sortBy('lastModified')->first()['path']
+                );
 
-                $S3photos = $this->getProfilePhotos(true);
-
-                if (count($S3photos) === 5) {
-                    $S3path = str_replace(
-                        env('AWS_PROFILE_URL'),
-                        '',
-                        $S3photos->sortBy('lastModified')->first()['path']
-                    );
-                    Storage::disk('s3')->delete($S3path);
-                }
-
-                // Can fail if external service is offline.
-                Storage::disk('s3')->put('/' . $filePath, $file);
-
-                // if ($previous) {
-                //     Storage::disk('s3')->delete($previous);
-                // }
-
-                $user->profile_photo_path = $filePath;
-                $user->save();
-
-                Storage::disk('public')->delete($filePath);
-
-            } catch (Exception $e) {
-
-                // Undo the update for profile photo.
-                $user->profile_photo_path = $previous;
-                $user->save();
-
-                session()->flash('syncStatus', 'error');
-                session()->flash('syncMessage', 'Oops! Some was wrong. Try upload profile photo later.');
-                return redirect()->back();
+                Storage::disk('s3')->delete($S3path);
             }
+
+            // Can fail if external service is offline.
+            Storage::disk('s3')->put('/' . $filePath, $file);
+
+            $user->profile_photo_path = $filePath;
+            $user->save();
+
+            Storage::disk('public')->delete($filePath);
 
             session()->flash('syncStatus', 'success');
             session()->flash('syncMessage', 'Profile Photo Updated Successfully!');
-
         }
 
         if ($input['email'] !== $user->email &&

@@ -16,7 +16,7 @@ trait AuxiliarFunctions
     public function getProfilePhotos(bool $withDate = false)
     {
         $photos = Storage::disk('s3')->files(
-            'profile-photos/' . Auth::user()->profile->slug
+            'profile-photos/' . Auth::user()->id
         );
 
         if ($withDate) {
@@ -29,5 +29,16 @@ trait AuxiliarFunctions
         }
 
         return $photos;
+    }
+
+    /**
+     * Filter url to convert it in S3 valid path.
+     *
+     * @param string $url
+     * @return string
+     */
+    public function filterS3Path(string $url)
+    {
+        return str_replace(env('AWS_PROFILE_URL'), '', $url);
     }
 }

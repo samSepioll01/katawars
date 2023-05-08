@@ -111,7 +111,7 @@ class User extends Authenticatable implements MustVerifyEmail
         tap($this->profile_photo_path, function ($previous) use ($photo) {
             $this->forceFill([
                 'profile_photo_path' => $photo->store(
-                    'profile-photos/' . $this->profile->slug, ['disk' => $this->profilePhotoDisk()]
+                    'profile-photos/' . $this->id, ['disk' => $this->profilePhotoDisk()]
                 ),
             ])->save();
 

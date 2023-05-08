@@ -159,7 +159,7 @@ class UpdateProfileInformationForm extends Component
                         if (!Str::contains($value, env('AWS_PROFILE_URL'))) {
                             $fail($message);
 
-                        } else if (!Str::contains($value, auth()->user()->profile->slug)) {
+                        } else if (!Str::contains($value, auth()->user()->id)) {
                             $fail($message);
                         }
                     },
