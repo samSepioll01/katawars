@@ -170,28 +170,30 @@
 
                 <x-jet-input-error for="photo" class="mt-2" />
 
-                <div class="max-h-44 w-full py-5 flex flex-col" x-show="{{count($profilePhotos) > 1 ? true : false}}">
-                    <div class="p-2">
-                        <x-jet-label value="{{ __('Last Photos') }}" />
-                    </div>
-                    <div class="flex flex-row justify-evenly items-center py-2" x-ref="conthumbnails">
-                        @foreach ($profilePhotos as $photo)
-                            <div class="rounded-md">
-                                <img
-                                    src="{{ env('AWS_PROFILE_URL') . '/' . $photo['path'] }}"
-                                    x-on:click="
-                                        $refs.profilephoto.style.opacity = 0;
-                                        $wire.choosePhoto($event.target.src);
-                                    "
-                                    class="w-20 h-20 cursor-pointer rounded-md transition-all duration-500"
-                                    :class="{'thumbnail-selected': $el.src === @this.selectedPhoto,}"
-                                    alt="Thumbnail"
-                                >
-                            </div>
-                        @endforeach
-                    </div>
+                @if (count($profilePhotos) >= 1)
 
-                </div>
+                    <div class="max-h-44 w-full py-5 flex flex-col">
+                        <div class="p-2">
+                            <x-jet-label value="{{ __('Last Photos') }}" />
+                        </div>
+                        <div class="flex flex-row justify-evenly items-center py-2" x-ref="conthumbnails">
+                            @foreach ($profilePhotos as $photo)
+                                <div class="rounded-md">
+                                    <img
+                                        src="{{ env('AWS_PROFILE_URL') . '/' . $photo['path'] }}"
+                                        x-on:click="
+                                            $refs.profilephoto.style.opacity = 0;
+                                            $wire.choosePhoto($event.target.src);
+                                        "
+                                        class="w-20 h-20 cursor-pointer rounded-md transition-all duration-500"
+                                        :class="{'thumbnail-selected': $el.src === @this.selectedPhoto,}"
+                                        alt="Thumbnail"
+                                    >
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
                 <x-jet-input-error for="photoUrl" class="mt-2" />
             </div>
 

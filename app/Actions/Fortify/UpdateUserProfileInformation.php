@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use App\Models\Profile;
 use App\Traits\AuxiliarFunctions;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -44,6 +45,17 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
                 $filePath = $user->profile_photo_path;
                 $file = Storage::disk('public')->get($filePath);
+
+                $S3photos = $this->getProfilePhotos(true);
+
+                if (count($S3photos) === 5) {
+                    $S3path = str_replace(
+                        env('AWS_PROFILE_URL'),
+                        '',
+                        $S3photos->sortBy('lastModified')->first()['path']
+                    );
+                    Storage::disk('s3')->delete($S3path);
+                }
 
                 // Can fail if external service is offline.
                 Storage::disk('s3')->put('/' . $filePath, $file);
