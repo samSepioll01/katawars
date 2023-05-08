@@ -2,6 +2,9 @@
     <x-layout.wrapper-secondary-panel>
 
         <header class="text-center">
+            <div class="rounded-md">
+                <img src="{{ env('AWS_APP_URL') }}/images/pulpy.webp" class="rounded-md w-full h-[200px] sm:h-[300px]" alt="Pulpy!">
+            </div>
             <h1 class="dark:text-tomato">Help</h1>
             <p class="text-slate-600 dark:text-slate-200">Last updated: {{ $updatedAt->toDateString() }}.</p>
         </header>

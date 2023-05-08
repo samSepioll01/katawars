@@ -9,8 +9,8 @@ const elemHtml = document.querySelector('html');
 const elemBody = document.querySelector('body');
 const btnChangeMode = document.getElementById('btn-mode');
 const modeIcon = document.getElementById('mode-icon');
-const darkModeIconPath = `${window.location.origin}/storage/icons/modo-nocturno.png`;
-const lightModeIconPath = `${window.location.origin}/storage/icons/brillo.png`;
+const darkModeIconPath = $katawars.S3.icons.darkMode;
+const lightModeIconPath = $katawars.S3.icons.lightMode;
 const csrf_token = document.querySelector('meta[name="csrf-token"]').content;
 
 

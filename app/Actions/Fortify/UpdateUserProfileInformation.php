@@ -5,11 +5,15 @@ namespace App\Actions\Fortify;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Models\Profile;
+use App\Traits\AuxiliarFunctions;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
+    use AuxiliarFunctions;
+
     /**
      * Validate and update the given user's profile information.
      *
@@ -29,7 +33,32 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         Profile::validateUrlProfile($input['name'], $user);
 
         if (isset($input['photo'])) {
+
             $user->updateProfilePhoto($input['photo']);
+
+            $filePath = $user->profile_photo_path;
+            $file = Storage::disk('public')->get($filePath);
+            $S3photos = $this->getProfilePhotos(true);
+
+            if (count($S3photos) === 5) {
+
+                $S3path = $this->filterS3Path(
+                    $S3photos->sortBy('lastModified')->first()['path']
+                );
+
+                Storage::disk('s3')->delete($S3path);
+            }
+
+            // Can fail if external service is offline.
+            Storage::disk('s3')->put('/' . $filePath, $file);
+
+            $user->profile_photo_path = $filePath;
+            $user->save();
+
+            Storage::disk('public')->delete($filePath);
+
+            session()->flash('syncStatus', 'success');
+            session()->flash('syncMessage', 'Profile Photo Updated Successfully!');
         }
 
         if ($input['email'] !== $user->email &&

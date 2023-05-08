@@ -17,12 +17,12 @@ class appThemeController extends Controller
         $this->modesValues = [
             'dark' => [
                 'theme' => 'dark',
-                'urlModeIcon' => url('/storage/icons/brillo.png'),
+                'urlModeIcon' => env('AWS_APP_URL') . '/icons/brillo.png',
                 'scrollbar' => 'scrollbar-dark',
             ],
             'light' => [
                 'theme' => 'light',
-                'urlModeIcon' => url('/storage/icons/modo-nocturno.png'),
+                'urlModeIcon' => env('AWS_APP_URL') . '/icons/modo-nocturno.png',
                 'scrollbar' => 'scrollbar-light',
             ],
         ];

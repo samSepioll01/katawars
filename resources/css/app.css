@@ -1,3 +1,5 @@
+@import 'cropperjs/dist/cropper.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +9,11 @@
 @layer utilities {
 
     /* Mozilla Firefox scrollbar styles */
+
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #ff01c2ff #cccdce;
+    }
 
     .moz-scrollbar-dark {
         scrollbar-width: thin;
@@ -188,6 +195,15 @@
     .transform-origin-50 {
         transform-origin: 50%;
     }
+
+    /* Cropper Photo Preview Target */
+    .preview {
+        overflow: hidden;
+        width: 240px;
+        height: 240px;
+        margin: 10px;
+        border-radius: 50%;
+    }
 }
 
 @layer components {
@@ -240,11 +256,11 @@
     }
 
     .parallax-bluegirl {
-        @apply bg-[url('/public/storage/images/chicaazul1.webp')] bg-right-top bg-cover bg-no-repeat bg-fixed;
+        @apply bg-right-top bg-cover bg-no-repeat bg-fixed;
     }
 
     .parallax-hexagon {
-        @apply bg-[url('/public/storage/images/hexagon.webp')] bg-left bg-cover bg-no-repeat bg-fixed flex justify-end;
+        @apply bg-left bg-cover bg-no-repeat bg-fixed flex justify-end;
     }
 
     .parallax-inner-container {
@@ -325,5 +341,10 @@
 
     .dark-placeholder::placeholder {
         @apply text-slate-300;
+    }
+
+    .thumbnail-selected {
+        @apply outline-none ring-2 ring-violet-600 scale-110 shadow-2xl shadow-violet-600
+                dark:ring-cyan-500 dark:shadow-cyan-400
     }
 }

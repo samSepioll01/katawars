@@ -41,11 +41,11 @@
                     <img id="mode-icon"
                             src="@if (auth()->user()?->email_verified_at)
                                     {{ auth()->user()->profile->is_darkmode ?
-                                            url('/storage/icons/brillo.png') :
-                                            url('/storage/icons/modo-nocturno.png')
+                                            env('AWS_APP_URL') . '/icons/brillo.png' :
+                                            env('AWS_APP_URL') . '/icons/modo-nocturno.png'
                                     }}
                                 @else
-                                    {{ session('urlModeIcon') ?? url('/storage/icons/brillo.png') }}
+                                    {{ session('urlModeIcon') ?? env('AWS_APP_URL') . '/icons/brillo.png' }}
                                 @endif"
                             alt="Change Theme Mode"
                     >

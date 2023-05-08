@@ -15,6 +15,9 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 use Faker\Factory as Faker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Jetstream\Features;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -71,6 +74,75 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Get the URL to the user's profile photo.
+     *
+     * @return string
+     */
+    public function getProfilePhotoUrlAttribute()
+    {
+        // Override public disk configuration to s3, otherwise hold it.
+        $disk = config('jetstream.profile_photo_disk') !== 'public' ?: 's3';
+
+        $url = $this->profile_photo_path
+                    ? Storage::disk($disk)
+                        ->url($this->profile_photo_path)
+                    : $this->defaultProfilePhotoUrl();
+
+        // Validate GitHub Sync Profile Photo Case
+        if ( filter_var( $url, FILTER_VALIDATE_URL ) ) {
+            if ( substr_count( $url, 'http') > 1 ) {
+                $url = $this->profile_photo_path;
+            }
+        }
+
+        return $url;
+    }
+
+    /**
+     * Update the user's profile photo.
+     *
+     * @param  \Illuminate\Http\UploadedFile  $photo
+     * @return void
+     */
+    public function updateProfilePhoto(UploadedFile $photo)
+    {
+        tap($this->profile_photo_path, function ($previous) use ($photo) {
+            $this->forceFill([
+                'profile_photo_path' => $photo->store(
+                    'profile-photos/' . $this->id, ['disk' => $this->profilePhotoDisk()]
+                ),
+            ])->save();
+
+            if ($previous) {
+                Storage::disk($this->profilePhotoDisk())->delete($previous);
+            }
+        });
+    }
+
+    /**
+     * Delete the user's profile photo.
+     *
+     * @return void
+     */
+    public function deleteProfilePhoto(string $disk = null)
+    {
+        $disk = $disk ?? $this->profilePhotoDisk();
+        $path = str_replace(
+            env('AWS_PROFILE_URL'), '', $this->profile_photo_path
+        );
+
+        if (! Features::managesProfilePhotos()) {
+            return;
+        }
+
+        if (is_null($this->profile_photo_path)) {
+            return;
+        }
+
+        Storage::disk($disk)->delete($path);
+    }
 
     /**
      * This determines which profile is associated to the user.

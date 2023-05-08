@@ -14,8 +14,11 @@
 
 <div
     class="w-1/3 h-32 fixed bottom-0 flex justify-end items-center p-6 right-0"
+    :class="{'hidden': session()->has('syncStatus')}"
     x-data="{ open: true }"
-    x-init="setTimeout(() => open = false, {{ $time }})">
+    x-show="open"
+    x-init="setTimeout(() => open = false, {{ $time }})"
+>
 
     <div x-show="open"
             x-transition:enter="transition ease-out duration-700"
