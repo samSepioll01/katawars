@@ -3,9 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
-use Illuminate\Support\Collection;
+use App\Traits\AuxiliarFunctions;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -14,7 +13,7 @@ use Illuminate\Support\Str;
 
 class UpdateProfileInformationForm extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, AuxiliarFunctions;
 
     /**
      * The position for x edge of the crop image.
@@ -177,30 +176,6 @@ class UpdateProfileInformationForm extends Component
 
             $this->emit('refresh-navigation-menu');
         }
-    }
-
-    /**
-     * Get the user profile photos from S3.
-     *
-     * @param bool $withDate
-     * @return array|Collection
-     */
-    public function getProfilePhotos(bool $withDate = false)
-    {
-        $photos = Storage::disk('s3')->files(
-            'profile-photos/' . Auth::user()->profile->slug
-        );
-
-        if ($withDate) {
-            $photos = collect($photos)->map(function ($photo) {
-                return [
-                    'path' => $photo,
-                    'lastModified' => Storage::disk('s3')->lastModified($photo),
-                ];
-            });
-        }
-
-        return $photos;
     }
 
     /**

@@ -8,10 +8,13 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Models\Profile;
+use App\Traits\AuxiliarFunctions;
 use Exception;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
+    use AuxiliarFunctions;
+
     /**
      * Validate and update the given user's profile information.
      *
