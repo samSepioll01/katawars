@@ -192,8 +192,27 @@
         }
     }
 
+    .animation-progress-bar {
+        transform-origin: left;
+        animation: progressBar 1s ease backwards;
+    }
+
+    @keyframes progressBar {
+        0% {
+            transform: scaleX(0);
+         }
+
+         100% {
+             transform: scaleX(1);
+         }
+    }
+
     .transform-origin-50 {
         transform-origin: 50%;
+    }
+
+    .transform-origin-left {
+        transform-origin: left;
     }
 
     /* Cropper Photo Preview Target */
@@ -203,6 +222,14 @@
         height: 240px;
         margin: 10px;
         border-radius: 50%;
+    }
+
+    .dot-shadow {
+        box-shadow: 0 0 0 4px #0bec7c22,
+        0 0 0 10px #0bec7c22,
+        0 0 20px #0bec7c,
+        0 0 40px 5px #0bec7c,
+        0 0 60px 10px #0bec7c;
     }
 }
 
@@ -346,5 +373,10 @@
     .thumbnail-selected {
         @apply outline-none ring-2 ring-violet-600 scale-110 shadow-2xl shadow-violet-600
                 dark:ring-cyan-500 dark:shadow-cyan-400
+    }
+
+    .dot {
+        @apply after:absolute after:top-1/2 after:transform after:-translate-y-1/2 after:scale-125 after:w-3 after:h-3
+               after:bg-green-600 dark:after:bg-[#0bec7c] after:rounded-full after:ml-[70%];
     }
 }

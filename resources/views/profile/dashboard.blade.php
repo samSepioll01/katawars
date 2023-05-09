@@ -93,11 +93,7 @@
 
                                 </div>
 
-                                <div class="w-full flex flex-col justify-center">
-                                    <div class="w-full border border-gray-900">
-                                        <div class="py-1 bg-green-600 w-[{{$userValues['exp2next']}}%]"></div>
-                                    </div>
-                                </div>
+                                <x-layout.progress-bar size="4" title="Rank Progress" :progress="$userValues['exp2next']" />
 
                             </div>
 
