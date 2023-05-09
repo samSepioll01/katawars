@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 // Guest
 
-Route::get('/prueba', fn() => view('prueba'));
 Route::get('/', [appThemeController::class, 'initialConfig'])->name('home');
 Route::get('/privacy-policy', fn() => view('policy'))->name('privacy-policy');
 Route::get('/terms-of-service', fn() => view('terms'))->name('terms-service');

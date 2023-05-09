@@ -1,6 +1,7 @@
-<div class="p-6 sm:px-20 border-b border-gray-200">
+<header class="p-6 sm:px-20 border-b border-gray-200">
+
     <div>
-        <x-jet-application-logo class="block h-12 w-auto" />
+        {{ $userValues }}
     </div>
 
     <div class="mt-8 text-2xl dark:text-slate-100">
@@ -13,7 +14,7 @@
         you should love expressing your creativity through programming, so we have spent time carefully crafting the Laravel
         ecosystem to be a breath of fresh air. We hope you love it.
     </div>
-</div>
+</header>
 
 <div class="grid grid-cols-1 md:grid-cols-2">
     <div class="p-6">

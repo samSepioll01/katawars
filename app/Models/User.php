@@ -145,6 +145,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * This determines the historial sessions for the user.
+     */
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
+    }
+
+    /**
      * This determines which profile is associated to the user.
      */
     public function profile(): HasOne

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\ThemeModeUpdated;
+use App\Models\User;
+use Carbon\Carbon;
 
 class appThemeController extends Controller
 {
@@ -58,7 +60,9 @@ class appThemeController extends Controller
             $profile->save();
         }
 
-        return view('profile.dashboard')->render();
+        return view('profile.dashboard', [
+            'userValues' => $this->getUserDashboardValues($user),
+        ]);
     }
 
     /**
@@ -95,5 +99,24 @@ class appThemeController extends Controller
     private function setSessionTheme($theme = null)
     {
         session($this->modesValues[$theme ?? session('theme')]);
+    }
+
+    private function getUserDashboardValues(User $user)
+    {
+        $lastSession = $user->sessions->sortByDesc('last_activity')
+                            ->first()->last_activity;
+
+        return [
+            'nickname' => $user->name,
+            'bio' => $user->bio,
+            'rank' => $user->profile->rank->name,
+            'time_elapsed' => $user->created_at->diffForHumans(now()),
+            'last_activity' => (new Carbon($lastSession)),
+            'exp' => $user->profile->exp,
+            'honor' => $user->profile->honor,
+            'exp2next' => $user->profile->exp / $user->profile->rank->level_up * 100,
+            'count_followers' => $user->profile->followers()->count(),
+            'count_following' => $user->profile->following()->count(),
+        ];
     }
 }
