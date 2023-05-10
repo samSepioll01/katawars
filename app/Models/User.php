@@ -153,6 +153,19 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * This determines if the passed user is online.
+     *
+     * @param \App\Models\User|null $user
+     * @return bool Return true if the user is online, false otherwise.
+     */
+    public static function isOnline(User $user = null): bool
+    {
+        return $user
+            ? (bool) Session::all()->where('user_id', $user->id )->count()
+            : false;
+    }
+
+    /**
      * This determines which profile is associated to the user.
      */
     public function profile(): HasOne
