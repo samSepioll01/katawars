@@ -30,6 +30,7 @@ class ProfileFactory extends Factory
             'is_banned' => false,
             'is_deleted' => false,
             'rank_id' => 1,
+            'last_activity' => (int) now()->valueOf(),
         ];
     }
 }
