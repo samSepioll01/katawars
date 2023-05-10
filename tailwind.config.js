@@ -19,6 +19,7 @@ module.exports = {
                 'outter-md': '0px 0px 6px',
                 'outter-lg': '0px 0px 7px',
                 'outter-xl': '0px 0px 8px',
+                'glassmorph': '0px 0px 15px, 0px 0px 30px, 0px 0px 45px, 0px 0px 60px',
             },
         },
     },

@@ -231,6 +231,13 @@
         0 0 40px 5px #0bec7c,
         0 0 60px 10px #0bec7c;
     }
+
+    .tab-active-marker-shadow {
+        box-shadow: 0 0 15px #5da6ff,
+        0 0 30px #5da6ff,
+        0 0 45px #5da6ff,
+        0 0 60px #5da6ff;
+    }
 }
 
 @layer components {
@@ -378,5 +385,29 @@
     .dot {
         @apply after:absolute after:top-1/2 after:transform after:-translate-y-1/2 after:scale-125 after:w-3 after:h-3
                after:bg-green-600 dark:after:bg-[#0bec7c] after:rounded-full after:ml-[70%];
+    }
+
+    .card-panel {
+        @apply bg-white dark:bg-[rgb(31,31,31)]/30 border border-slate-800/20 rounded-md shadow-xl;
+    }
+
+    .tab {
+        @apply relative text-center text-slate-400 hover:text-slate-50 py-5 transition-all duration-300 cursor-pointer;
+    }
+
+    .tab-bottom {
+        @apply  transition-all duration-300 rounded-md absolute bottom-0 h-[2px] left-0
+                w-full bg-[#7f5bd1ff] dark:bg-[#00b6e0ff] shadow-[#7f5bd1ff]
+                dark:shadow-[#00b6e0ff] shadow-outter-lg transform scale-x-0;
+    }
+
+    .tab-selected {
+        @apply  transition-all duration-300 rounded-md absolute bottom-0 h-[2px]
+                w-full bg-[#7f5bd1ff] dark:bg-[#00b6e0ff] left-0 shadow-[#7f5bd1ff]
+                dark:shadow-[#00b6e0ff] shadow-outter-sm scale-x-100;
+    }
+
+    .tab:hover > .tab-bottom {
+        @apply scale-x-100;
     }
 }

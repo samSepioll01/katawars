@@ -22,7 +22,7 @@
 >
     <div
         x-show="sidebarOpen"
-        class="min-h-screen z-10 w-full fixed inset-0 bg-gray-700/30 dark:bg-gray-400/30 transition-all
+        class="min-h-screen z-30 w-full fixed inset-0 bg-gray-700/30 dark:bg-gray-400/30 transition-all
                backdrop-blur-sm transform"
         x-transition:enter="ease-out duration-300"
         x-transition:enter-start="opacity-0"
@@ -42,7 +42,7 @@
         "
         x-on:close.stop="sidebarOpen = false"
         x-on:keydown.escape.window="sidebarOpen = false"
-        class="sidebar h-screen overflow-y-auto scrollbar-inner-menu moz-scrollbar-light dark:moz-scrollbar-dark w-64 z-10 p-4 fixed pt-10 pb-20
+        class="sidebar h-screen overflow-y-auto scrollbar-inner-menu moz-scrollbar-light dark:moz-scrollbar-dark w-64 z-30 p-4 fixed pt-10 pb-20
              bg-slate-50 dark:bg-gray-900 transform shadow-outter-sm shadow-gray-400 dark:shadow-gray-700 transition-all"
         x-transition:enter="ease-fast-slide duration-800"
         x-transition:enter-start="-translate-x-64"
