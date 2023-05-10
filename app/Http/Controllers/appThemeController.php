@@ -103,23 +103,33 @@ class appThemeController extends Controller
         session($this->modesValues[$theme ?? session('theme')]);
     }
 
-    private function getUserDashboardValues(User $user)
+    /**
+     * Get all the values necessary for the main page of the user.
+     *
+     * @param App\Models\User $user
+     * @return array
+     */
+    private function getUserDashboardValues(User $user): array
     {
-        $lastSession = $user->sessions->sortByDesc('last_activity')
-                            ->first()->last_activity;
+        $last_activity = User::isOnline($user)
+            ? 'Online'
+            : (new Carbon($user->profile->last_activity));
+
+        $ranking = Profile::orderByDesc('exp')->get()
+            ->search(Auth::user()->profile) + 1;
 
         return [
             'nickname' => $user->name,
             'bio' => $user->bio,
             'rank' => $user->profile->rank->name,
             'time_elapsed' => $user->created_at->diffForHumans(now()),
-            'last_activity' => (new Carbon($lastSession)),
+            'last_activity' => $last_activity,
             'exp' => $user->profile->exp,
             'honor' => $user->profile->honor,
             'exp2next' => $user->profile->exp / $user->profile->rank->level_up * 100,
             'count_followers' => $user->profile->followers()->count(),
             'count_following' => $user->profile->following()->count(),
-            'ranking' => Profile::orderByDesc('exp')->get()->search(Auth::user()) + 1,
+            'ranking' => $ranking,
         ];
     }
 }

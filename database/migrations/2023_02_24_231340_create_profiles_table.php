@@ -24,6 +24,7 @@ return new class extends Migration
             $table->boolean('is_banned');
             $table->foreignId('rank_id')->constrained('ranks', 'id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->integer('last_activity')->nullable();
             $table->timestamps();
         });
     }

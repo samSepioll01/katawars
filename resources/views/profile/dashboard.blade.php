@@ -82,7 +82,10 @@
 
                                         <div>
                                             <label class="pr-1 font-bold">Last Connection:</label>
-                                            <span class="">{{ $userValues['last_activity']->diffInMinutes() <= 1 ? 'Online' : $userValues['last_activity']->diffForHumans(now())  }}</p>
+                                            <span class="">
+                                                {{ $userValues['last_activity'] === 'Online'
+                                                    ? $userValues['last_activity']
+                                                    : $userValues['last_activities']->diffForHumans(now()) }}</span>
                                         </div>
 
                                     </div>
