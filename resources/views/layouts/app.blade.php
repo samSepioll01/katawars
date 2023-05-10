@@ -13,6 +13,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="last_activity" content="{{ auth()->user()->sessions->first()->last_activity }}">
 
         <title>{{ config('app.name', 'KataWars') }}</title>
 
