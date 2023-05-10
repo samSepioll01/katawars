@@ -112,7 +112,7 @@
 
                         <div
                             class="tab col-span-3"
-                            :class="{'text-slate-50': stats, 'tracking-wider': stats}"
+                            :class="{'dark:text-slate-50 text-slate-700 tracking-wider': stats}"
                             x-on:click="stats = true, katas = false, blitz = false, created = false"
                         >
                             <span class="">Statistics</span>
@@ -121,7 +121,7 @@
 
                         <div
                             class="tab col-span-3"
-                            :class="{'text-slate-50': katas, 'tracking-wider': katas}"
+                            :class="{'dark:text-slate-50 text-slate-700 tracking-wider': katas}"
                             x-on:click="stats = false, katas = true, blitz = false, created = false"
                         >
                             <span class="">Passed Katas</span>
@@ -130,7 +130,7 @@
 
                         <div
                             class="tab col-span-3"
-                            :class="{'text-slate-50': blitz, 'tracking-wider': blitz}"
+                            :class="{'dark:text-slate-50 text-slate-700 tracking-wider': blitz}"
                             x-on:click="stats = false, katas = false, blitz = true, created = false"
                         >
                             <span class="">Passed Blitz</span>
@@ -139,7 +139,7 @@
 
                         <div
                             class="tab col-span-3"
-                            :class="{'text-slate-50': created, 'tracking-wider': created}"
+                            :class="{'dark:text-slate-50 text-slate-700 tracking-wider': created}"
                             x-on:click="stats = false, katas = false, blitz = false, created = true"
                         >
                             <span class="">Created Katas</span>
