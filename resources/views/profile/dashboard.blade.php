@@ -53,6 +53,11 @@
 
                                     <div class="grid col-span-4 items-center border-r border-r-gray-300 dark:border-r-slate-500 dark:text-slate-200">
 
+                                        <div>
+                                            <label class="pr-1 font-bold">Ranked:</label>
+                                            <span class="">#{{ $userValues['ranking'] }}</p>
+                                        </div>
+
                                         <div class="">
                                             <label class="pr-1 font-bold">Rank:</label>
                                             <span class="text-md">
@@ -76,7 +81,7 @@
                                         </div>
 
                                         <div>
-                                            <label class="pr-1 font-bold">Status Connection:</label>
+                                            <label class="pr-1 font-bold">Last Connection:</label>
                                             <span class="">{{ $userValues['last_activity']->diffInMinutes() <= 1 ? 'Online' : $userValues['last_activity']->diffForHumans(now())  }}</p>
                                         </div>
 
@@ -85,6 +90,7 @@
 
                                     <div class="grid col-span-3 dark:text-slate-200">
                                         <div class="flex flex-col justify-evenly">
+
                                             <p><span class="font-bold">{{ $userValues['exp'] }}</span><span class="pl-1">EXP</span></p>
                                             <p><span class="font-bold">{{ $userValues['honor'] }}</span><span class="pl-1">HONOR</span></p>
                                         </div>

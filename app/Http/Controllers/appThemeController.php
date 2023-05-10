@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\ThemeModeUpdated;
+use App\Models\Profile;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class appThemeController extends Controller
 {
@@ -117,6 +119,7 @@ class appThemeController extends Controller
             'exp2next' => $user->profile->exp / $user->profile->rank->level_up * 100,
             'count_followers' => $user->profile->followers()->count(),
             'count_following' => $user->profile->following()->count(),
+            'ranking' => Profile::orderByDesc('exp')->get()->search(Auth::user()) + 1,
         ];
     }
 }

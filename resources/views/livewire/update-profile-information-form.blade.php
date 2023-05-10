@@ -134,7 +134,7 @@
                 <div class="flex justify-center">
                     <!-- New Profile Photo Preview -->
                     <div class="mt-2" x-show="photoPreview" style="display: none;">
-                        <span class="block rounded-full w-32 h-32 bg-cover bg-no-repeat bg-center"
+                        <span class="block rounded-full h-32 w-32 xl:h-40 xl:w-40 2xl:h-44 2xl:w-44 bg-cover bg-no-repeat bg-center"
                             x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                         </span>
                     </div>
