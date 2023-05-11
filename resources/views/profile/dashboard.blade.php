@@ -1,11 +1,4 @@
 <x-app-layout>
-    {{-- <style>
-        div {
-            padding: 5px;
-            border: 1px solid crimson;
-        }
-    </style> --}}
-
     <div class="min-h-screen py-12">
         <div class="max-w-7xl mx-auto md:px-6 lg:px-8 max-sm:card-panel">
             <div class="sm:rounded-lg">
@@ -17,8 +10,8 @@
                         <div class="p-5 grid col-span-12 md:col-span-6 justify-items-center gap-6">
 
                             <div class="w-44 h-44 rounded-full shadow-2xl shadow-violet-600 dark:shadow-cyan-600 @unless($userValues['rank'] === 'white') ring-8 ring-{{ $userValues['rank'] }}-600 @endunless">
-                                <a href="{{ route('profile.show') }}">
-                                    <img class="w-full h-full rounded-full block hover:scale-110 transition-all duration-500" src="{{ auth()->user()->profile_photo_url }}" alt="Profile Photo">
+                                <a href="{{ auth()->user()->id == $userValues['id'] ? route('profile.show') : '' }}">
+                                    <img class="w-full h-full rounded-full block hover:scale-110 transition-all duration-500" src="{{ $userValues['avatar'] }}" alt="Profile Photo">
                                 </a>
                             </div>
 
@@ -85,7 +78,7 @@
                                             <span class="">
                                                 {{ $userValues['last_activity'] === 'Online'
                                                     ? $userValues['last_activity']
-                                                    : $userValues['last_activities']->diffForHumans(now()) }}</span>
+                                                    : $userValues['last_activity']->diffForHumans(now()) }}</span>
                                         </div>
 
                                     </div>
