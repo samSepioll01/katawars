@@ -33,13 +33,13 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "Tests\\": "tests/",
-            "Katas\\": "storage/app/katas"
+            "Katas\\": "storage/app/katas-tmp"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "Katas\\": "storage/app/katas"
+            "Katas\\": "storage/app/katas-tmp"
         }
     },
     "scripts": {

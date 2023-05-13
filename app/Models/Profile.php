@@ -34,6 +34,7 @@ class Profile extends Model
         'is_deleted',
         'is_banned',
         'rank_id',
+        'last_activity',
     ];
 
     /**
