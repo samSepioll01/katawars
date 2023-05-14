@@ -87,9 +87,7 @@
                                         <div>
                                             <label class="pr-1 font-bold">Last Connection:</label>
                                             <span class="">
-                                                {{ $userValues['last_activity'] === 'Online'
-                                                    ? $userValues['last_activity']
-                                                    : $userValues['last_activity']->diffForHumans(now()) }}
+                                                {{ $userValues['last_activity'] }}
                                             </span>
                                         </div>
 

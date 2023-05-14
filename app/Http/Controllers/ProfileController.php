@@ -222,13 +222,6 @@ class ProfileController extends Controller
      */
     private function getUserDashboardValues(User $user): array
     {
-        $last_activity = User::isOnline($user)
-            ? 'Online'
-            : (new Carbon($user->profile->last_activity));
-
-        $ranking = Profile::orderByDesc('exp')->get()
-            ->search(Auth::user()->profile) + 1;
-
         return [
             'id' => $user->id,
             'nickname' => $user->name,
@@ -236,12 +229,12 @@ class ProfileController extends Controller
             'avatar' => $user->profile_photo_url,
             'rank' => $user->profile->rank->name,
             'time_elapsed' => $user->created_at->diffForHumans(now()),
-            'last_activity' => $last_activity,
+            'last_activity' => $user->last_activity(),
             'exp' => $user->profile->exp,
             'honor' => $user->profile->honor,
             'count_followers' => $user->profile->followers()->count(),
             'count_following' => $user->profile->following()->count(),
-            'ranking' => $ranking,
+            'ranking' => $user->ranking(),
         ];
     }
 }

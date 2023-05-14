@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -163,6 +164,38 @@ class User extends Authenticatable implements MustVerifyEmail
         return $user
             ? (bool) Session::all()->where('user_id', $user->id )->count()
             : false;
+    }
+
+    /**
+     * This determines the last activity for a user.
+     *
+     * @return string Online if the current user is Online in this moment,
+     *                the time since the last connection.
+     */
+    public function last_activity()
+    {
+        return self::isOnline($this)
+            ? 'Online'
+            : (new Carbon($this->profile->last_activity))->diffForHumans(now());
+    }
+
+    /**
+     * This determines the position in the global ranking for the users.
+     * Excluding admins users.
+     *
+     * @return int
+     */
+    public function ranking()
+    {
+        $ranking = User::with('profile')
+            ->role('user')->get()
+            ->sortByDesc(['exp', 'honor']);
+
+        $userRanking = $ranking->search($ranking->find($this->id)) + 1;
+
+        return $this->hasRole(['superadmin', 'admin'])
+            ? 'Sannin'
+            : $userRanking;
     }
 
     /**
