@@ -15,9 +15,13 @@
                     <x-layout.hub class="hidden sm:inline-flex sm:items-start" />
                 @endauth
 
+                @php
+                    $authRoute = auth()?->user()?->hasRole(['superadmin', 'admin']) ? 'admin.dashboard' : 'dashboard';
+                @endphp
+
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="@auth() {{ route('dashboard') }} @else {{ route('home') }}@endauth" class=" flex flex-row">
+                    <a href="@auth() {{ route($authRoute) }} @else {{ route('home') }}@endauth" class=" flex flex-row">
                         <x-logo id="logo" type="text" class="rounded w-36 bg-white/80 dark:bg-slate-900/80 transition duration-300" />
                     </a>
                 </div>
