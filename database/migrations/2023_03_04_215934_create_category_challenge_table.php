@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('category_kata', function (Blueprint $table) {
+        Schema::create('category_challenge', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('kata_id')->constrained()
+            $table->foreignId('challenge_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
-            $table->unique(['category_id', 'kata_id']);
+            $table->unique(['category_id', 'challenge_id']);
         });
     }
 
@@ -32,5 +32,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('category_kata');
+        Schema::dropIfExists('category_challenge');
     }
 };

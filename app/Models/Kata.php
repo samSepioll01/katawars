@@ -78,14 +78,6 @@ class Kata extends Model
     }
 
     /**
-     * This determines which categories have been assigned to the kata.
-     */
-    public function categories(): BelongsToMany
-    {
-        return $this->belongsToMany(Category::class);
-    }
-
-    /**
      * This determines the resources that have been published in the kata.
      */
     public function resources(): HasMany

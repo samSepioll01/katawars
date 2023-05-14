@@ -15,27 +15,36 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
+        Category::create([
+            'name' => 'math',
+            'bg_color' => 'bg-gradient-to-r from-emerald-500 to-emerald-900',
+        ]);
+
         Category::create(['name' => 'algebra']);
-        Category::create(['name' => 'algorithms']);
-        Category::create(['name' => 'arrays']);
-        Category::create(['name' => 'control flow']);
-        Category::create(['name' => 'cryptography']);
-        Category::create(['name' => 'data structures']);
-        Category::create(['name' => 'dates']);
-        Category::create(['name' => 'functional programming']);
-        Category::create(['name' => 'geometry']);
-        Category::create(['name' => 'higher order functions']);
-        Category::create(['name' => 'language fundamentals']);
-        Category::create(['name' => 'logic']);
-        Category::create(['name' => 'loops']);
-        Category::create(['name' => 'math']);
         Category::create(['name' => 'numbers']);
-        Category::create(['name' => 'objects']);
-        Category::create(['name' => 'physics']);
+
+        Category::create([
+            'name' => 'arrays',
+            'bg_color' => 'bg-gradient-to-tr from-rose-500 to-rose-600',
+        ]);
+
+        Category::create([
+            'name' => 'dates',
+            'bg_color' => 'bg-gradient-to-r from-slate-900 to-slate-700',
+        ]);
+
+        Category::create([
+            'name' => 'strings',
+            'bg_color' => 'bg-gradient-to-r from-blue-800 to-indigo-900',
+        ]);
+
+        Category::create([
+            'name' => 'objects',
+            'bg_color' => 'bg-gradient-to-r from-purple-500 to-purple-900',
+        ]);
+
+        Category::create(['name' => 'algorithms']);
+        Category::create(['name' => 'loops']);
         Category::create(['name' => 'recursion']);
-        Category::create(['name' => 'regex']);
-        Category::create(['name' => 'sorting']);
-        Category::create(['name' => 'strings']);
-        Category::create(['name' => 'validation']);
     }
 }

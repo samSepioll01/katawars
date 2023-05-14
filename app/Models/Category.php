@@ -15,13 +15,13 @@ class Category extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'bg_colow'];
 
     /**
-     * This determines which katas have a category.
+     * This determines which challenge have a category.
      */
-    public function katas(): BelongsToMany
+    public function challenges(): BelongsToMany
     {
-        return $this->belongsToMany(Kata::class);
+        return $this->belongsToMany(Challenge::class);
     }
 }

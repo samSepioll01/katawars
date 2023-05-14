@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('extension')->unique();
-            $table->string('bg_gradient');
+            $table->string('bg_color')->nullable();
             $table->string('uri_logo');
+            $table->string('uri_container')->nullable();
             $table->timestamps();
         });
     }

@@ -36,8 +36,8 @@ class DatabaseSeeder extends Seeder
             ScoreSeeder::class,
         ]);
 
-        $this->generateChallengesKatas(10);
-        $this->generateResources(10);
+        //$this->generateChallengesKatas(10);
+        //$this->generateResources(10);
     }
 
     /**

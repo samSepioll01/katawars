@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Challenge extends Model
@@ -30,5 +31,13 @@ class Challenge extends Model
     public function katas(): HasMany
     {
         return $this->hasMany(Kata::class);
+    }
+
+    /**
+     * This determines which categories have been assigned to the challenge.
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
     }
 }

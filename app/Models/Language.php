@@ -18,8 +18,9 @@ class Language extends Model
     protected $fillable = [
         'name',
         'extension',
-        'bg_gradient',
+        'bg_color',
         'uri_logo',
+        'uri_container',
     ];
 
     /**
