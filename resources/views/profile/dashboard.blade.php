@@ -9,7 +9,9 @@
 
                         <div class="p-5 grid col-span-12 md:col-span-6 justify-items-center gap-6">
 
-                            <div class="w-44 h-44 rounded-full shadow-2xl shadow-violet-600 dark:shadow-cyan-600 @unless($userValues['rank'] === 'white') ring-8 ring-{{ $userValues['rank'] }}-600 @endunless">
+                            <div
+                                class="w-44 h-44 rounded-full shadow-2xl shadow-violet-600 dark:shadow-cyan-600v"
+                            >
                                 <a href="{{ auth()->user()->id == $userValues['id'] ? route('profile.show') : '' }}">
                                     <img class="w-full h-full rounded-full block hover:scale-110 transition-all duration-500" src="{{ $userValues['avatar'] }}" alt="Profile Photo">
                                 </a>
@@ -57,13 +59,22 @@
                                                 {{ __(ucfirst($userValues['rank'])) }}
                                             </span>
                                             <div
-                                                class="w-6 h-6 inline-flex
-                                                        @if( $userValues['rank'] === 'white' || $userValues['rank'] === 'black' )
-                                                            bg-{{$userValues['rank']}}
+                                                class="w-6 h-6 inline-flex rounded-full border border-slate-500 shadow-outter-sm shadow-slate-600
+                                                        @if ($userValues['rank'] === 'white')
+                                                            bg-slate-50
+                                                        @elseif($userValues['rank'] === 'yellow')
+                                                            bg-yellow-600
+                                                        @elseif($userValues['rank'] === 'orange')
+                                                            bg-orange-600
+                                                        @elseif($userValues['rank'] === 'green')
+                                                            bg-green-600
+                                                        @elseif($userValues['rank'] === 'blue')
+                                                            bg-blue-600
+                                                        @elseif($userValues['rank'] === 'brown')
+                                                            bg-orange-900
                                                         @else
-                                                            bg-{{$userValues['rank']}}-600
+                                                            bg-slate-900
                                                         @endif
-                                                        rounded-full border border-slate-500 shadow-outter-sm shadow-slate-600
                                                 "
                                             ></div>
                                         </div>
@@ -78,7 +89,8 @@
                                             <span class="">
                                                 {{ $userValues['last_activity'] === 'Online'
                                                     ? $userValues['last_activity']
-                                                    : $userValues['last_activity']->diffForHumans(now()) }}</span>
+                                                    : $userValues['last_activity']->diffForHumans(now()) }}
+                                            </span>
                                         </div>
 
                                     </div>
@@ -87,15 +99,15 @@
                                     <div class="grid col-span-3 dark:text-slate-200">
                                         <div class="flex flex-col justify-evenly">
 
-                                            <p><span class="font-bold">{{ $userValues['exp'] }}</span><span class="pl-1">EXP</span></p>
-                                            <p><span class="font-bold">{{ $userValues['honor'] }}</span><span class="pl-1">HONOR</span></p>
+                                            <p><span class="font-bold">{{ number_format($userValues['exp']) }}</span><span class="pl-1">EXP</span></p>
+                                            <p><span class="font-bold">{{ number_format($userValues['honor']) }}</span><span class="pl-1">HONOR</span></p>
                                         </div>
 
                                     </div>
 
                                 </div>
 
-                                <x-layout.progress-bar size="4" title="Rank Progress" :progress="$userValues['exp2next']" />
+                                <x-layout.progress-bar size="4" title="Rank Progress" />
 
                             </div>
 

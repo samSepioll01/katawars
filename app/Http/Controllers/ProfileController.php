@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProfileRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Profile;
 use App\Events\ThemeModeUpdated;
+use App\Models\Rank;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -121,9 +122,19 @@ class ProfileController extends Controller
             session()->missing('theme') ? 'dark' : null
         );
 
-        return auth()->check()
-            ? redirect()->route('dashboard')
-            : view('welcome')->render();
+        if (auth()->check()) {
+
+            if (auth()->user()->hasRole(['superadmin', 'admin'])) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            if (auth()->user()->hasRole(['user'])) {
+                return redirect()->route('dashboard');
+            }
+
+        } else {
+            return view('welcome')->render();
+        }
     }
 
     /**
@@ -228,7 +239,6 @@ class ProfileController extends Controller
             'last_activity' => $last_activity,
             'exp' => $user->profile->exp,
             'honor' => $user->profile->honor,
-            'exp2next' => $user->profile->exp / $user->profile->rank->level_up * 100,
             'count_followers' => $user->profile->followers()->count(),
             'count_following' => $user->profile->following()->count(),
             'ranking' => $ranking,

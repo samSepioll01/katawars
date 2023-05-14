@@ -9,9 +9,23 @@
     $sidebar = $sidebar ?? false;
     $bgColor = $sidebar ? 'dark:bg-gray-700/40' : 'dark:bg-gray-900/40';
     $textSize = $sidebar ? 'text-sm' : 'text-md';
+    $profile = auth()->user()->profile;
+
+
+    $lastLevelUp = $profile->rank->id === 1 ? 0 : App\Models\Rank::find($profile->rank_id - 1)->level_up;
+    $actualLevelUp = $profile->rank->level_up;
+
+    $progress = ($profile->exp - $lastLevelUp) / ($actualLevelUp - $lastLevelUp) * 100;
+
+    if (App\Models\Rank::all()->count() === $profile->rank_id
+        && $profile->exp > $profile->rank->level_up
+    ) {
+        $progress = 100;
+    }
+
 @endphp
 
-<div class="w-full flex flex-col justify-center md:py-0">
+<div class="w-full flex flex-col justify-center md:py-0 px-1 overflow-hidden">
     @if ($title)
         <span class="dark:text-slate-200 {{ $textSize }} ">{{ $title }}</span>
     @endif

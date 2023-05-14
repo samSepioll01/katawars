@@ -30,7 +30,7 @@
         @livewireStyles
     </head>
     <body x-data="hubSidebar()" :class="{ 'overflow-hidden': responsiveOpen}"
-          class="bg-slate-100 dark:bg-gradient-to-tr dark:from-cyan-700 dark:via-cyan-500 dark:to-violet-500 transition-all duration-300
+          class="min-h-screen bg-slate-100 dark:bg-gradient-to-tr dark:from-cyan-700 dark:via-cyan-500 dark:to-violet-500 transition-all duration-300
             @if (auth()->user()?->email_verified_at)
                 {{ auth()->user()->profile->is_darkmode ? 'scrollbar-dark' : 'scrollbar-light' }}
             @else
@@ -45,7 +45,7 @@
             <x-layout.sidebar-content />
         </x-layout.sidebar>
 
-            <!-- Page Content -->
+        <!-- Page Content -->
         <main class="font-sans text-gray-900 antialiased dark:bg-slate-900/70">
             {{ $slot }}
         </main>

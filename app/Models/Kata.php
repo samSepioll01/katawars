@@ -24,6 +24,8 @@ class Kata extends Model
         'rank_id',
         'mode_id',
         'uri_test',
+        'signature',
+        'testClassName',
     ];
 
     /**

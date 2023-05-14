@@ -1,6 +1,6 @@
 <div>
     <div class="w-full pb-4 px-1 text-gray-700 dark:text-slate-200">
-        <x-layout.progress-bar size="4" title="Rank Progress" :progress="auth()->user()->profile->exp" :sidebar="true" />
+        <x-layout.progress-bar size="4" title="Rank Progress" :sidebar="true" />
     </div>
 
     <x-layout.dropdown-separator />

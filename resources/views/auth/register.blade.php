@@ -33,6 +33,8 @@
                 <x-jet-input-error for="password_confirmation" class="mt-2" />
             </div>
 
+            <input type="hidden" name="role" value='user' />
+
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
                 <div class="mt-4">
                     <x-jet-label for="terms">

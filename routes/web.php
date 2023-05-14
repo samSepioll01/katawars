@@ -67,3 +67,21 @@ Route::prefix('users')->middleware([
     Route::get('/{slug}', [ProfileController::class, 'showProfilesMainPage'])
         ->name('users.main');
 });
+
+
+// Admin Section
+Route::prefix('admin')->middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'role:superadmin|admin',
+])->group(function () {
+
+        Route::get('/', function() {
+            return redirect()->route('admin.dashboard');
+        });
+
+        Route::get('/dashboard', function() {
+            return view('admin.dashboard');
+        })->name('admin.dashboard');
+    });

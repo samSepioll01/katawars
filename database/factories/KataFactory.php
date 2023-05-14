@@ -28,6 +28,8 @@ class KataFactory extends Factory
             'language_id' => Language::all()->random()->id,
             'rank_id' => 1,
             'uri_test' => $this->faker->unique()->file(),
+            'signature' => $this->faker->word(),
+            'testClassName' => $this->faker->word(),
         ];
     }
 }
