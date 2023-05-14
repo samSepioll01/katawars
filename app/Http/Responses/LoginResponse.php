@@ -13,8 +13,6 @@ class LoginResponse implements LoginResponseContract
      */
     public function toResponse($request)
     {
-        // reemplaza esto con tu propio código
-        // el usuario se puede localizar con la fachada Auth
         $home = Auth::user()->hasRole(['superadmin', 'admin'])
             ? '/admin/dashboard'
             : '/user/dashboard';
