@@ -20,6 +20,7 @@ class StringCalculator extends TestCase
             [2205, ':', '1956:249'],
             [2, '-', '1-1'],
             [0, ',', '0,0'],
+            [9, ";", "a;2;b;3;c;4"],
         ];
     }
 }

@@ -34,7 +34,8 @@ class RomanNumerals extends TestCase
             [900, 'CM'],
             [1000, 'M'],
             [3999, 'MMMCMXCIX'],
-            [2023, 'MMXXIII']
+            [2023, 'MMXXIII'],
+            [4000, ''],
         ];
     }
 }

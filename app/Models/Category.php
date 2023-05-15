@@ -15,7 +15,7 @@ class Category extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['name', 'bg_colow'];
+    protected $fillable = ['name', 'bg_color'];
 
     /**
      * This determines which challenge have a category.

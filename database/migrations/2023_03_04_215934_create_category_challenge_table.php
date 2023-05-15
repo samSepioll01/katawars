@@ -31,7 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_kata');
         Schema::dropIfExists('category_challenge');
     }
 };
