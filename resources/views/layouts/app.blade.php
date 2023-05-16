@@ -46,7 +46,7 @@
         </x-layout.sidebar>
 
         <!-- Page Content -->
-        <main class="font-sans text-gray-900 antialiased dark:bg-slate-900/70">
+        <main class="font-sans text-gray-900 antialiased dark:bg-slate-900/70 min-h-screen">
             {{ $slot }}
         </main>
         <x-layout.footer />

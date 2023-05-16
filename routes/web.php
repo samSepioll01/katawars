@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
+use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\HelpController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,16 +57,9 @@ Route::prefix('user')->middleware([
     // GitHub User Account Sync
     Route::get('/profile/sync/github', [GitHubLoginController::class, 'redirectToProvider'])
         ->name('github.sync');
-});
-
-Route::prefix('users')->middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified'
-])->group(function () {
 
     Route::get('/{slug}', [ProfileController::class, 'showProfilesMainPage'])
-        ->name('users.main');
+    ->name('users.main');
 });
 
 
@@ -77,11 +71,28 @@ Route::prefix('admin')->middleware([
     'role:superadmin|admin',
 ])->group(function () {
 
-        Route::get('/', function() {
-            return redirect()->route('admin.dashboard');
-        });
-
-        Route::get('/dashboard', function() {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+    Route::get('/', function() {
+        return redirect()->route('admin.dashboard');
     });
+
+    Route::get('/dashboard', function() {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
+
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+
+    Route::get('/training', [ChallengeController::class, 'showChallenges'])
+        ->name('challenges.training');
+
+    Route::get('/blitz', [ChallengeController::class, 'showChallenges'])
+        ->name('challenges.blitz');
+
+    Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
+        ->name('katas.main-page');
+});

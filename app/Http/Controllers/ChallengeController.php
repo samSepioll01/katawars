@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChallengeRequest;
 use App\Http\Requests\UpdateChallengeRequest;
 use App\Models\Challenge;
+use App\Models\Kata;
+use App\Models\Mode;
+use Illuminate\Http\Request;
 
 class ChallengeController extends Controller
 {
@@ -16,6 +19,36 @@ class ChallengeController extends Controller
     public function index()
     {
         //
+    }
+
+    public function showChallenges()
+    {
+        $route = request()->path();
+
+        if (request()->path() === 'training') {
+            $katas = Kata::where(
+                'mode_id',
+                Mode::where('denomination', request()->path())->first()->id
+            )->get();
+        }
+
+        if (request()->path() === 'blitz') {
+            $katas = Kata::where(
+                'mode_id',
+                Mode::where('denomination', request()->path())->first()->id
+            )->get();
+        }
+
+        $challenges = $katas->map(fn($kata) => $kata->challenge)->unique('id');
+
+        return view('challenges.index', ['challenges' => $challenges]);
+    }
+
+    public function showKataMainPage(Request $request)
+    {
+        $challenge = Challenge::where('slug', $request->slug)->first();
+
+        return view('katas.main-page', ['challenge' => $challenge]);
     }
 
     /**
