@@ -140,8 +140,8 @@ class ChallengeSeeder extends Seeder
 
         $categories = [
             Category::where('name', 'math')->first()->id,
-            Category::where('name', 'number')->first()->id,
-            Category::where('name', 'array')->first()->id,
+            Category::where('name', 'numbers')->first()->id,
+            Category::where('name', 'arrays')->first()->id,
             Category::where('name', 'algorithms')->first()->id,
         ];
 
@@ -1062,7 +1062,7 @@ class ChallengeSeeder extends Seeder
         ]);
 
         $categories = [
-            Category::where('name', 'date')->first()->id,
+            Category::where('name', 'dates')->first()->id,
             Category::where('name', 'algorithms')->first()->id,
         ];
 
@@ -1130,6 +1130,565 @@ class ChallengeSeeder extends Seeder
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/9va76OJRyuOVNPdSySBfGEsAnafqvYQD1F7Zrm4O.txt',
             'signature' => 'function factorial($num) {',
             'testClassName' => 'Factorial',
+        ]);
+
+
+        // MCD
+
+        $slug = Str::slug('Greatest Common Divisor');
+
+        $challenge = Challenge::create([
+            'slug' => $slug,
+            'url' => url("/katas/$slug"),
+            'title' => 'Calculate the Greatest Common Divisor',
+            'description' => <<<EOL
+                <p>Write a function named <code>mcd</code> that takes two arguments of type <code>int</code> named <code>a</code> and <code>b</code> and returns the greatest common divisor (GCD/MCD) of them. The MCD of two numbers is the largest positive integer that divides both numbers without leaving a remainder. For example, the MCD of 12 and 18 is 6.</p>
+                <p><b>Base Case and Constrints</b></p>
+                <p>
+                    <ul>
+                        <li>If both arguments are zero, return zero.</li>
+                        <li>If one argument is zero and the other is not, return the absolute value of the non-zero argument.</li>
+                        <li>0 <= a, b <= 10^9</li>
+                    </ul>
+                </p>
+            EOL,
+            'examples' => <<<EOL
+                <pre><code>mcd(0, 0) => 0</code></pre>
+                <pre><code>mcd(1, 0) => 1</code></pre>
+                <pre><code>mcd(0, 1) => 1</code></pre>
+                <pre><code>mcd(2, 4) => 2</code></pre>
+                <pre><code>mcd(3, 5) => 1</code></pre>
+                <pre><code>mcd(6, 9) => 3</code></pre>
+            EOL,
+            'notes' => <<<EOL
+                <ul>
+                    <li>Don't forget <code>return</code> the result.</li>
+                    <li>If you get stuck on a challenge, find help in the <b>Resources</b> tab.</li>
+                    <li>If you're really stuck, unlock solutions in the <b>Solutions</b> tab</li>
+                </ul>
+            EOL,
+        ]);
+
+        $categories = [
+            Category::where('name', 'math')->first()->id,
+            Category::where('name', 'numbers')->first()->id,
+        ];
+
+        $challenge->categories()->sync($categories);
+
+        $kata = Kata::create([
+            'challenge_id' => $challenge->id,
+            'owner_id' => $superadminID,
+            'language_id' => $phpID,
+            'rank_id' => 3,
+            'mode_id' => $trainingModeID,
+            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/wrETHaLCjZCop45rmNdoB6zxvQSoMOgOKevftl84.txt',
+            'signature' => 'function mcd($a, $b) {',
+            'testClassName' => 'MCD',
+        ]);
+
+
+        // MCM
+
+        $slug = Str::slug('Least Common Divisor');
+
+        $challenge = Challenge::create([
+            'slug' => $slug,
+            'url' => url("/katas/$slug"),
+            'title' => 'Calculate the Least Common Divisor',
+            'description' => <<<EOL
+                <p>Write a function named <code>mcm</code> that takes two arguments of type <code>int</code> named <code>a</code> and <code>b</code> and returns the least common multiple (LCM) of them. The LCM of two numbers is the smallest positive integer that is divisible by both numbers without leaving a remainder. For example, the LCM of 4 and 6 is 12.</p>
+                <p><b>Base Case and Constrints</b></p>
+                <p>
+                    <ul>
+                        <li>If both arguments are zero, return zero.</li>
+                        <li>If one argument is zero and the other is not, return zero.</li>
+                        <li>0 <= a, b <= 10^9</li>
+                    </ul>
+                </p>
+            EOL,
+            'examples' => <<<EOL
+                <pre><code>mcm(2, 3) => 6</code></pre>
+                <pre><code>mcm(4, 6) => 12</code></pre>
+                <pre><code>mcm(5, 10) => 10</code></pre>
+                <pre><code>mcm(6, 8) => 24</code></pre>
+                <pre><code>mcm(0, 0) => 0</code></pre>
+                <pre><code>mcm(0, 1) => 0</code></pre>
+            EOL,
+            'notes' => <<<EOL
+                <ul>
+                    <li>Don't forget <code>return</code> the result.</li>
+                    <li>If you get stuck on a challenge, find help in the <b>Resources</b> tab.</li>
+                    <li>If you're really stuck, unlock solutions in the <b>Solutions</b> tab</li>
+                </ul>
+            EOL,
+        ]);
+
+        $categories = [
+            Category::where('name', 'math')->first()->id,
+            Category::where('name', 'numbers')->first()->id,
+        ];
+
+        $challenge->categories()->sync($categories);
+
+        $kata = Kata::create([
+            'challenge_id' => $challenge->id,
+            'owner_id' => $superadminID,
+            'language_id' => $phpID,
+            'rank_id' => 3,
+            'mode_id' => $trainingModeID,
+            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/bmVvtUyoNHbr6GZ1Ywr3gHZ9e9fwzyZO8ygD6u6O.txt',
+            'signature' => 'function mcm($a, $b) {',
+            'testClassName' => 'MCM',
+        ]);
+
+
+        // Fibonacci
+
+        $slug = Str::slug('Fibonacci');
+
+        $challenge = Challenge::create([
+            'slug' => $slug,
+            'url' => url("/katas/$slug"),
+            'title' => 'Generate the numbers of Fibonacci.',
+            'description' => <<<EOL
+                <p>Write a function named <code>fibonacci</code> that takes one argument of type <code>int</code> named <code>num</code> and returns an array of the Fibonacci sequence up to the given position. The Fibonacci sequence is a series of numbers where each number is the sum of the two preceding ones, starting from 0 and 1. For example, the first 10 numbers of the Fibonacci sequence are: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34.</p>
+                <p><b>Base Case and Constrints</b></p>
+                <p>
+                    <ul>
+                        <li>If the argument is zero, return an empty array.</li>
+                        <li>If the argument is one, return an array with only 0.</li>
+                        <li>If the argument is negative, throw an exception with the message “Invalid input”.</li>
+                        <li>0 <= num <= 50</li>
+                    </ul>
+                </p>
+            EOL,
+            'examples' => <<<EOL
+                <pre><code>fibonacci(0) => []</code></pre>
+                <pre><code>fibonacci(1) => [0]</code></pre>
+                <pre><code>fibonacci(2) => [0, 1]</code></pre>
+                <pre><code>fibonacci(3) => [0, 1, 1]</code></pre>
+                <pre><code>fibonacci(4) => [0, 1, 1, 2]</code></pre>
+                <pre><code>fibonacci(7) => [0, 1, 1, 2, 3, 5, 8]</code></pre>
+                <pre><code>fibonacci(11) => [0 ,1 ,1 ,2 ,3 ,5 ,8 ,13 ,21 ,34 ,55]</code></pre>
+            EOL,
+            'notes' => <<<EOL
+                <ul>
+                    <li><b>Optional:</b> Try to solve it recursively.</li>
+                    <li>Don't forget <code>return</code> the result.</li>
+                    <li>If you get stuck on a challenge, find help in the <b>Resources</b> tab.</li>
+                    <li>If you're really stuck, unlock solutions in the <b>Solutions</b> tab</li>
+                </ul>
+            EOL,
+        ]);
+
+        $categories = [
+            Category::where('name', 'math')->first()->id,
+            Category::where('name', 'numbers')->first()->id,
+        ];
+
+        $challenge->categories()->sync($categories);
+
+        $kata = Kata::create([
+            'challenge_id' => $challenge->id,
+            'owner_id' => $superadminID,
+            'language_id' => $phpID,
+            'rank_id' => 5,
+            'mode_id' => $trainingModeID,
+            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/IbBdN6riFJ3teSOzmmJYkrL3LubKyVFIna2iuRI2.txt',
+            'signature' => 'function fibonacci($num) {',
+            'testClassName' => 'Fibonacci',
+        ]);
+
+
+        // Trasposed Matrix
+
+        $slug = Str::slug('Trasposed Matrix');
+
+        $challenge = Challenge::create([
+            'slug' => $slug,
+            'url' => url("/katas/$slug"),
+            'title' => 'Get the Trasposed Matrix.',
+            'description' => <<<EOL
+                <p>Write a function named <code>trasposed</code> that takes one argument of type <code>array</code> named <code>matrix</code> and returns another array that represents the transpose of the given matrix. The transpose of a matrix is a new matrix whose rows are the columns of the original matrix. </p>
+                <p><b>Base Case and Constrints</b></p>
+                <p>
+                    <ul>
+                        <li>If the argument is an empty array, return an empty array.</li>
+                        <li>If the argument is one, return an array with only 0.</li>
+                        <li>The given matrix can have any number of rows and columns.</li>
+                        <li>It means that the past matrix will always be two-dimensional.</li>
+                    </ul>
+                </p>
+            EOL,
+            'examples' => <<<EOL
+                <pre><code>trasposed([]) => []</code></pre>
+                <pre><code>trasposed([]) => []</code></pre>
+                <pre><code>trasposed([[1, 2], [3, 4]]) => [[1, 3], [2, 4]]</code></pre>
+                <pre><code>trasposed([[1, 2, 3], [4, 5 ,6], [7 ,8 ,9]]) => [[1 ,4 ,7], [2 ,5 ,8], [3 ,6 ,9]]</code></pre>
+                <pre><code>trasposed([[10 ,11 ,12], [13 ,14 ,15], [16 ,17 ,18]]) => [[10 ,13 ,16], [11 ,14 ,17], [12 ,15 ,18]]</code></pre>
+            EOL,
+            'notes' => <<<EOL
+                <ul>
+                    <li>Don't forget <code>return</code> the result.</li>
+                    <li>If you get stuck on a challenge, find help in the <b>Resources</b> tab.</li>
+                    <li>If you're really stuck, unlock solutions in the <b>Solutions</b> tab</li>
+                </ul>
+            EOL,
+        ]);
+
+        $categories = [
+            Category::where('name', 'arrays')->first()->id,
+            Category::where('name', 'math')->first()->id,
+            Category::where('name', 'algebra')->first()->id,
+        ];
+
+        $challenge->categories()->sync($categories);
+
+        $kata = Kata::create([
+            'challenge_id' => $challenge->id,
+            'owner_id' => $superadminID,
+            'language_id' => $phpID,
+            'rank_id' => 6,
+            'mode_id' => $blitzModeID,
+            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/CBYzLCAR2l0WC5SpQXlKsxXM8Tjm4KX847ik2vts.txt',
+            'signature' => 'function trasposed($matrix) {',
+            'testClassName' => 'TrasposedMatrix',
+        ]);
+
+
+        // Multiply Matrix
+
+        $slug = Str::slug('Multiply Matrix');
+
+        $challenge = Challenge::create([
+            'slug' => $slug,
+            'url' => url("/katas/$slug"),
+            'title' => 'Calculate the Multiply of Two Matrix.',
+            'description' => <<<EOL
+                <p>Write a function named <code>multiplied</code> that takes two arguments of type <code>array</code> named <code>matrixA</code> and <code>matrixB</code> and returns another array that represents the product of the two matrices. The product of two matrices is a new matrix whose elements are obtained by multiplying each row of the first matrix by each column of the second matrix and adding up the results.</p>
+                <p><b>Base Case and Constrints</b></p>
+                <p>
+                    <ul>
+                        <li>If either argument is an empty array, return an empty array.</li>
+                        <li>The given matrices can have any number of rows and columns.</li>
+                        <li>It means that the past matrix will always be two-dimensional.</li>
+                    </ul>
+                </p>
+            EOL,
+            'examples' => <<<EOL
+                <pre><code>multiplied([], []) => []</code></pre>
+                <pre><code>multiplied([[1]], [[1]]) => [[1]]</code></pre>
+                <pre><code>multiplied([[1, 2], [3, 4]], [[5, 6], [7, 8]]) => [[19, 22], [43, 50]]</code></pre>
+                <pre><code>multiplied([[1 ,2 ,3], [4 ,5 ,6], [7 ,8 ,9]], [[10 ,11 ,12], [13 ,14 ,15], [16 ,17 ,18]]) => [[84 ,90 ,96], [201 ,216 ,231], [318 ,342 ,366]]</code></pre>
+            EOL,
+            'notes' => <<<EOL
+                <ul>
+                    <li>Don't forget <code>return</code> the result.</li>
+                    <li>If you get stuck on a challenge, find help in the <b>Resources</b> tab.</li>
+                    <li>If you're really stuck, unlock solutions in the <b>Solutions</b> tab</li>
+                </ul>
+            EOL,
+        ]);
+
+        $categories = [
+            Category::where('name', 'arrays')->first()->id,
+            Category::where('name', 'math')->first()->id,
+            Category::where('name', 'algebra')->first()->id,
+        ];
+
+        $challenge->categories()->sync($categories);
+
+        $kata = Kata::create([
+            'challenge_id' => $challenge->id,
+            'owner_id' => $superadminID,
+            'language_id' => $phpID,
+            'rank_id' => 6,
+            'mode_id' => $trainingModeID,
+            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/OS55Uj3N6sKLmKXfgjs7rkyEF17Bala9XAclQviY.txt',
+            'signature' => 'function multiplied($matrixA, $matrixB) {',
+            'testClassName' => 'MultiplyMatrix',
+        ]);
+
+
+        // CombinatorialNumbers
+
+        $slug = Str::slug('Combinatorial Numbers');
+
+        $challenge = Challenge::create([
+            'slug' => $slug,
+            'url' => url("/katas/$slug"),
+            'title' => 'Calculate the Combinatorial Number.',
+            'description' => <<<EOL
+                <p>Write a function named <code>combinatorial</code> that takes two arguments of type <code>int</code> named <code>m</code> and <code>n</code> and returns the binomial coefficient of them. The binomial coefficient of two numbers is the number of ways to choose n elements from a set of m elements without repetition and without regard to order.</p>
+                <p><b>Base Case and Constrints</b></p>
+                <p>
+                    <ul>
+                        <li>If either argument is zero, return one.</li>
+                        <li>0 <= m, n <= 20</li>
+                    </ul>
+                </p>
+            EOL,
+            'examples' => <<<EOL
+                <pre><code>combinatorial(3, 2) => 3</code></pre>
+                <pre><code>combinatorial(8, 5) => 56</code></pre>
+                <pre><code>combinatorial(5, 3) => 10</code></pre>
+                <pre><code>combinatorial(10, 5) => 252</code></pre>
+                <pre><code>combinatorial(4, 4) => 1</code></pre>
+                <pre><code>combinatorial(0, 0) => 1</code></pre>
+            EOL,
+            'notes' => <<<EOL
+                <ul>
+                    <li>Don't forget <code>return</code> the result.</li>
+                    <li>If you get stuck on a challenge, find help in the <b>Resources</b> tab.</li>
+                    <li>If you're really stuck, unlock solutions in the <b>Solutions</b> tab</li>
+                </ul>
+            EOL,
+        ]);
+
+        $categories = [
+            Category::where('name', 'math')->first()->id,
+            Category::where('name', 'numbers')->first()->id,
+        ];
+
+        $challenge->categories()->sync($categories);
+
+        $kata = Kata::create([
+            'challenge_id' => $challenge->id,
+            'owner_id' => $superadminID,
+            'language_id' => $phpID,
+            'rank_id' => 3,
+            'mode_id' => $blitzModeID,
+            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/Pv8tGHJEqowUZhZtmSDpGWgMp0nPJYwING2fGlQY.txt',
+            'signature' => 'function combinatorial($m, $n) {',
+            'testClassName' => 'CombinatorialNumbers',
+        ]);
+
+
+
+        // PrimesBelowGivenNumber
+
+        $slug = Str::slug('Primes Below Given Number');
+
+        $challenge = Challenge::create([
+            'slug' => $slug,
+            'url' => url("/katas/$slug"),
+            'title' => 'Generate the Primes Below a Given Number.',
+            'description' => <<<EOL
+                <p>Write a function named <code>generatePrimes</code> that takes one argument of type <code>int</code> named <code>num</code> and returns an array of all the prime numbers between 2 and num (inclusive). A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.</p>
+                <p><b>Base Case and Constrints</b></p>
+                <p>
+                    <ul>
+                        <li>If the argument is less than 2, return an empty array.</li>
+                        <li>0 <= num <= 1000</li>
+                        <li>It means that the past number will always be a natural number.</li>
+                    </ul>
+                </p>
+            EOL,
+            'examples' => <<<EOL
+                <pre><code>generatePrimes(7) => [2, 3, 5, 7]</code></pre>
+                <pre><code>generatePrimes(10) => [2, 3, 5, 7]</code></pre>
+                <pre><code>generatePrimes(20) => [2, 3, 5, 7, 11, 13, 17, 19]</code></pre>
+                <pre><code>generatePrimes(1) => []</code></pre>
+                <pre><code>generatePrimes(0) => []</code></pre>
+            EOL,
+            'notes' => <<<EOL
+                <ul>
+                    <li>Don't forget <code>return</code> the result.</li>
+                    <li>If you get stuck on a challenge, find help in the <b>Resources</b> tab.</li>
+                    <li>If you're really stuck, unlock solutions in the <b>Solutions</b> tab</li>
+                </ul>
+            EOL,
+        ]);
+
+        $categories = [
+            Category::where('name', 'math')->first()->id,
+            Category::where('name', 'numbers')->first()->id,
+        ];
+
+        $challenge->categories()->sync($categories);
+
+        $kata = Kata::create([
+            'challenge_id' => $challenge->id,
+            'owner_id' => $superadminID,
+            'language_id' => $phpID,
+            'rank_id' => 2,
+            'mode_id' => $blitzModeID,
+            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/YjzEMtkTXq7W16KGWKSfqWCt9C99didgKNYRBYwN.txt',
+            'signature' => 'function generatePrimes($num) {',
+            'testClassName' => 'PrimesBelowGivenNumber',
+        ]);
+
+
+
+        // IsPrime
+
+        $slug = Str::slug('Is Prime');
+
+        $challenge = Challenge::create([
+            'slug' => $slug,
+            'url' => url("/katas/$slug"),
+            'title' => 'Return if the number Is Prime.',
+            'description' => <<<EOL
+                <p>Write a function named <code>isPrime</code> that takes one argument of type <code>int</code> named <code>num</code> and returns a boolean value indicating whether the given number is a prime number or not. A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.</p>
+                <p><b>Base Case and Constrints</b></p>
+                <p>
+                    <ul>
+                        <li>If the argument is less than or equal to 1, return false.</li>
+                        <li>0 <= num <= 1000</li>
+                        <li>It means that the past number will always be a natural number.</li>
+                    </ul>
+                </p>
+            EOL,
+            'examples' => <<<EOL
+                <pre><code>isPrime(2) => true</code></pre>
+                <pre><code>isPrime(47) => true</code></pre>
+                <pre><code>isPrime(215) => false</code></pre>
+                <pre><code>isPrime(6) => false</code></pre>
+                <pre><code>isPrime(7) => true</code></pre>
+                <pre><code>isPrime(97) => true</code></pre>
+                <pre><code>isPrime(100) => false</code></pre>
+                <pre><code>isPrime(9) => false</code></pre>
+                <pre><code>isPrime(11) => true</code></pre>
+                <pre><code>isPrime(121) => false</code></pre>
+            EOL,
+            'notes' => <<<EOL
+                <ul>
+                    <li>Don't forget <code>return</code> the result.</li>
+                    <li>If you get stuck on a challenge, find help in the <b>Resources</b> tab.</li>
+                    <li>If you're really stuck, unlock solutions in the <b>Solutions</b> tab</li>
+                </ul>
+            EOL,
+        ]);
+
+        $categories = [
+            Category::where('name', 'math')->first()->id,
+            Category::where('name', 'numbers')->first()->id,
+        ];
+
+        $challenge->categories()->sync($categories);
+
+        $kata = Kata::create([
+            'challenge_id' => $challenge->id,
+            'owner_id' => $superadminID,
+            'language_id' => $phpID,
+            'rank_id' => 2,
+            'mode_id' => $trainingModeID,
+            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/ocnfVOgV1QwhiDVPFXyKtetOTL4cuNpwtSXEBIII.txt',
+            'signature' => 'function isPrime($num) {',
+            'testClassName' => 'IsPrime',
+        ]);
+
+
+        // StringSumDigit
+
+        $slug = Str::slug('String Sum Digit');
+
+        $challenge = Challenge::create([
+            'slug' => $slug,
+            'url' => url("/katas/$slug"),
+            'title' => 'Return the sum of the digits for a string',
+            'description' => <<<EOL
+                <p>Write a function named <code>sumDigit</code> that takes one argument of type <code>string</code> named <code>str</code> and returns the sum of the digits of the given string. The string represents a non-negative integer number.</p>
+                <p><b>Base Case and Constrints</b></p>
+                <p>
+                    <ul>
+                        <li>If the argument is an empty string, return zero.</li>
+                        <li>The length of the string is less than or equal to 1000</li>
+                        <li>It means that the past string will always be with numerical format.</li>
+                    </ul>
+                </p>
+            EOL,
+            'examples' => <<<EOL
+                <pre><code>sumDigit("123") => 6</code></pre>
+                <pre><code>sumDigit("456") => 15</code></pre>
+                <pre><code>sumDigit("789") => 24</code></pre>
+                <pre><code>sumDigit("1010") => 2</code></pre>
+                <pre><code>sumDigit("2468") => 20</code></pre>
+                <pre><code>sumDigit("1357") => 16</code></pre>
+            EOL,
+            'notes' => <<<EOL
+                <ul>
+                    <li>Don't forget <code>return</code> the result.</li>
+                    <li>If you get stuck on a challenge, find help in the <b>Resources</b> tab.</li>
+                    <li>If you're really stuck, unlock solutions in the <b>Solutions</b> tab</li>
+                </ul>
+            EOL,
+        ]);
+
+        $categories = [
+            Category::where('name', 'strings')->first()->id,
+        ];
+
+        $challenge->categories()->sync($categories);
+
+        $kata = Kata::create([
+            'challenge_id' => $challenge->id,
+            'owner_id' => $superadminID,
+            'language_id' => $phpID,
+            'rank_id' => 1,
+            'mode_id' => $blitzModeID,
+            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/pzaE8teLjE9qpoElQF3U4ANDTg9p2C4su39wOpec.txt',
+            'signature' => 'function sumDigit($str) {',
+            'testClassName' => 'StringSumDigit',
+        ]);
+
+
+
+        // PascalTriangle
+
+        $slug = Str::slug('Pascal Triangle');
+
+        $challenge = Challenge::create([
+            'slug' => $slug,
+            'url' => url("/katas/$slug"),
+            'title' => 'Generate a row of Pascal’s triangle',
+            'description' => <<<EOL
+                <p>Write a function named <code>pascal</code> that takes one argument of type <code>int</code> named <code>num</code> and returns a string that represents the digits of the given row of Pascal’s triangle, separated by a space. Pascal’s triangle is a triangular array of numbers where each number is the sum of the two numbers above it. The rows and columns of Pascal’s triangle are numbered starting from 0.</p>
+                <p><b>Base Case and Constrints</b></p>
+                <p>
+                    <ul>
+                        <li>If the argument is zero, return “1”.</li>
+                        <li>0 <= num <= 20</li>
+                        <li>It means that the past number will always be a positive number.</li>
+                    </ul>
+                </p>
+            EOL,
+            'examples' => <<<EOL
+                <pre><code>pascal(0) => "1"</code></pre>
+                <pre><code>pascal(1) => "1 1"</code></pre>
+                <pre><code>pascal(2) => "1 2 1"</code></pre>
+                <pre><code>pascal(3) => "1 3 3 1"</code></pre>
+                <pre><code>pascal(4) => "1 4 6 4 1"</code></pre>
+                <pre><code>pascal(5) => "1 5 10 10 5 1"</code></pre>
+                <pre><code>pascal(6) => "1 6 15 20 15 6 1"</code></pre>
+                <pre><code>pascal(7) => "1 7 21 35 35 21 7 1"</code></pre>
+                <pre><code>pascal(8) => "1 8 28 56 70 56 28 8 1""</code></pre>
+            EOL,
+            'notes' => <<<EOL
+                <ul>
+                    <li>Don't forget <code>return</code> the result.</li>
+                    <li>If you get stuck on a challenge, find help in the <b>Resources</b> tab.</li>
+                    <li>If you're really stuck, unlock solutions in the <b>Solutions</b> tab</li>
+                </ul>
+            EOL,
+        ]);
+
+        $categories = [
+            Category::where('name', 'math')->first()->id,
+        ];
+
+        $challenge->categories()->sync($categories);
+
+        $kata = Kata::create([
+            'challenge_id' => $challenge->id,
+            'owner_id' => $superadminID,
+            'language_id' => $phpID,
+            'rank_id' => 7,
+            'mode_id' => $trainingModeID,
+            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/VWdiyVmr1qRBksyIKuuHWWVpYTafiXpHeMtqDKtF.txt',
+            'signature' => 'function pascal($num) {',
+            'testClassName' => 'PascalTriangle',
         ]);
 
 
