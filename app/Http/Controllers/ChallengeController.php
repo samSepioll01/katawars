@@ -29,6 +29,7 @@ class ChallengeController extends Controller
         $validator = Validator::make($request->all(), [
             'category' => ['string', 'max:255'],
             'rank' => ['string', 'max:255'],
+            'selected' => ['string', 'max:10'],
         ]);
 
         if ($validator->fails()) {
@@ -51,10 +52,16 @@ class ChallengeController extends Controller
             }
 
             $challenges = Challenge::query()->filter($request->query())->get();
-            $procesedHTML = view('includes.challenges', [
-                'challenges' => $challenges,
-                'selected' => $request->query('category'),
-            ])->render();
+
+            if (count($challenges) > 0) {
+
+                $procesedHTML = view('includes.challenges', [
+                    'challenges' => $challenges,
+                    'selected' => $request->query('category'),
+                ])->render();
+            } else {
+                $procesedHTML = '<h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Challenges Not Found.</h1>';
+            }
 
             return response()->json([
                 'success' => true,

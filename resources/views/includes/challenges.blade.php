@@ -10,7 +10,7 @@
 
                                 axios({
                                     method: 'get',
-                                    url: '/training?category={{ $category->name }}&selected=' + selected,
+                                    url: '/training?category={{ $category->name }}&rank=' + $refs.rank.value + '&selected=' + selected,
                                     responseType: 'json',
                                 })
                                 .then(response => response.data.success
@@ -19,15 +19,14 @@
                                 )
                                 .catch(error => console.log(error));
                                 "
-                        >
-                            {{ $category->name }}
-                        </span>
+                        >{{ $category->name }}</span>
                     </div>
                 @endforeach
                 <x-utilities.rank :size="4" :rank="$challenge->rank->name"/>
             </div>
-            <div>
-                favorite
+            <div class="w-56 flex flex-row justify-evenly items-center">
+                <span>favorite</span>
+                <span>saved katas</span>
             </div>
         </div>
 
@@ -43,6 +42,5 @@
                 </div>
             </a>
         </div>
-
     </div>
 @endforeach

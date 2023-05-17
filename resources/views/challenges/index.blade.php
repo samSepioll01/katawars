@@ -11,14 +11,21 @@
             <div class="grid col-span-12 sm:col-span-4 px-8">
 
                 <div class="flex flex-col p-6">
-
                     <select class="select"
                             id="rank"
                             x-ref="rank"
                             x-on:change="
+                                categorySelected = document.querySelector('.category-selected');
+
+                                if (categorySelected) {
+                                    categorySelected = categorySelected.firstElementChild.textContent;
+                                } else {
+                                    categorySelected = null;
+                                }
+
                                 axios({
                                     method: 'get',
-                                    url: '/training?rank=' + $event.target.value,
+                                    url: '/training?rank=' + $event.target.value + '&category=' + categorySelected,
                                     responseType: 'json',
                                 })
                                 .then(response => {
@@ -51,9 +58,10 @@
 
                                         <span class="category"
                                               x-on:click="
+                                                console.log($refs.rank.value);
                                                 axios({
                                                     method: 'get',
-                                                    url: '/training?category={{$category->name}}',
+                                                    url: '/training?category={{$category->name}}' + '&rank=' + $refs.rank.value,
                                                     responseType: 'json',
                                                 })
                                                 .then(response => {
@@ -63,15 +71,14 @@
                                                 })
                                                 .catch(error => console.log(error));
                                               "
-                                        >
-                                            {{ $category->name }}
-                                        </span>
+                                        >{{ $category->name }}</span>
                                     </div>
                                 @endforeach
                                 <x-utilities.rank size="4" :rank="$challenge->rank->name" />
                             </div>
-                            <div>
-                                favorite
+                            <div class="w-56 flex flex-row justify-evenly items-center">
+                                <span>favorite</span>
+                                <span>saved katas</span>
                             </div>
                         </div>
 

@@ -56,8 +56,11 @@ class Challenge extends Model
         $rank = $filters['rank'] ?? false;
         $rank = $rank === 'ranks' ? false : $rank;
 
+        $category = $filters['category'] ?? false;
+        $category = $category === 'null' ? false : $category;
+
         return Challenge::query()
-            ->when($filters['category'] ?? false, fn($query, $category) =>
+            ->when($category ?? false, fn($query, $category) =>
                 $query->whereHas('categories', fn($query) =>
                     $query->where('name', $category)
                 )
