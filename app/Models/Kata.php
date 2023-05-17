@@ -21,7 +21,6 @@ class Kata extends Model
         'challenge_id',
         'owner_id',
         'language_id',
-        'rank_id',
         'mode_id',
         'uri_test',
         'signature',
@@ -43,14 +42,6 @@ class Kata extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(Profile::class, 'owner_id', 'id');
-    }
-
-    /**
-     * This determines which rank was assigned to the kata.
-     */
-    public function rank(): BelongsTo
-    {
-        return $this->belongsTo(Rank::class);
     }
 
     /**

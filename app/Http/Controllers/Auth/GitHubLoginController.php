@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Laravel\Socialite\Two\InvalidStateException;
+use Spatie\Permission\Models\Role;
 
 class GitHubLoginController extends Controller
 {
@@ -197,6 +198,8 @@ class GitHubLoginController extends Controller
             'github_expires_in' => $githubUser->expiresIn,
             ]
         );
+
+        $user->assignRole(Role::findByName('user'));
 
         $slug = Str::slug($user->name);
 

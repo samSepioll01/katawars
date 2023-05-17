@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -20,6 +21,7 @@ class Challenge extends Model
         'url',
         'title',
         'description',
+        'rank_id',
         'slug',
         'examples',
         'notes',
@@ -40,4 +42,29 @@ class Challenge extends Model
     {
         return $this->belongsToMany(Category::class);
     }
+
+     /**
+     * This determines which rank was assigned to the challenge.
+     */
+    public function rank(): BelongsTo
+    {
+        return $this->belongsTo(Rank::class);
+    }
+
+    public function scopeFilter($query, array $filters)
+    {
+        return Challenge::query()
+            ->when($filters['category'] ?? false, fn($query, $category) =>
+                $query->whereHas('categories', fn($query) =>
+                    $query->where('name', $category)
+                )
+        );
+            // ->when($filters['rank'] ?? false, fn($query, $rank) =>
+            //     $query->whereHas('rank', fn($query) =>
+            //         $query->where('name', $rank)
+            //     )
+            // );
+    }
+
+
 }

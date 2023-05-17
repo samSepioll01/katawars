@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('url')->unique();
             $table->string('title');
             $table->text('description');
+            $table->foreignId('rank_id')->constrained()
+                ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('slug')->unique();
             $table->text('examples');
             $table->text('notes');

@@ -87,7 +87,7 @@ Route::middleware([
     'verified'
 ])->group(function () {
 
-    Route::get('/training/{category?}', [ChallengeController::class, 'showChallenges'])
+    Route::get('/training', [ChallengeController::class, 'showChallenges'])
         ->name('challenges.training');
 
     Route::get('/blitz', [ChallengeController::class, 'showChallenges'])

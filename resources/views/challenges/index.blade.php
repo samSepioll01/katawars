@@ -8,10 +8,37 @@
         </header>
 
         <main class="grid grid-cols-12 mt-8">
-            <div class="grid col-span-12 sm:col-span-3">
-                panel filtrado
+            <div class="grid col-span-12 sm:col-span-4 px-8">
+
+                <div class="flex flex-col p-6">
+
+                    <select class="select"
+                            id="rank"
+                            x-ref="rank"
+                            x-on:change="
+                                axios({
+                                    method: 'get',
+                                    url: '/training?rank=' + $event.target.value + '&category=' + document.querySelector('.category-selected')?.firstElementChild.textContent,
+                                    responseType: 'json',
+                                })
+                                .then(response => response.data.success
+                                    ? console.log(JSON.parse(response.data.challenges))
+                                    : null
+                                )
+                                .catch(error => console.log(error));
+                            "
+                    >
+                        <option class="option" value="ranks">Ranks</option>
+                        @foreach (\App\Models\Rank::all() as $rank)
+                            <option class="option" value="{{ $rank->name }}">{{ ucfirst($rank->name) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+
+
             </div>
-            <div class="grid col-span-12 sm:col-span-9 py-2" x-ref="challenges">
+            <div class="grid col-span-12 sm:col-span-8 py-2" x-ref="challenges">
                 @foreach ($challenges as $challenge)
                     <div class="card-challenge">
 
@@ -25,13 +52,14 @@
                                               x-on:click="
                                                 axios({
                                                     method: 'get',
-                                                    url: '/training/{{ $category->name }}',
+                                                    url: '/training?category={{$category->name}}',
                                                     responseType: 'json',
                                                 })
-                                                .then(response => response.data.success
-                                                    ? $refs.challenges.innerHTML = response.data.challenges
-                                                    : null
-                                                )
+                                                .then(response => {
+                                                    if (response.data.success) {
+                                                        $refs.challenges.innerHTML = response.data.challenges;
+                                                    }
+                                                })
                                                 .catch(error => console.log(error));
                                               "
                                         >
@@ -39,6 +67,7 @@
                                         </span>
                                     </div>
                                 @endforeach
+                                <x-utilities.rank size="4" :rank="$challenge->rank->name" />
                             </div>
                             <div>
                                 favorite

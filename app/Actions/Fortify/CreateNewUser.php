@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -27,7 +28,6 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'role' => ['nullable', 'string', 'max:255'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
@@ -39,7 +39,7 @@ class CreateNewUser implements CreatesNewUsers
             'bio' => '',
         ]);
 
-        $user->assignRole($input['role'] ?? 'user');
+        $user->assignRole(Role::findByName('user'));
 
         $slug = Str::slug($input['name']);
 

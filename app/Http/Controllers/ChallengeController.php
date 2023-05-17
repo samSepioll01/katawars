@@ -8,7 +8,9 @@ use App\Models\Category;
 use App\Models\Challenge;
 use App\Models\Kata;
 use App\Models\Mode;
+use App\Models\Rank;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ChallengeController extends Controller
 {
@@ -24,39 +26,46 @@ class ChallengeController extends Controller
 
     public function showChallenges(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'category' => ['string', 'max:255'],
+            'rank' => ['string', 'max:255'],
+        ]);
 
-        if ($request->ajax() && $request->category) {
+        if ($validator->fails()) {
+            abort(404);
+        }
 
-            $challenges = Category::where('name', $request->category)->first()->challenges()->get();
+        if ($request->ajax() && $request->query()) {
 
+            if ($request->query('selected') === 'true') {
+                $returnHTML = view('includes.challenges', ['challenges' => $this->getTrainingChallenges(), 'selected' => 'none'])->render();
+                return response()->json(['success' => true, 'challenges' => $returnHTML]);
+            }
+
+
+            $challenges = Challenge::query()->filter($request->query())->get();
             $procesedHTML = view('includes.challenges', [
                 'challenges' => $challenges,
-                'selected' => $request->category,
+                'selected' => $request->query('category'),
             ])->render();
 
             return response()->json(['success' => true, 'challenges' => $procesedHTML]);
         }
 
+        return view('challenges.index', [
+            'challenges' => $this->getTrainingChallenges(),
+        ]);
+    }
 
-        $route = request()->path();
 
-        if (request()->path() === 'training') {
-            $katas = Kata::where(
-                'mode_id',
-                Mode::where('denomination', request()->path())->first()->id
-            )->get();
-        }
+    protected function getTrainingChallenges()
+    {
+        $katas = Kata::where(
+            'mode_id',
+            Mode::where('denomination', request()->path())->first()->id
+        )->get();
 
-        if (request()->path() === 'blitz') {
-            $katas = Kata::where(
-                'mode_id',
-                Mode::where('denomination', request()->path())->first()->id
-            )->get();
-        }
-
-        $challenges = $katas->map(fn($kata) => $kata->challenge)->unique('id');
-
-        return view('challenges.index', ['challenges' => $challenges]);
+        return $katas->map(fn($kata) => $kata->challenge)->unique('id');
     }
 
     public function showKataMainPage(Request $request)

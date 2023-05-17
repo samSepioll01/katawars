@@ -419,6 +419,17 @@
     .card-challenge {
         @apply h-40 px-1 sm:px-6 py-2 mb-8 border border-slate-400 sm:rounded-xl
                dark:border-slate-800 hover:border-violet-600 bg-slate-50 hover:bg-slate-200 dark:bg-slate-800/70 shadow-lg
-               dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-900 transition-all duration-300;
+               dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-900 transition-all;
+    }
+
+    .select {
+        @apply cursor-pointer border dark:focus:border-cyan-600 focus:border-violet-600 dark:focus:ring-0 bg-white
+               dark:bg-slate-800/70 dark:text-slate-100 dark:border-slate-800 shadow-lg border-gray-300
+               rounded-full text-gray-600 h-10 pl-5 pr-10 hover:border-gray-400 mb-16;
+    }
+
+    .option {
+        @apply w-full py-1 cursor-pointer text-center hover:bg-slate-200 dark:hover:bg-slate-700 rounded-md
+               dark:text-slate-100 text-slate-700;
     }
 }

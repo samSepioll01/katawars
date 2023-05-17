@@ -37,6 +37,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Return the Sum of Two Numbers',
+            'rank_id' => 1,
             'description' => <<<EOL
                 <p>Create a function that takes two numbers as arguments and returns their sum.</p>
             EOL,
@@ -64,7 +65,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/gWYEKQHYDU3l58JVhxQM2HXlRPnzHe6ydUjkdf27.txt',
             'signature' => 'function sum($a, $b) {',
@@ -80,6 +80,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Knights Who Say Ni!',
+            'rank_id' => 1,
             'description' => 'Create a function that return Ni! like Knights of Ni in the Monty Python and the Holy Grail film.',
             'examples' => <<<EOL
                 <pre><code>say_ni() => Ni!</code></pre>
@@ -102,7 +103,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/1yB9AsjkUKKDEHYvbZfg73bx9YBA7lgcV9SBE8Xj.txt',
             'signature' => 'function say_ni() {',
@@ -118,6 +118,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Get the Prime Factors of a number.',
+            'rank_id' => 4,
             'description' => <<<EOL
                 <p>Write a function called <code>prime_factors</code> that takes a positive integer <code>n</code> as an argument and returns an indexed array with the prime factors of <code>n</code> sorted from smallest to largest.</p>
                 <p>The prime factors of a number are the prime numbers that divide it exactly. For example, the prime factors of 15 are 3 and 5, and the prime factors of 100 are 2 and 5 (with multiplicity 2). If the number is prime, the function should return an array with the same number as the only element. If the number is less than 2, the function should return an empty array.</p>
@@ -151,7 +152,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 4,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/I0fL7dZCeykHK1If4vKiUrsnPrPUhQnXwmLvptrU.txt',
             'signature' => 'function prime_factors() {',
@@ -167,6 +167,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Generate Roman Numerals.',
+            'rank_id' => 4,
             'description' => <<<EOL
                 <p>Write a function called <code>generate</code> that takes a positive integer <code>n</code> as an argument and returns a string with the Roman numeral equivalent of <code>n</code>.</p>
                 <p>The Roman numerals are symbols used in a system of numerical notation based on the ancient Roman system. The symbols are I, V, X, L, C, D, and M, standing respectively for 1, 5, 10, 50, 100, 500, and 1,000 in the Hindu-Arabic numeral system.</p>
@@ -201,7 +202,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 4,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/zHxM8zRS2Ec1DDEbmuowvoSKALnVCgwZQSsg6FPR.txt',
             'signature' => 'function generate() {',
@@ -216,6 +216,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Get de Bowling Score for a Game!.',
+            'rank_id' => 7,
             'description' => <<<EOL
                 <p>Write a function called <code>bowling_score</code> that takes an array of integers <code>rolls</code> as an argument and returns an integer with the total score of the bowling game. The array <code>rolls</code> contains the number of pins knocked down on each roll of the game. A bowling game consists of 10 frames, with a minimum score of zero and a maximum of 300. Each frame consists of two chances to knock down ten pins, except for the 10th frame, which can have up to three rolls depending on the outcome of the first two.</p>
                 <p>The scoring rules are as follow:</p>
@@ -254,7 +255,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 7,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/FIqagqNECuGTkDsAqp3reJ3TIPjXHWKdnqzUICQY.txt',
             'signature' => 'function bowling_score($rolls) {',
@@ -270,6 +270,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'String Calculator with Delimiter.',
+            'rank_id' => 2,
             'description' => <<<EOL
                 <p>Write a function called <code>str_calc</code> that takes two strings as arguments: <code>delimiter</code> and <code>str</code>. The function should return an integer with the sum of the digits that are separated by the delimiter in the string <code>str</code>.</p>
                 <p>The delimiter can be any character, and the string <code>str</code> can contain any number of digits and delimiters.</p>
@@ -303,7 +304,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 2,
             'mode_id' => $blitzModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/rrvYnZ6YoFkYuBYbSO3e2bMWRTLNvl6eqtQGSqpV.txt',
             'signature' => 'function str_calc($delimiter, $str) {',
@@ -319,6 +319,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Call the points for a Tennis Match.',
+            'rank_id' => 3,
             'description' => <<<EOL
                 <p>Write a function called <code>scoreTo</code> that takes two integers as arguments: <code>pointsP1</code> and <code>pointsP2</code>. The function should return a string with the tennis score corresponding to the points of player 1 and player 2.</p>
                 <p>The tennis score is based on a system of points, games, and sets. A point is scored when a player hits the ball in such a way that the opponent is unable to return it, or if the opponent hits the ball out of bounds. A game is won by the player who is able to score four points and win by a margin of at least two points. A set is won by the first side to win six games, with a margin of at least two games over the other side. A match is won when a player or a doubles team has won the majority of the prescribed number of sets.</p>
@@ -361,7 +362,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 3,
             'mode_id' => $blitzModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/aX85dHP0sgyN373LSsam6fskDXCLGONGEsUYRrL2.txt',
             'signature' => 'function scoreTo($pointsP1, $pointsP2) {',
@@ -377,6 +377,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'FizzBuzz',
+            'rank_id' => 1,
             'description' => <<<EOL
                 <p>Write a function called <code>fizzbuzz</code> that takes an integer <code>number</code> as an argument and returns a string or an integer depending on the value of <code>number</code>.</p>
                 <p>The function should follow these rules:</p>
@@ -417,7 +418,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/NXr1sU2GtHsL21kswJG16lQzDVWYkHZApI2jOV7t.txt',
             'signature' => 'function fizzbuzz($number) {',
@@ -434,6 +434,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => '99 Bottles Song Verses',
+            'rank_id' => 7,
             'description' => <<<EOL
                 <p>Write a class called <code>Song</code> that has a method called <code>verse</code> that takes an integer <code>n</code> as an argument and returns a string with the lyrics of the song “99 Bottles of Beer”. The song is about someone who drinks 99 bottles of beer, one by one, until there are no more bottles left. The lyrics of each verse depend on the number of bottles remaining, as shown in the test cases. The method should handle any number from 0 to 99.</p>
             EOL,
@@ -489,7 +490,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 7,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/reVLFVb2tMN0UCI4TXsrTIgNbdlJ9cmGiozL1z3l.txt',
             'signature' => 'class Song { public function verse($number) {',
@@ -506,6 +506,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Reverse the String',
+            'rank_id' => 1,
             'description' => <<<EOL
                 <p>Write a function called <code>reverse</code> that takes a string <code>str</code> as an argument and returns a string with the characters of <code>str</code> in reverse order.</p>
             EOL,
@@ -535,7 +536,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $blitzModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/xuYaIyBR2nLGILvI1iUdD9YdGqCazfYavoiWalnG.txt',
             'signature' => 'function reverse($str) {',
@@ -551,6 +551,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Convert a String in a Slug.',
+            'rank_id' => 1,
             'description' => <<<EOL
                 <p>Write a function called <code>str_slug</code> that takes a string <code>str</code> as an argument and returns a string with the format of a slug. A slug is a string that is used to identify a resource in a URL, and it usually consists of lowercase alphanumeric characters separated by hyphens. </p>
                 <p>The function should follow these rules:</p>
@@ -590,7 +591,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/ShMP94Zlqb1EwS0JbRCg7t4yIqqNNy4SFWhT3KgD.txt',
             'signature' => 'function str_slug($str) {',
@@ -606,6 +606,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Get Points for the matchs of the Football Team.',
+            'rank_id' => 1,
             'description' => <<<EOL
                 <p>Create a function called <code>points</code> that takes three arguments: <code>wins</code>, <code>draws</code> and <code>losses</code>. These are integers that represent the number of wins, draws and losses that a football team has had in a season.</p>
                 <p>The function should return the total number of points that the team has earned, according to the following rules:</p>
@@ -644,7 +645,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/9BdJ149FOheyNItlOMs7dkHAXjkB4EbWiSUODijA.txt',
             'signature' => 'function points($wins, $draws, $loses) {',
@@ -661,6 +661,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Capitalize all words of a string.',
+            'rank_id' => 1,
             'description' => <<<EOL
                 <p>Create a function called <code>capitalize_all</code> that takes one argument: <code>str</code>. This is a string that contains one or more words. The function should return a new string that has the first letter of every word capitalized.</p>
                 <p>For example, if the input string is “hello world”, the output string should be “Hello World”.</p>
@@ -691,7 +692,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/LpQXY4M8Qw9CnytUDWNtONpIbLVRf3DBn46JwVr6.txt',
             'signature' => 'function capitalize_all($str) {',
@@ -708,6 +708,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Check Palindrome Strings.',
+            'rank_id' => 4,
             'description' => <<<EOL
                 <p>Create a function called <code>isPalindrome</code> that takes one argument: <code>str</code>. This is a string that may contain punctuation marks and spaces. The function should return a boolean value that indicates whether the string is a palindrome or not.</p>
                 <p>A palindrome is a word or phrase that reads the same forward and backward, ignoring punctuation marks and spaces.</p>
@@ -738,7 +739,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 4,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/6v1mgUS7AxAmg4RzKWGnsSnNNSBTd4pBsFJE24dp.txt',
             'signature' => 'function isPalindrome($str) {',
@@ -754,6 +754,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Count the repeats of substring.',
+            'rank_id' => 1,
             'description' => <<<EOL
                 <p>Create a function called <code>count_str</code> that takes two arguments: <code>haystack</code> and <code>needle</code>. These are both strings. The function should return an integer that represents the number of times that the <code>needle</code> string appears as a substring in the <code>haystack</code> string.</p>
                 <p>For example, if the <code>haystack</code> string is “The Knights Of ni never lose” and the <code>needle</code> string is “ni”, the function should return 2.</p>
@@ -783,7 +784,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/5hTH3wO9QL4T2GgLlsJKJedpSNgz7er9hxiaQvUg.txt',
             'signature' => 'function count_str($str) {',
@@ -799,6 +799,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Returning the First element in the Array.',
+            'rank_id' => 1,
             'description' => <<<EOL
                 <p>Create a function called <code>array_first</code> that takes one argument: <code>arr</code>. This is an array that contains different strings. The function should return the first element of the array.</p>
                 <p>For example, if the array is <code>['Lancelot', 'Dartagnan', 'Alatriste']</code>, the function should return ‘Lancelot’.</p>
@@ -828,7 +829,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/W1J562yAOH12uMJ7WT0wEd65BuvDPD9JYvv51EtJ.txt',
             'signature' => 'function array_first($arr) {',
@@ -844,6 +844,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Array Filtered for Greater Than Number.',
+            'rank_id' => 3,
             'description' => <<<EOL
                 <p>Create a function called <code>filtered</code> that takes two arguments: <code>arr</code> and <code>num</code>. These are an array of numbers and a number, respectively. The function should return a new array that contains only the elements of the original array that are greater than the number.</p>
                 <p>For example, if the array is <code>[-53, 1544, 12, 0, -511, 2]</code> and the number is <code>0</code>, the function should return <code>[1544, 12, 2]</code>.</p>
@@ -873,7 +874,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 3,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/ih6Oc5lEzTS2j30MugMVcIXCHkPkB4K8YU2xWk1f.txt',
             'signature' => 'function filtered($arr) {',
@@ -889,6 +889,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Convert the Array content To a String.',
+            'rank_id' => 1,
             'description' => <<<EOL
                 <p>Create a function called <code>arr2string</code> that takes one argument: <code>arr</code>. This is an array that contains individual characters in each position. The function should return a string that is composed of the characters of the array.</p>
             EOL,
@@ -915,7 +916,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/APqA4t8KNTBkgPq3DtWYnQWoPVDZ8hQ0DnXq7RQf.txt',
             'signature' => 'function arr2string($arr) {',
@@ -931,6 +931,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Invert the Bits of a Given String.',
+            'rank_id' => 2,
             'description' => <<<EOL
                 <p>Create a function called <code>bit_inverter</code> that takes one argument: <code>strBin</code>. This is a string that represents a sequence of bits (0s and 1s). The function should return a new string that has the bits inverted (1s become 0s and 0s become 1s).</p>
                 <p>For example, if the input string is <code>010</code>, the output string should be <code>101</code>.</p>
@@ -961,7 +962,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 2,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/Ckss2SGJHxeZNcYYATzES41HaeWoQyevnjEe3tkv.txt',
             'signature' => 'function bit_inverter($strBin) {',
@@ -978,6 +978,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Convert Decimal Number to Binary Using Bitwise Operator.',
+            'rank_id' => 5,
             'description' => <<<EOL
                 <p>Create a function called <code>decToBin</code> that takes one argument: <code>num</code>. This is an integer that represents a decimal number. The function should return a string that represents the binary equivalent of the decimal number.</p>
                 <p>To convert a decimal number to binary, you can use the following steps:</p>
@@ -1017,7 +1018,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 5,
             'mode_id' => $blitzModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/nPNSnlbIgxzF8NlOpVSDVPo1VjuWywjcvy55n9Ni.txt',
             'signature' => 'function decToBin($num) {',
@@ -1033,6 +1033,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Check Leap Year.',
+            'rank_id' => 3,
             'description' => <<<EOL
                 <p>Create a function called <code>leapYear</code> that takes one argument: <code>year</code>. This is an integer that represents a year. The function should return a boolean value that indicates whether the year is a leap year or not. A leap year is a year that has 366 days instead of 365 days, by adding an extra day to February</p>
                 <p>To determine if a year is a leap year, you can use the following rules:</p>
@@ -1072,7 +1073,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 3,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/12dgGk17s7UeaOB1ZhkTVr7Iem8y0kY90Pab7Yfk.txt',
             'signature' => 'function leapYear($year) {',
@@ -1088,6 +1088,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Calculate the Factorial Given a Number Recursively',
+            'rank_id' => 4,
             'description' => <<<EOL
                 <p>Create a function called <code>factorial</code> that takes one argument: <code>num</code>. This is an integer that represents a number. The function should return the factorial of the number, which is the product of all positive integers less than or equal to the number.</p>
                 <p>To calculate the factorial of a number, recursively, this is his base cases:</p>
@@ -1125,7 +1126,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 4,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/9va76OJRyuOVNPdSySBfGEsAnafqvYQD1F7Zrm4O.txt',
             'signature' => 'function factorial($num) {',
@@ -1141,6 +1141,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Calculate the Greatest Common Divisor',
+            'rank_id' => 3,
             'description' => <<<EOL
                 <p>Write a function named <code>mcd</code> that takes two arguments of type <code>int</code> named <code>a</code> and <code>b</code> and returns the greatest common divisor (GCD/MCD) of them. The MCD of two numbers is the largest positive integer that divides both numbers without leaving a remainder. For example, the MCD of 12 and 18 is 6.</p>
                 <p><b>Base Case and Constrints</b></p>
@@ -1180,7 +1181,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 3,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/wrETHaLCjZCop45rmNdoB6zxvQSoMOgOKevftl84.txt',
             'signature' => 'function mcd($a, $b) {',
@@ -1196,6 +1196,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Calculate the Least Common Divisor',
+            'rank_id' => 3,
             'description' => <<<EOL
                 <p>Write a function named <code>mcm</code> that takes two arguments of type <code>int</code> named <code>a</code> and <code>b</code> and returns the least common multiple (LCM) of them. The LCM of two numbers is the smallest positive integer that is divisible by both numbers without leaving a remainder. For example, the LCM of 4 and 6 is 12.</p>
                 <p><b>Base Case and Constrints</b></p>
@@ -1235,7 +1236,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 3,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/bmVvtUyoNHbr6GZ1Ywr3gHZ9e9fwzyZO8ygD6u6O.txt',
             'signature' => 'function mcm($a, $b) {',
@@ -1251,6 +1251,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Generate the numbers of Fibonacci.',
+            'rank_id' => 5,
             'description' => <<<EOL
                 <p>Write a function named <code>fibonacci</code> that takes one argument of type <code>int</code> named <code>num</code> and returns an array of the Fibonacci sequence up to the given position. The Fibonacci sequence is a series of numbers where each number is the sum of the two preceding ones, starting from 0 and 1. For example, the first 10 numbers of the Fibonacci sequence are: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34.</p>
                 <p><b>Base Case and Constrints</b></p>
@@ -1293,7 +1294,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 5,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/IbBdN6riFJ3teSOzmmJYkrL3LubKyVFIna2iuRI2.txt',
             'signature' => 'function fibonacci($num) {',
@@ -1309,6 +1309,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Get the Trasposed Matrix.',
+            'rank_id' => 6,
             'description' => <<<EOL
                 <p>Write a function named <code>trasposed</code> that takes one argument of type <code>array</code> named <code>matrix</code> and returns another array that represents the transpose of the given matrix. The transpose of a matrix is a new matrix whose rows are the columns of the original matrix. </p>
                 <p><b>Base Case and Constrints</b></p>
@@ -1349,7 +1350,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 6,
             'mode_id' => $blitzModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/CBYzLCAR2l0WC5SpQXlKsxXM8Tjm4KX847ik2vts.txt',
             'signature' => 'function trasposed($matrix) {',
@@ -1365,6 +1365,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Calculate the Multiply of Two Matrix.',
+            'rank_id' => 6,
             'description' => <<<EOL
                 <p>Write a function named <code>multiplied</code> that takes two arguments of type <code>array</code> named <code>matrixA</code> and <code>matrixB</code> and returns another array that represents the product of the two matrices. The product of two matrices is a new matrix whose elements are obtained by multiplying each row of the first matrix by each column of the second matrix and adding up the results.</p>
                 <p><b>Base Case and Constrints</b></p>
@@ -1403,7 +1404,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 6,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/OS55Uj3N6sKLmKXfgjs7rkyEF17Bala9XAclQviY.txt',
             'signature' => 'function multiplied($matrixA, $matrixB) {',
@@ -1419,6 +1419,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Calculate the Combinatorial Number.',
+            'rank_id' => 3,
             'description' => <<<EOL
                 <p>Write a function named <code>combinatorial</code> that takes two arguments of type <code>int</code> named <code>m</code> and <code>n</code> and returns the binomial coefficient of them. The binomial coefficient of two numbers is the number of ways to choose n elements from a set of m elements without repetition and without regard to order.</p>
                 <p><b>Base Case and Constrints</b></p>
@@ -1457,7 +1458,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 3,
             'mode_id' => $blitzModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/Pv8tGHJEqowUZhZtmSDpGWgMp0nPJYwING2fGlQY.txt',
             'signature' => 'function combinatorial($m, $n) {',
@@ -1474,6 +1474,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Generate the Primes Below a Given Number.',
+            'rank_id' => 2,
             'description' => <<<EOL
                 <p>Write a function named <code>generatePrimes</code> that takes one argument of type <code>int</code> named <code>num</code> and returns an array of all the prime numbers between 2 and num (inclusive). A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.</p>
                 <p><b>Base Case and Constrints</b></p>
@@ -1512,7 +1513,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 2,
             'mode_id' => $blitzModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/YjzEMtkTXq7W16KGWKSfqWCt9C99didgKNYRBYwN.txt',
             'signature' => 'function generatePrimes($num) {',
@@ -1529,6 +1529,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Return if the number Is Prime.',
+            'rank_id' => 2,
             'description' => <<<EOL
                 <p>Write a function named <code>isPrime</code> that takes one argument of type <code>int</code> named <code>num</code> and returns a boolean value indicating whether the given number is a prime number or not. A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.</p>
                 <p><b>Base Case and Constrints</b></p>
@@ -1572,7 +1573,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 2,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/ocnfVOgV1QwhiDVPFXyKtetOTL4cuNpwtSXEBIII.txt',
             'signature' => 'function isPrime($num) {',
@@ -1588,6 +1588,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Return the sum of the digits for a string',
+            'rank_id' => 1,
             'description' => <<<EOL
                 <p>Write a function named <code>sumDigit</code> that takes one argument of type <code>string</code> named <code>str</code> and returns the sum of the digits of the given string. The string represents a non-negative integer number.</p>
                 <p><b>Base Case and Constrints</b></p>
@@ -1626,7 +1627,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 1,
             'mode_id' => $blitzModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/pzaE8teLjE9qpoElQF3U4ANDTg9p2C4su39wOpec.txt',
             'signature' => 'function sumDigit($str) {',
@@ -1643,6 +1643,7 @@ class ChallengeSeeder extends Seeder
             'slug' => $slug,
             'url' => url("/katas/$slug"),
             'title' => 'Generate a row of Pascal’s triangle',
+            'rank_id' => 7,
             'description' => <<<EOL
                 <p>Write a function named <code>pascal</code> that takes one argument of type <code>int</code> named <code>num</code> and returns a string that represents the digits of the given row of Pascal’s triangle, separated by a space. Pascal’s triangle is a triangular array of numbers where each number is the sum of the two numbers above it. The rows and columns of Pascal’s triangle are numbered starting from 0.</p>
                 <p><b>Base Case and Constrints</b></p>
@@ -1684,7 +1685,6 @@ class ChallengeSeeder extends Seeder
             'challenge_id' => $challenge->id,
             'owner_id' => $superadminID,
             'language_id' => $phpID,
-            'rank_id' => 7,
             'mode_id' => $trainingModeID,
             'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/VWdiyVmr1qRBksyIKuuHWWVpYTafiXpHeMtqDKtF.txt',
             'signature' => 'function pascal($num) {',

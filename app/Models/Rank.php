@@ -18,11 +18,11 @@ class Rank extends Model
     protected $fillable = ['name', 'level_up'];
 
     /**
-     * This determines which katas was assigned to the rank.
+     * This determines which challenges was assigned to the rank.
      */
-    public function katas(): HasMany
+    public function challenges(): HasMany
     {
-        return $this->hasMany(Kata::class);
+        return $this->hasMany(Challenge::class);
     }
 
     /**

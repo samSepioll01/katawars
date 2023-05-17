@@ -58,25 +58,7 @@
                                             <span class="text-md">
                                                 {{ __(ucfirst($userValues['rank'])) }}
                                             </span>
-                                            <div
-                                                class="w-6 h-6 inline-flex rounded-full border border-slate-500 shadow-outter-sm shadow-slate-600
-                                                        @if ($userValues['rank'] === 'white')
-                                                            bg-slate-50
-                                                        @elseif($userValues['rank'] === 'yellow')
-                                                            bg-yellow-600
-                                                        @elseif($userValues['rank'] === 'orange')
-                                                            bg-orange-600
-                                                        @elseif($userValues['rank'] === 'green')
-                                                            bg-green-600
-                                                        @elseif($userValues['rank'] === 'blue')
-                                                            bg-blue-600
-                                                        @elseif($userValues['rank'] === 'brown')
-                                                            bg-orange-900
-                                                        @else
-                                                            bg-slate-900
-                                                        @endif
-                                                "
-                                            ></div>
+                                            <x-utilities.rank :rank="$userValues['rank']"/>
                                         </div>
 
                                         <div>
