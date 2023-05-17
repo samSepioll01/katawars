@@ -18,13 +18,14 @@
                             x-on:change="
                                 axios({
                                     method: 'get',
-                                    url: '/training?rank=' + $event.target.value + '&category=' + document.querySelector('.category-selected')?.firstElementChild.textContent,
+                                    url: '/training?rank=' + $event.target.value,
                                     responseType: 'json',
                                 })
-                                .then(response => response.data.success
-                                    ? console.log(JSON.parse(response.data.challenges))
-                                    : null
-                                )
+                                .then(response => {
+                                    if (response.data.success) {
+                                        $refs.challenges.innerHTML = response.data.challenges;
+                                    }
+                                })
                                 .catch(error => console.log(error));
                             "
                     >

@@ -53,18 +53,19 @@ class Challenge extends Model
 
     public function scopeFilter($query, array $filters)
     {
+        $rank = $filters['rank'] ?? false;
+        $rank = $rank === 'ranks' ? false : $rank;
+
         return Challenge::query()
             ->when($filters['category'] ?? false, fn($query, $category) =>
                 $query->whereHas('categories', fn($query) =>
                     $query->where('name', $category)
                 )
-        );
-            // ->when($filters['rank'] ?? false, fn($query, $rank) =>
-            //     $query->whereHas('rank', fn($query) =>
-            //         $query->where('name', $rank)
-            //     )
-            // );
+            )
+            ->when($rank, fn($query, $rank) =>
+                $query->whereHas('rank', fn($query) =>
+                    $query->where('name', $rank)
+                )
+            );
     }
-
-
 }

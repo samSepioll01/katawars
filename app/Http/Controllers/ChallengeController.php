@@ -38,10 +38,17 @@ class ChallengeController extends Controller
         if ($request->ajax() && $request->query()) {
 
             if ($request->query('selected') === 'true') {
-                $returnHTML = view('includes.challenges', ['challenges' => $this->getTrainingChallenges(), 'selected' => 'none'])->render();
-                return response()->json(['success' => true, 'challenges' => $returnHTML]);
-            }
 
+                $returnHTML = view('includes.challenges', [
+                    'challenges' => $this->getTrainingChallenges(),
+                    'selected' => 'none',
+                ])->render();
+
+                return response()->json([
+                    'success' => true,
+                    'challenges' => $returnHTML
+                ]);
+            }
 
             $challenges = Challenge::query()->filter($request->query())->get();
             $procesedHTML = view('includes.challenges', [
@@ -49,7 +56,10 @@ class ChallengeController extends Controller
                 'selected' => $request->query('category'),
             ])->render();
 
-            return response()->json(['success' => true, 'challenges' => $procesedHTML]);
+            return response()->json([
+                'success' => true,
+                'challenges' => $procesedHTML
+            ]);
         }
 
         return view('challenges.index', [
