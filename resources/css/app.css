@@ -410,4 +410,15 @@
     .tab:hover > .tab-bottom {
         @apply scale-x-100;
     }
+
+    code {
+        @apply border border-slate-400 dark:border-cyan-600 px-1 text-center rounded-md bg-slate-200
+               dark:bg-slate-900 dark:text-slate-100;
+    }
+
+    .card-challenge {
+        @apply h-40 px-1 sm:px-6 py-2 mb-8 border border-slate-400 sm:rounded-xl
+               dark:border-slate-800 hover:border-violet-600 bg-slate-50 hover:bg-slate-200 dark:bg-slate-800/70 shadow-lg
+               dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-900 transition-all duration-300;
+    }
 }

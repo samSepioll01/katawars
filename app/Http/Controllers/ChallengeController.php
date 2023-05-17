@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreChallengeRequest;
 use App\Http\Requests\UpdateChallengeRequest;
+use App\Models\Category;
 use App\Models\Challenge;
 use App\Models\Kata;
 use App\Models\Mode;
@@ -21,8 +22,22 @@ class ChallengeController extends Controller
         //
     }
 
-    public function showChallenges()
+    public function showChallenges(Request $request)
     {
+
+        if ($request->ajax() && $request->category) {
+
+            $challenges = Category::where('name', $request->category)->first()->challenges()->get();
+
+            $procesedHTML = view('includes.challenges', [
+                'challenges' => $challenges,
+                'selected' => $request->category,
+            ])->render();
+
+            return response()->json(['success' => true, 'challenges' => $procesedHTML]);
+        }
+
+
         $route = request()->path();
 
         if (request()->path() === 'training') {
