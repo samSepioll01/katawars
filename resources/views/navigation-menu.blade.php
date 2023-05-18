@@ -222,7 +222,7 @@
 
                     <x-layout.dropdown-separator />
 
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
+                    <x-jet-responsive-nav-link href="{{ route('challenges.training') }}">
                         {{ __('Training') }}
                     </x-jet-responsive-nav-link>
 

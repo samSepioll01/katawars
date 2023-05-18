@@ -25,7 +25,7 @@
 
                                 axios({
                                     method: 'get',
-                                    url: '/training?rank=' + $event.target.value + '&category=' + categorySelected + '&sort=' + $refs.date.value,
+                                    url: '/training?rank=' + $event.target.value + '&category=' + categorySelected + '&sort=' + $refs.date.value + '&status=' + $refs.status.value,
                                     responseType: 'json',
                                 })
                                 .then(response => {
@@ -56,7 +56,7 @@
 
                                 axios({
                                     method: 'get',
-                                    url: '/training?sort=' + $event.target.value + '&rank=' + $refs.rank.value + '&category=' + categorySelected,
+                                    url: '/training?sort=' + $event.target.value + '&rank=' + $refs.rank.value + '&category=' + categorySelected + '&status=' + $refs.status.value,
                                     responseType: 'json',
                                 })
                                 .then(response => {
@@ -70,6 +70,36 @@
                         <option class="option" value="asc">Date</option>
                         <option class="option" value="asc">Ascendent</option>
                         <option class="option" value="desc">Descendent</option>
+                    </select>
+
+                    <select class="select"
+                            id="status"
+                            x-ref="status"
+                            x-on:change="
+                                categorySelected = document.querySelector('.category-selected');
+
+                                if (categorySelected) {
+                                    categorySelected = categorySelected.firstElementChild.textContent;
+                                } else {
+                                    categorySelected = null;
+                                }
+
+                                axios({
+                                    method: 'get',
+                                    url: '/training?status=' + $event.target.value + '&sort=' + $refs.date.value + '&rank=' + $refs.rank.value + '&category=' + categorySelected,
+                                    responseType: 'json',
+                                })
+                                .then(response => {
+                                    if (response.data.success) {
+                                        $refs.challenges.innerHTML = response.data.challenges;
+                                    }
+                                })
+                                .catch(error => console.log(error));
+                            "
+                    >
+                        <option class="option" value="all">Status</option>
+                        <option class="option" value="true">Completed</option>
+                        <option class="option" value="false">Not Completed</option>
                     </select>
                 </div>
 

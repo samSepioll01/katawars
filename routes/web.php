@@ -90,9 +90,6 @@ Route::middleware([
     Route::get('/training', [ChallengeController::class, 'showChallenges'])
         ->name('challenges.training');
 
-    Route::get('/blitz', [ChallengeController::class, 'showChallenges'])
-        ->name('challenges.blitz');
-
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');
 });

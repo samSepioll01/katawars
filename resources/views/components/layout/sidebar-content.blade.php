@@ -17,7 +17,7 @@
         {{ __('Training') }}
     </x-jet-dropdown-link>
 
-    <x-jet-dropdown-link href="{{ route('challenges.blitz') }}" class="text-md items-center">
+    <x-jet-dropdown-link href="{{ route('dashboard') }}" class="text-md items-center">
         <x-layout.dropdown-icon srcPath="blitz" class="mr-6" sidebar/>
         {{ __('Blitz') }}
     </x-jet-dropdown-link>

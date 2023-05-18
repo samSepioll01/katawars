@@ -8,8 +8,10 @@ use App\Models\Category;
 use App\Models\Challenge;
 use App\Models\Kata;
 use App\Models\Mode;
+use App\Models\Profile;
 use App\Models\Rank;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ChallengeController extends Controller
@@ -31,6 +33,7 @@ class ChallengeController extends Controller
             'rank' => ['string', 'max:255'],
             'selected' => ['string', 'max:10'],
             'sort' => ['string', 'max:10'],
+            'status' => ['string', 'max:10'],
         ]);
 
         if ($validator->fails()) {
@@ -44,8 +47,11 @@ class ChallengeController extends Controller
             if ($request->query('selected') === 'true') {
 
                 $returnHTML = view('includes.challenges', [
-                    'challenges' => $this->getTrainingChallenges()
-                        ->sortBy('id', SORT_REGULAR, $ord === 'asc'),
+                    'challenges' => Challenge::query()->filter([],
+                        [
+                            Mode::where('denomination', 'training')->first()->id,
+                        ],
+                    )->orderBy('id', $ord)->get(),
                     'selected' => 'none',
                 ])->render();
 
@@ -55,8 +61,26 @@ class ChallengeController extends Controller
                 ]);
             }
 
-            $challenges = Challenge::query()->filter($request->query())->get()
-                ->sortBy('id', SORT_REGULAR, $ord === 'asc');
+            $challenges = Challenge::query()->filter(
+                $request->query(),
+                [
+                    Mode::where('denomination', 'training')->first()->id
+                ],
+            )->get();
+
+            $passedChallenges = $this->getPassedChallenges();
+
+            $status = $request->query('status');
+
+            if ($status === 'true') {
+                $challenges = $challenges->intersect($passedChallenges);
+            }
+
+            if ($status === 'false') {
+                $challenges = $challenges->diff($passedChallenges);
+            }
+
+            $challenges = $challenges->sortBy('id', SORT_REGULAR, $ord === 'asc');
 
             if (count($challenges) > 0) {
 
@@ -65,30 +89,29 @@ class ChallengeController extends Controller
                     'selected' => $request->query('category'),
                 ])->render();
             } else {
-                $procesedHTML = '<h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Challenges Not Found.</h1>';
+                $procesedHTML = '<h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Challenges not availables yet.</h1>';
             }
 
             return response()->json([
                 'success' => true,
-                'challenges' => $procesedHTML
+                'challenges' => $procesedHTML,
             ]);
         }
 
         return view('challenges.index', [
-            'challenges' => $this->getTrainingChallenges()
-                ->sortBy('id', SORT_REGULAR, $ord === 'asc'),
+            'challenges' => Challenge::query()->filter([],
+                [
+                    Mode::where('denomination', 'training')->first()->id,
+                ],
+            )->orderBy('id', $ord)->get(),
         ]);
     }
 
-
-    protected function getTrainingChallenges()
+    protected function getPassedChallenges()
     {
-        $katas = Kata::where(
-            'mode_id',
-            Mode::where('denomination', request()->path())->first()->id
-        )->get();
-
-        return $katas->map(fn($kata) => $kata->challenge)->unique('id');
+        $passedKatas = Profile::find(Auth::user()->id)->passedKatas()->get();
+        $passedKatas = $passedKatas->where('mode_id', 1)->unique('challenge_id');
+        return $passedKatas->map(fn($kata) => $kata->challenge);
     }
 
     public function showKataMainPage(Request $request)

@@ -51,13 +51,17 @@ class Challenge extends Model
         return $this->belongsTo(Rank::class);
     }
 
-    public function scopeFilter($query, array $filters)
+    public function scopeFilter($query, array $filters, array $modes = null)
     {
         $rank = $filters['rank'] ?? false;
         $rank = $rank === 'ranks' ? false : $rank;
+        if (!Rank::pluck('name')->contains($rank)) $rank = false;
 
         $category = $filters['category'] ?? false;
         $category = $category === 'null' ? false : $category;
+        if (!Category::pluck('name')->contains($category)) $category = false;
+
+        $modes = $modes ?? Mode::pluck('id');
 
         return Challenge::query()
             ->when($category ?? false, fn($query, $category) =>
@@ -68,6 +72,11 @@ class Challenge extends Model
             ->when($rank, fn($query, $rank) =>
                 $query->whereHas('rank', fn($query) =>
                     $query->where('name', $rank)
+                )
+            )
+            ->when(true, fn($query) =>
+                $query->whereHas('katas', fn($query) =>
+                    $query->whereIn('mode_id', $modes)
                 )
             );
     }
