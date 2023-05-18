@@ -7,10 +7,11 @@
                         <span class="category"
                                 x-on:click="
                                 selected = $el.parentNode.classList.contains('category-selected');
+                                console.log($refs.date.value);
 
                                 axios({
                                     method: 'get',
-                                    url: '/training?category={{ $category->name }}&rank=' + $refs.rank.value + '&selected=' + selected,
+                                    url: '/training?category={{ $category->name }}&rank=' + $refs.rank.value + '&selected=' + selected + '&sort=' + $refs.date.value,
                                     responseType: 'json',
                                 })
                                 .then(response => response.data.success

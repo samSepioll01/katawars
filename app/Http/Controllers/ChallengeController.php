@@ -30,18 +30,22 @@ class ChallengeController extends Controller
             'category' => ['string', 'max:255'],
             'rank' => ['string', 'max:255'],
             'selected' => ['string', 'max:10'],
+            'sort' => ['string', 'max:10'],
         ]);
 
         if ($validator->fails()) {
             abort(404);
         }
 
+        $ord = $request->query('sort') === 'asc' ? 'asc' : 'desc';
+
         if ($request->ajax() && $request->query()) {
 
             if ($request->query('selected') === 'true') {
 
                 $returnHTML = view('includes.challenges', [
-                    'challenges' => $this->getTrainingChallenges(),
+                    'challenges' => $this->getTrainingChallenges()
+                        ->sortBy('id', SORT_REGULAR, $ord === 'asc'),
                     'selected' => 'none',
                 ])->render();
 
@@ -51,7 +55,8 @@ class ChallengeController extends Controller
                 ]);
             }
 
-            $challenges = Challenge::query()->filter($request->query())->get();
+            $challenges = Challenge::query()->filter($request->query())->get()
+                ->sortBy('id', SORT_REGULAR, $ord === 'asc');
 
             if (count($challenges) > 0) {
 
@@ -70,7 +75,8 @@ class ChallengeController extends Controller
         }
 
         return view('challenges.index', [
-            'challenges' => $this->getTrainingChallenges(),
+            'challenges' => $this->getTrainingChallenges()
+                ->sortBy('id', SORT_REGULAR, $ord === 'asc'),
         ]);
     }
 

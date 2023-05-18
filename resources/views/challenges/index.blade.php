@@ -25,7 +25,7 @@
 
                                 axios({
                                     method: 'get',
-                                    url: '/training?rank=' + $event.target.value + '&category=' + categorySelected,
+                                    url: '/training?rank=' + $event.target.value + '&category=' + categorySelected + '&sort=' + $refs.date.value,
                                     responseType: 'json',
                                 })
                                 .then(response => {
@@ -40,6 +40,36 @@
                         @foreach (\App\Models\Rank::all() as $rank)
                             <option class="option" value="{{ $rank->name }}">{{ ucfirst($rank->name) }}</option>
                         @endforeach
+                    </select>
+
+                    <select class="select"
+                            id="date"
+                            x-ref="date"
+                            x-on:change="
+                                categorySelected = document.querySelector('.category-selected');
+
+                                if (categorySelected) {
+                                    categorySelected = categorySelected.firstElementChild.textContent;
+                                } else {
+                                    categorySelected = null;
+                                }
+
+                                axios({
+                                    method: 'get',
+                                    url: '/training?sort=' + $event.target.value + '&rank=' + $refs.rank.value + '&category=' + categorySelected,
+                                    responseType: 'json',
+                                })
+                                .then(response => {
+                                    if (response.data.success) {
+                                        $refs.challenges.innerHTML = response.data.challenges;
+                                    }
+                                })
+                                .catch(error => console.log(error));
+                            "
+                    >
+                        <option class="option" value="asc">Date</option>
+                        <option class="option" value="asc">Ascendent</option>
+                        <option class="option" value="desc">Descendent</option>
                     </select>
                 </div>
 
@@ -58,10 +88,9 @@
 
                                         <span class="category"
                                               x-on:click="
-                                                console.log($refs.rank.value);
                                                 axios({
                                                     method: 'get',
-                                                    url: '/training?category={{$category->name}}' + '&rank=' + $refs.rank.value,
+                                                    url: '/training?category={{$category->name}}' + '&rank=' + $refs.rank.value + '&sort=' + $refs.date.value,
                                                     responseType: 'json',
                                                 })
                                                 .then(response => {
