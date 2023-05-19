@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
 use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\HelpController;
+use App\Jobs\SendMailJob;
+use App\Mail\GitHubLoginPasswordMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -95,4 +98,16 @@ Route::middleware([
 
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');
+
+    Route::get('/mailprueba', function() {
+
+
+        SendMailJob::dispatch()->onQueue('sendMailQueue');
+        SendMailJob::dispatch()->onQueue('sendMailQueue');
+        SendMailJob::dispatch()->onQueue('sendMailQueue');
+        SendMailJob::dispatch()->onQueue('sendMailQueue');
+        SendMailJob::dispatch()->onQueue('sendMailQueue');
+
+        return 'El email ha sido enviado.';
+    });
 });

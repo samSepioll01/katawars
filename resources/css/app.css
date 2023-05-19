@@ -442,6 +442,6 @@
     .search-btn {
         @apply border border-slate-400 px-3 flex justify-center items-center rounded-r-full ml-1 cursor-pointer
                transform transition-all duration-200 active:scale-95 dark:bg-slate-900/70 dark:border-slate-800
-               dark:hover:bg-slate-800/70 bg-slate-800;
+               dark:hover:bg-slate-800/70 bg-slate-800 shadow-lg;
     }
 }
