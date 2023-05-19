@@ -48,8 +48,12 @@ class ProfileController extends Controller
 
     public function showDojo(Request $request)
     {
+
+        $profiles = Profile::whereHas('user', fn($query) => $query->role('user'))
+            ->get()->except(auth()->user()->id);
+
         return view('dojo.index', [
-            'profiles' => Profile::latest()->get()->except(auth()->user()->id),
+            'profiles' => $profiles,
         ]);
     }
 
