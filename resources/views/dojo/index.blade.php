@@ -1,17 +1,12 @@
 <x-app-layout>
     <x-layout.wrapped-main-section>
 
-        <header class="">
-            <div id="searcher" class="h-8 rounded-l-full rounded-r-full flex justify-center card-panel">
-                Buscador
-            </div>
-        </header>
+        <x-layout.searcher action="{{ route('dojo.index') }}" />
 
         <main class="mt-20 flex flex-col">
 
             <div class="relative p-5 md:px-12 lg:px-36 grid grid-cols-1 gap-5 md:grid-cols-2 lg:max-w-none xl:grid-cols-3" x-ref="users">
                 @foreach ($profiles as $profile)
-
 
                         <div class="card-users sm:mt-4 relative">
                             <a href="{{ $profile->url }}">

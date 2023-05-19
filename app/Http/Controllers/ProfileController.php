@@ -46,7 +46,7 @@ class ProfileController extends Controller
         //
     }
 
-    public function showDojo()
+    public function showDojo(Request $request)
     {
         return view('dojo.index', [
             'profiles' => Profile::latest()->get()->except(auth()->user()->id),

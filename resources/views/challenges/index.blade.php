@@ -1,11 +1,7 @@
 <x-app-layout>
     <x-layout.wrapped-main-section>
 
-        <header class="">
-            <div id="searcher" class="h-8 rounded-l-full rounded-r-full flex justify-center card-panel">
-                Buscador
-            </div>
-        </header>
+        <x-layout.searcher action="#" />
 
         <main class="grid grid-cols-12 mt-8">
             <div class="grid col-span-12 sm:col-span-4 px-8">
