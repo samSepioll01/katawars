@@ -371,7 +371,7 @@ class Profile extends Model
     public static function validateUrlProfile(string $inputName, User $user = null): void
     {
         $slug = Str::slug($inputName);
-        $url = url("/users/$slug");
+        $url = url("/user/$slug");
         $errorBag = [
             'name' => "The name has already been taken.
                        This is showed as your main page nickname."

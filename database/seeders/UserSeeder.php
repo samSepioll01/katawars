@@ -292,6 +292,7 @@ class UserSeeder extends Seeder
             'email' => 'yavieneborrachocabron@hotmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/11/dqF4smdgQSfYmza0EkOhWHn0NpAiJDriJjSyHF79.jpg'
         ]);
 
         Profile::create([
@@ -315,6 +316,7 @@ class UserSeeder extends Seeder
             'email' => 'mei@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/12/KM908WliDxfMQDWFkkvbf41znWhkAJn7zOOc8f5n.jpg',
         ]);
 
         Profile::create([
@@ -338,6 +340,7 @@ class UserSeeder extends Seeder
             'email' => 'jess_harris@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/13/qGxIlzRO5wSAyw7Owr4xMvjPho1z9xogqA7BvQky.jpg',
         ]);
 
         Profile::create([
@@ -361,6 +364,7 @@ class UserSeeder extends Seeder
             'email' => 'garsi@outlook.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/14/gCqZcge3kruQkSSP1MFq58MsfS05OfYq3Gb2F4I5.jpg',
         ]);
 
         Profile::create([
@@ -384,6 +388,7 @@ class UserSeeder extends Seeder
             'email' => 'arkano@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/15/9U73JOEuMEP3oMFX3xsQEtdOnrA5TPFMX0fMSk4U.jpg',
         ]);
 
         Profile::create([
@@ -407,6 +412,7 @@ class UserSeeder extends Seeder
             'email' => 'tandem@protonmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/16/eIMENzmPiySG5Mfaq5P8BFgtpQs1T1xyxJvmwYpR.jpg',
         ]);
 
         Profile::create([
@@ -430,6 +436,7 @@ class UserSeeder extends Seeder
             'email' => 'regular_joe@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/17/yEcN3ZgSqufJDlWGzite583ezykuDoDdXWhedDCF.png',
         ]);
 
         Profile::create([
@@ -454,7 +461,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'bio' => 'Larabits for everyone!!',
-            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/18/Nm2VZR45xkqI4TcSdYNCZuDlfT1r6N7oZ9FUNFqH.png',
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/18/v9lppDb0XSK62cWrqoxGezrEMskub9upnneV4V2D.png',
         ]);
 
         $profile = Profile::create([
@@ -511,6 +518,7 @@ class UserSeeder extends Seeder
             'email' => 'uchiha_itachi@konoha.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/20/VgGrjtlw4p9ZNUvGZDyRQcyIMSHhK2Km9Mr8r1c7.jpg',
         ]);
 
         Profile::create([
@@ -534,6 +542,7 @@ class UserSeeder extends Seeder
             'email' => 'puchikito@spark.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/21/ji097t18VHOQTyYO3yJZpDo8Iqt80YzrBdqRzCem.jpg',
         ]);
 
         Profile::create([
