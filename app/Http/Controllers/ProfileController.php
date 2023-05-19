@@ -46,6 +46,13 @@ class ProfileController extends Controller
         //
     }
 
+    public function showDojo()
+    {
+        return view('dojo.index', [
+            'profiles' => Profile::latest()->get()->except(auth()->user()->id),
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

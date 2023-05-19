@@ -5,7 +5,7 @@
 
     <x-layout.dropdown-separator />
 
-    <x-jet-dropdown-link href="{{ route('dashboard') }}" class="text-md 2xl: items-center">
+    <x-jet-dropdown-link href="{{ route('dojo.index') }}" class="text-md 2xl: items-center">
         <x-layout.dropdown-icon srcPath="dojo" class="mr-6" sidebar/>
         {{ __('Dojo') }}
     </x-jet-dropdown-link>

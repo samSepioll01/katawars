@@ -216,7 +216,7 @@
                 <div class="mt-3 space-y-1 p-2">
 
                     <div class="text-lg text-gray-700 dark:text-slate-200 p-1">Katawars Ways</div>
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
+                    <x-jet-responsive-nav-link href="{{ route('dojo.index') }}">
                         {{ __('Dojo') }}
                     </x-jet-responsive-nav-link>
 

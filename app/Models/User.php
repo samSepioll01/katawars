@@ -187,9 +187,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function ranking()
     {
-        $ranking = User::with('profile')
-            ->role('user')->get()
-            ->sortByDesc(['exp', 'honor']);
+        $ranking = Profile::whereHas('user', fn($query) => $query->role('user'))
+            ->orderByDesc('exp')->orderByDesc('honor')->get();
 
         $userRanking = $ranking->search($ranking->find($this->id)) + 1;
 

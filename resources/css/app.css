@@ -422,6 +422,12 @@
                dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-900 transition-all;
     }
 
+    .card-users {
+        @apply h-48 px-1 sm:px-4 py-2 mb-8 border border-slate-400 rounded-xl
+               dark:border-slate-800 hover:border-violet-600 bg-slate-50 hover:bg-slate-200 dark:bg-slate-800/70 shadow-lg
+               dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-900 transition-all;
+    }
+
     .select {
         @apply cursor-pointer border dark:focus:border-cyan-600 focus:border-violet-600 dark:focus:ring-0 bg-white
                dark:bg-slate-800/70 dark:text-slate-100 dark:border-slate-800 shadow-lg border-gray-300

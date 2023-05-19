@@ -90,6 +90,9 @@ Route::middleware([
     Route::get('/training', [ChallengeController::class, 'showChallenges'])
         ->name('challenges.training');
 
+    Route::get('/dojo', [ProfileController::class, 'showDojo'])
+        ->name('dojo.index');
+
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');
 });
