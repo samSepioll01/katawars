@@ -137,16 +137,16 @@
                     </nav>
                     <div class="min-h-screen grid grid-flow-row">
                         <div class="py-5">
-                            <section x-show="stats">
+                            <section x-show="stats" style="display: none;">
                                 Statistics
                             </section>
-                            <section x-show="katas">
+                            <section x-show="katas"style="display: none;">
                                 Passed Katas
                             </section>
-                            <section x-show="kataways">
+                            <section x-show="kataways" style="display: none;">
                                 Kataways
                             </section>
-                            <section x-show="created">
+                            <section x-show="created" style="display: none;">
                                 Created
                             </section>
                         </div>
