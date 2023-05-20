@@ -67,8 +67,16 @@ class Challenge extends Model
         return $this->belongsTo(Rank::class);
     }
 
+    /**
+     * Filter the challenges throught passed filters on a query.
+     *
+     * @param mixed $query
+     * @param array $filters
+     * @param array|null $modes
+     */
     public function scopeFilter($query, array $filters, array $modes = null)
     {
+        // Sanitize the params for apply the filters
         $rank = $filters['rank'] ?? false;
         $rank = $rank === 'ranks' ? false : $rank;
         if (!Rank::pluck('name')->contains($rank)) $rank = false;
@@ -79,6 +87,8 @@ class Challenge extends Model
 
         $modes = $modes ?? Mode::pluck('id');
 
+        // Filter data throught relationship values and if the param is omitted
+        // not apply the filter, therefore, recovery all the records in his scope.
         return Challenge::query()
             ->when($category ?? false, fn($query, $category) =>
                 $query->whereHas('categories', fn($query) =>

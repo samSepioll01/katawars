@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreChallengeRequest;
 use App\Http\Requests\UpdateChallengeRequest;
-use App\Models\Category;
 use App\Models\Challenge;
-use App\Models\Kata;
 use App\Models\Mode;
 use App\Models\Profile;
-use App\Models\Rank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -27,23 +24,21 @@ class ChallengeController extends Controller
         //
     }
 
+    /**
+     * Show the Challenges resources for the Training View.
+     */
     public function showChallenges(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'category' => ['string', 'max:255'],
-            'rank' => ['string', 'max:255'],
-            'selected' => ['string', 'max:10'],
-            'sort' => ['string', 'max:10'],
-            'status' => ['string', 'max:10'],
-        ]);
+        $this->validateRequest($request->query());
 
-        if ($validator->fails()) {
-            abort(404);
-        }
-
+        // Dont respect the filters.
         if ($request->query('searcher') === 'true') {
 
-            $challenges = Challenge::search($request->query('search'))->get();
+            if (!$request->query('search')) {
+                $challenges = $this->filteredChallenges()->get();
+            } else {
+                $challenges = Challenge::search($request->query('search'))->get();
+            }
 
             if ($challenges->count()) {
 
@@ -64,17 +59,16 @@ class ChallengeController extends Controller
 
         $ord = $request->query('sort') === 'asc' ? 'asc' : 'desc';
 
+        // Where user apply filters
         if ($request->ajax() && $request->query()) {
 
+            // Case when the filter for category is active.
             if ($request->query('selected') === 'true') {
 
+                // Disable selected styles for category and recovery all initial records.
                 $returnHTML = $this->renderView(
                     'includes.challenges',
-                    Challenge::query()->filter([],
-                        [
-                            Mode::where('denomination', 'training')->first()->id,
-                        ],
-                    )->orderBy('id', $ord)->get(),
+                    $this->filteredChallenges([], $ord)->get(),
                 );
 
                 return response()->json([
@@ -83,15 +77,12 @@ class ChallengeController extends Controller
                 ]);
             }
 
-            $challenges = Challenge::query()->filter(
-                $request->query(),
-                [
-                    Mode::where('denomination', 'training')->first()->id
-                ],
-            )->get();
+            // Apply all filters actives.
+            $challenges = $this->filteredChallenges($request->query(), $ord)->get();
 
             $passedChallenges = $this->getPassedChallenges();
 
+            // Case filter completed or not.
             if ($request->query('status') === 'true') {
                 $challenges = $challenges->intersect($passedChallenges);
             }
@@ -102,6 +93,7 @@ class ChallengeController extends Controller
 
             $challenges = $challenges->sortBy('id', SORT_REGULAR, $ord === 'asc');
 
+            // Manage case in that no challenges found for the applicate filter.
             if (count($challenges) > 0) {
 
                 $procesedHTML = $this->renderView(
@@ -121,13 +113,46 @@ class ChallengeController extends Controller
             ]);
         }
 
+        // Resources returned the first time that call the view.
         return view('challenges.index', [
-            'challenges' => Challenge::query()->filter([],
-                [
-                    Mode::where('denomination', 'training')->first()->id,
-                ],
-            )->orderBy('id', $ord)->get(),
+            'challenges' => $this->filteredChallenges([], $ord)->get(),
         ]);
+    }
+
+    /**
+     * Get the the challenges applicate the filters.
+     *
+     * @param
+     */
+    protected function filteredChallenges(
+        array $filters = [],
+        string $ord = 'asc',
+        string $mode = 'training',
+    )
+    {
+        return Challenge::query()->filter($filters,
+            [
+                Mode::where('denomination', $mode)->first()->id,
+            ],
+        )->orderBy('id', $ord);
+    }
+
+    /**
+     * Validate the params of the incomming request.
+     */
+    protected function validateRequest($queryBag)
+    {
+        $validator = Validator::make($queryBag, [
+            'category' => ['string', 'max:255'],
+            'rank' => ['string', 'max:255'],
+            'selected' => ['string', 'max:10'],
+            'sort' => ['string', 'max:10'],
+            'status' => ['string', 'max:10'],
+        ]);
+
+        if ($validator->fails()) {
+            abort(404);
+        }
     }
 
     /**
