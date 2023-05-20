@@ -1367,7 +1367,8 @@ class ChallengeSeeder extends Seeder
             'title' => 'Calculate the Multiply of Two Matrix.',
             'rank_id' => 6,
             'description' => <<<EOL
-                <p>Write a function named <code>multiplied</code> that takes two arguments of type <code>array</code> named <code>matrixA</code> and <code>matrixB</code> and returns another array that represents the product of the two matrices. The product of two matrices is a new matrix whose elements are obtained by multiplying each row of the first matrix by each column of the second matrix and adding up the results.</p>
+                <p>Write a function named <code>multiplied</code> that takes two arguments of type <code>array</code> named <code>matrixA</code> and <code>matrixB</code> and returns another array that represents the product of the two matrices.</p>
+                <p>The product of two matrices is a new matrix whose elements are obtained by multiplying each row of the first matrix by each column of the second matrix and adding up the results.</p>
                 <p><b>Base Case and Constrints</b></p>
                 <p>
                     <ul>
@@ -1378,10 +1379,10 @@ class ChallengeSeeder extends Seeder
                 </p>
             EOL,
             'examples' => <<<EOL
-                <pre><code>multiplied([], []) => []</code></pre>
-                <pre><code>multiplied([[1]], [[1]]) => [[1]]</code></pre>
-                <pre><code>multiplied([[1, 2], [3, 4]], [[5, 6], [7, 8]]) => [[19, 22], [43, 50]]</code></pre>
-                <pre><code>multiplied([[1 ,2 ,3], [4 ,5 ,6], [7 ,8 ,9]], [[10 ,11 ,12], [13 ,14 ,15], [16 ,17 ,18]]) => [[84 ,90 ,96], [201 ,216 ,231], [318 ,342 ,366]]</code></pre>
+                <p><code>multiplied([], []) => []</code></p>
+                <p><code>multiplied([[1]], [[1]]) => [[1]]</code></p>
+                <p><code>multiplied([[1, 2], [3, 4]], [[5, 6], [7, 8]])=> [[19, 22], [43, 50]]</code></p>
+                <p><code>multiplied([[1 ,2 ,3], [4 ,5 ,6], [7 ,8 ,9]], [[10 ,11 ,12], [13 ,14 ,15], [16 ,17 ,18]]) => [[84 ,90 ,96], [201 ,216 ,231], [318 ,342 ,366]]</code></p>
             EOL,
             'notes' => <<<EOL
                 <ul>

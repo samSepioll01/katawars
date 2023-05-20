@@ -201,7 +201,10 @@ class ChallengeController extends Controller
     {
         $challenge = Challenge::where('slug', $request->slug)->first();
 
-        return view('katas.main-page', ['challenge' => $challenge]);
+        return view('katas.main-page', [
+            'challenge' => $challenge,
+            'owner' => $challenge->katas()->first()->owner->user,
+        ]);
     }
 
     /**
