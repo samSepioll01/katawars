@@ -98,16 +98,4 @@ Route::middleware([
 
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');
-
-    Route::get('/mailprueba', function() {
-
-
-        SendMailJob::dispatch()->onQueue('sendMailQueue');
-        SendMailJob::dispatch()->onQueue('sendMailQueue');
-        SendMailJob::dispatch()->onQueue('sendMailQueue');
-        SendMailJob::dispatch()->onQueue('sendMailQueue');
-        SendMailJob::dispatch()->onQueue('sendMailQueue');
-
-        return 'El email ha sido enviado.';
-    });
 });
