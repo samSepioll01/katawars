@@ -19,11 +19,13 @@ use Faker\Factory as Faker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Jetstream\Features;
+use Laravel\Scout\Searchable;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable,
-        TwoFactorAuthenticatable, HasRoles, SoftDeletes;
+        TwoFactorAuthenticatable, HasRoles, SoftDeletes, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -75,6 +77,19 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'bio' => $this->bio,
+        ];
+    }
 
     /**
      * Get the URL to the user's profile photo.
