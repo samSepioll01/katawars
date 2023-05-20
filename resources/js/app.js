@@ -28,6 +28,7 @@ window.$katawars.S3 = {
         favoritesOn: $katawars.AWS_APP_URL + '/icons/favoritos1.png',
         favoritesOff: $katawars.AWS_APP_URL + '/icons/favoritos2.png',
         markerOn: $katawars.AWS_APP_URL + '/icons/marcador2.png',
+        markerOff: $katawars.AWS_APP_URL + '/icons/marcador1.png',
 
     },
 }
