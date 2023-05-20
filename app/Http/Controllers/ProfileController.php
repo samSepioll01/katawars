@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProfileRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Profile;
 use App\Events\ThemeModeUpdated;
+use App\Http\Requests\SearchUserRequest;
 use App\Models\Rank;
 use App\Models\User;
 use Carbon\Carbon;
@@ -48,13 +49,51 @@ class ProfileController extends Controller
 
     public function showDojo(Request $request)
     {
+        $this->validateRequest($request->query());
 
-        $profiles = Profile::whereHas('user', fn($query) => $query->role('user'))
+
+        if ($request->ajax()) {
+
+                $search = User::search($request->query('search'))->get();
+                $users = User::whereHas('roles', fn($query) => $query->where('name', 'user'))->get();
+                $searchUsers = $users->intersect($search)->except(auth()->user()->id);
+
+                if ($searchUsers->count()) {
+
+                    $returnHTML = view('includes.dojoprofiles', [
+                        'users' => $searchUsers,
+                    ])->render();
+                } else {
+                    $returnHTML = '<h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Sorry. No results for your search.</h1>';
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'users' => $returnHTML,
+                ]);
+        }
+
+        $users = User::whereHas('roles', fn($query) => $query->where('name', 'user'))
             ->get()->except(auth()->user()->id);
 
         return view('dojo.index', [
-            'profiles' => $profiles,
+            'users' => $users,
         ]);
+    }
+
+    /**
+     * Check if the incomming request validate his parameters.
+     */
+    protected function validateRequest($queryBag)
+    {
+        $validator = Validator::make($queryBag, [
+            'search' => ['nullable', 'string', 'max:255', 'alpha_num'],
+            'searcher' => ['string', 'max:4', 'alpha_num'],
+        ]);
+
+        if ($validator->fails()) {
+            abort(404);
+        }
     }
 
     /**

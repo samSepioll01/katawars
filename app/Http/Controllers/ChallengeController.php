@@ -11,6 +11,7 @@ use App\Models\Mode;
 use App\Models\Profile;
 use App\Models\Rank;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -40,20 +41,41 @@ class ChallengeController extends Controller
             abort(404);
         }
 
+        if ($request->query('searcher') === 'true') {
+
+            $challenges = Challenge::search($request->query('search'))->get();
+
+            if ($challenges->count()) {
+
+                $returnHTML = $this->renderView(
+                    'includes.challenges',
+                    $challenges,
+                );
+
+            } else {
+                $returnHTML = $this->getMessageNotAvailable();
+            }
+
+            return response()->json([
+                'success' => true,
+                'challenges' => $returnHTML,
+            ]);
+        }
+
         $ord = $request->query('sort') === 'asc' ? 'asc' : 'desc';
 
         if ($request->ajax() && $request->query()) {
 
             if ($request->query('selected') === 'true') {
 
-                $returnHTML = view('includes.challenges', [
-                    'challenges' => Challenge::query()->filter([],
+                $returnHTML = $this->renderView(
+                    'includes.challenges',
+                    Challenge::query()->filter([],
                         [
                             Mode::where('denomination', 'training')->first()->id,
                         ],
                     )->orderBy('id', $ord)->get(),
-                    'selected' => 'none',
-                ])->render();
+                );
 
                 return response()->json([
                     'success' => true,
@@ -70,13 +92,11 @@ class ChallengeController extends Controller
 
             $passedChallenges = $this->getPassedChallenges();
 
-            $status = $request->query('status');
-
-            if ($status === 'true') {
+            if ($request->query('status') === 'true') {
                 $challenges = $challenges->intersect($passedChallenges);
             }
 
-            if ($status === 'false') {
+            if ($request->query('status') === 'false') {
                 $challenges = $challenges->diff($passedChallenges);
             }
 
@@ -84,12 +104,15 @@ class ChallengeController extends Controller
 
             if (count($challenges) > 0) {
 
-                $procesedHTML = view('includes.challenges', [
-                    'challenges' => $challenges,
-                    'selected' => $request->query('category'),
-                ])->render();
+                $procesedHTML = $this->renderView(
+                    'includes.challenges',
+                    $challenges,
+                    $request->query('category')
+                );
+
             } else {
-                $procesedHTML = '<h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Challenges not availables yet.</h1>';
+
+                $procesedHTML = $this->getMessageNotAvailable();
             }
 
             return response()->json([
@@ -107,13 +130,48 @@ class ChallengeController extends Controller
         ]);
     }
 
-    protected function getPassedChallenges()
+    /**
+     * Set default message when not find challenges with the constaints.
+     */
+    protected function getMessageNotAvailable()
+    {
+        return '<h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Challenges not availables yet.</h1>';
+    }
+
+    /**
+     * Render the view with the news records.
+     *
+     * @param string $routeView
+     * @param mixed $challenges
+     * @param string $category
+     *
+     * @return string
+     */
+    protected function renderView(
+        string $routeView,
+        mixed $challenges,
+        string $category = 'none'
+    )
+    {
+        return view($routeView, [
+            'challenges' => $challenges,
+            'selected' => $category,
+        ])->render();
+    }
+
+    /**
+     * Get the challenges that has been passed succesfully.
+     */
+    protected function getPassedChallenges(): Collection
     {
         $passedKatas = Profile::find(Auth::user()->id)->passedKatas()->get();
         $passedKatas = $passedKatas->where('mode_id', 1)->unique('challenge_id');
         return $passedKatas->map(fn($kata) => $kata->challenge);
     }
 
+    /**
+     * Show the main page for the Challenges throught the slug.
+     */
     public function showKataMainPage(Request $request)
     {
         $challenge = Challenge::where('slug', $request->slug)->first();

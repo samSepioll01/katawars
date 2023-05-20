@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-layout.wrapped-main-section>
 
-        <x-layout.searcher action="#" />
+        <x-layout.searcher route="/training" />
 
         <main class="grid grid-cols-12 mt-8">
             <div class="grid col-span-12 sm:col-span-4 px-8">

@@ -444,4 +444,9 @@
                transform transition-all duration-200 active:scale-95 dark:bg-slate-900/70 dark:border-slate-800
                dark:hover:bg-slate-800/70 bg-slate-800 shadow-lg;
     }
+
+    .search-input {
+        @apply transition-all duration-300 bg-slate-50 border-slate-400 dark:border-slate-700
+               shadow-lg dark:dark-placeholder;
+    }
 }
