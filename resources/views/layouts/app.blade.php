@@ -23,6 +23,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/thememode.js'])
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
 
         <!-- Import method throught Vite port without type module attribute -->
         <script src="{{ env('APP_VITE_URL') }}/resources/js/hubsidebar.js" async></script>

@@ -204,6 +204,7 @@ class ChallengeController extends Controller
         return view('katas.main-page', [
             'challenge' => $challenge,
             'owner' => $challenge->katas()->first()->owner->user,
+            'signature' => $challenge->katas()->first()->signature,
         ]);
     }
 

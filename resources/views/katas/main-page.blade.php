@@ -1,6 +1,10 @@
 <x-app-layout>
     <x-layout.wrapped-main-section>
-        <main x-data="{instructions: true, code: false, resources: false, solutions: false}" class="sm:mt-8 grid grid-flow-row sm:card-panel">
+
+        <main
+            x-data="{instructions: false, code: true, resources: false, solutions: false}"
+            class="sm:mt-8 grid grid-flow-row sm:card-panel"
+        >
             <nav class="grid grid-flow-col grid-cols-12 shadow-xl relative overflow-hidden dark:text-slate-200">
 
                 <div
@@ -82,8 +86,35 @@
                             </div>
                         </div>
                     </section>
-                    <section x-show="code"style="display: none;">
-                        Code
+                    <section x-show="code" style="display: none;">
+                        <div
+                            class="grid grid-cols-12 gap-8 md:px-20 py-10 opacity-0 transition-all duration-300"
+                            x-init="setTimeout(() => $el.classList.add('opacity-100'), 300)"
+                        >
+                            <div class="h-96 col-span-12 lg:col-span-8 relative">
+                                <div
+                                    id="editor"
+                                    class="editorkata"
+                                    @changetheme.window="
+                                        if ($event.detail === 'light') {
+                                            ace.edit('editor').setTheme('ace/theme/solarized_light');
+                                        }
+
+                                        if ($event.detail === 'dark') {
+                                            ace.edit('editor').setTheme('ace/theme/monokai');
+                                        }
+                                    "
+                                >&lt;?php&#10;{!!$signature!!}&#10;&#9;return '';&#10;}</div>
+                                <x-jet-button x-ref="check" id="check" class="absolute right-0 bottom-0">Check</x-jet-button>
+                            </div>
+                            <div class="errorkata">
+                                <div class="flex flex-col justify-center items-center h-full w-full text-slate-700 dark:text-slate-200">
+                                    <h1 class="text-2xl font-bold text-violet-600 dark:text-tomato">Pro Tip</h1>
+                                    <h3 class="py-2">Press <i>Cntrl + Space</i> to <i>Check Code</i>.</h3>
+                                </div>
+
+                            </div>
+                        </div>
                     </section>
                     <section x-show="resources" style="display: none;">
                         Resources
@@ -94,6 +125,30 @@
                 </div>
             </div>
         </main>
+        <style>
+            .ace_active-line {
+                background-color: rgba(93, 93, 94, 0.103) !important;
+            }
+
+            .ace-solarized-light .ace_gutter  {
+                background-color: rgba(180, 180, 180, 0.548) !important;
+                color: gray !important;
+            }
+
+            .ace-solarized-light .ace_gutter-active-line {
+                background-color: rgba(180, 180, 180, 0.548) !important;
+            }
+
+            .ace-monokai .ace_gutter {
+                background-color: #1311116c !important;
+                color: #bebbbb !important;
+            }
+
+            .ace-monokai .ace_gutter-active-line {
+                background-color: rgba(36, 36, 36, 0.692) !important;
+            }
+        </style>
+        @vite(['resources/js/codekata.js'])
     </x-layout.wrapped-main-section>
 </x-app-layout>
 

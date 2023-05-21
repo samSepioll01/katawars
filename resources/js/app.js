@@ -43,6 +43,16 @@ window.$modals = {
     },
 }
 
+window.$theme = {
+    change(theme) {
+        window.dispatchEvent(
+            new CustomEvent('changetheme', {
+                detail: theme,
+            })
+        );
+    }
+}
+
 window.$aux = {
     createElement(elem = null, attributes = {}, textNode = '') {
 

@@ -63,7 +63,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'bio' => ':(){ :|:& };:',
-            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/3/3zaWLBr9OnQIRH9Vz9eXCeL37D9g4g6VTN1ijWpw.png',
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/3/4U8KJxsfKy9RJtb4etO6KHbRyXgBsVWmoO26EP9X.jpg',
         ]);
 
         $profile = Profile::create([

@@ -5,7 +5,7 @@
 <div x-data="{write: false}" id="cont-searcher" class="relative flex lg:inline-flex items-center h-8 w-full">
     <div x-ref="searchform" class="w-full flex flex-row justify-center">
         <div class="w-full sm:w-3/4 xl:w-1/2 relative transtion-all duration-200">
-            <input
+            <x-jet-input
                 type="text"
                 id="search"
                 x-ref="search"
