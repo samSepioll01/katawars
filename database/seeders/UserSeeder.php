@@ -316,7 +316,7 @@ class UserSeeder extends Seeder
             'email' => 'mei@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
-            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/12/KM908WliDxfMQDWFkkvbf41znWhkAJn7zOOc8f5n.jpg',
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/12/sS8BNaMQtrV4dJfKY3XfCSU08PyzYPpOB0hajfbT.jpg',
         ]);
 
         Profile::create([

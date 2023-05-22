@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Storage;
 
 class S3 extends Facade
 {
+
+    private const S3basePath = 'https://s3.eu-south-2.amazonaws.com/katawars.es';
+
+    /**
+     * Override method to declare the S3 Facade.
+     */
     protected static function getFacadeAccessor()
     {
         return 'S3';
@@ -19,6 +25,20 @@ class S3 extends Facade
     public static function getClassName()
     {
         return self::class;
+    }
+
+    /**
+     * Return the base url from your app S3 bucket.
+     * If bucket base url dont registered in
+     * AWS_PROFILE property of .env file
+     * or existant values dont matches,
+     * null is returned.
+     */
+    public static function getBaseUrl(): string|null
+    {
+        return self::S3basePath === env('AWS_PROFILE_URL')
+            ? self::S3basePath
+            : null;
     }
 
     /**
@@ -53,6 +73,8 @@ class S3 extends Facade
      */
     public static function filterPath(string $url)
     {
-        return str_replace(env('AWS_PROFILE_URL'), '', $url);
+        return filter_var($url, FILTER_VALIDATE_URL)
+            ? str_replace(self::getBaseUrl(), '', $url)
+            : $url;
     }
 }

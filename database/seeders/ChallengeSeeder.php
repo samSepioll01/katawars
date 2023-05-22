@@ -66,7 +66,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/gWYEKQHYDU3l58JVhxQM2HXlRPnzHe6ydUjkdf27.txt',
+            'uri_test' => '/katas/php/gWYEKQHYDU3l58JVhxQM2HXlRPnzHe6ydUjkdf27.txt',
             'signature' => 'function sum($a, $b) {',
             'testClassName' => 'SumTwoNumbers',
         ]);
@@ -104,7 +104,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/1yB9AsjkUKKDEHYvbZfg73bx9YBA7lgcV9SBE8Xj.txt',
+            'uri_test' => '/katas/php/1yB9AsjkUKKDEHYvbZfg73bx9YBA7lgcV9SBE8Xj.txt',
             'signature' => 'function say_ni() {',
             'testClassName' => 'Ni',
         ]);
@@ -153,7 +153,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/I0fL7dZCeykHK1If4vKiUrsnPrPUhQnXwmLvptrU.txt',
+            'uri_test' => '/katas/php/I0fL7dZCeykHK1If4vKiUrsnPrPUhQnXwmLvptrU.txt',
             'signature' => 'function prime_factors() {',
             'testClassName' => 'PrimeFactors',
         ]);
@@ -203,7 +203,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/zHxM8zRS2Ec1DDEbmuowvoSKALnVCgwZQSsg6FPR.txt',
+            'uri_test' => '/katas/php/zHxM8zRS2Ec1DDEbmuowvoSKALnVCgwZQSsg6FPR.txt',
             'signature' => 'function generate() {',
             'testClassName' => 'RomanNumerals',
         ]);
@@ -256,7 +256,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/FIqagqNECuGTkDsAqp3reJ3TIPjXHWKdnqzUICQY.txt',
+            'uri_test' => '/katas/php/FIqagqNECuGTkDsAqp3reJ3TIPjXHWKdnqzUICQY.txt',
             'signature' => 'function bowling_score($rolls) {',
             'testClassName' => 'BowlingScore',
         ]);
@@ -305,7 +305,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $blitzModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/rrvYnZ6YoFkYuBYbSO3e2bMWRTLNvl6eqtQGSqpV.txt',
+            'uri_test' => '/katas/php/rrvYnZ6YoFkYuBYbSO3e2bMWRTLNvl6eqtQGSqpV.txt',
             'signature' => 'function str_calc($delimiter, $str) {',
             'testClassName' => 'StringCalculator',
         ]);
@@ -363,7 +363,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $blitzModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/aX85dHP0sgyN373LSsam6fskDXCLGONGEsUYRrL2.txt',
+            'uri_test' => '/katas/php/aX85dHP0sgyN373LSsam6fskDXCLGONGEsUYRrL2.txt',
             'signature' => 'function scoreTo($pointsP1, $pointsP2) {',
             'testClassName' => 'TennisMatch',
         ]);
@@ -419,7 +419,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/NXr1sU2GtHsL21kswJG16lQzDVWYkHZApI2jOV7t.txt',
+            'uri_test' => '/katas/php/NXr1sU2GtHsL21kswJG16lQzDVWYkHZApI2jOV7t.txt',
             'signature' => 'function fizzbuzz($number) {',
             'testClassName' => 'FizzBuzz',
         ]);
@@ -491,7 +491,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/reVLFVb2tMN0UCI4TXsrTIgNbdlJ9cmGiozL1z3l.txt',
+            'uri_test' => '/katas/php/reVLFVb2tMN0UCI4TXsrTIgNbdlJ9cmGiozL1z3l.txt',
             'signature' => 'class Song { public function verse($number) {',
             'testClassName' => 'SongBottles',
         ]);
@@ -537,7 +537,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $blitzModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/xuYaIyBR2nLGILvI1iUdD9YdGqCazfYavoiWalnG.txt',
+            'uri_test' => '/katas/php/xuYaIyBR2nLGILvI1iUdD9YdGqCazfYavoiWalnG.txt',
             'signature' => 'function reverse($str) {',
             'testClassName' => 'ReverseString',
         ]);
@@ -592,7 +592,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/ShMP94Zlqb1EwS0JbRCg7t4yIqqNNy4SFWhT3KgD.txt',
+            'uri_test' => '/katas/php/ShMP94Zlqb1EwS0JbRCg7t4yIqqNNy4SFWhT3KgD.txt',
             'signature' => 'function str_slug($str) {',
             'testClassName' => 'SlugString',
         ]);
@@ -646,7 +646,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/9BdJ149FOheyNItlOMs7dkHAXjkB4EbWiSUODijA.txt',
+            'uri_test' => '/katas/php/9BdJ149FOheyNItlOMs7dkHAXjkB4EbWiSUODijA.txt',
             'signature' => 'function points($wins, $draws, $loses) {',
             'testClassName' => 'FootballPoints',
         ]);
@@ -693,7 +693,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/LpQXY4M8Qw9CnytUDWNtONpIbLVRf3DBn46JwVr6.txt',
+            'uri_test' => '/katas/php/LpQXY4M8Qw9CnytUDWNtONpIbLVRf3DBn46JwVr6.txt',
             'signature' => 'function capitalize_all($str) {',
             'testClassName' => 'CapitalizeAll',
         ]);
@@ -740,7 +740,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/6v1mgUS7AxAmg4RzKWGnsSnNNSBTd4pBsFJE24dp.txt',
+            'uri_test' => '/katas/php/6v1mgUS7AxAmg4RzKWGnsSnNNSBTd4pBsFJE24dp.txt',
             'signature' => 'function isPalindrome($str) {',
             'testClassName' => 'PalindromeTest',
         ]);
@@ -785,7 +785,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/5hTH3wO9QL4T2GgLlsJKJedpSNgz7er9hxiaQvUg.txt',
+            'uri_test' => '/katas/php/5hTH3wO9QL4T2GgLlsJKJedpSNgz7er9hxiaQvUg.txt',
             'signature' => 'function count_str($str) {',
             'testClassName' => 'CountSubstring',
         ]);
@@ -830,7 +830,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/W1J562yAOH12uMJ7WT0wEd65BuvDPD9JYvv51EtJ.txt',
+            'uri_test' => '/katas/php/W1J562yAOH12uMJ7WT0wEd65BuvDPD9JYvv51EtJ.txt',
             'signature' => 'function array_first($arr) {',
             'testClassName' => 'ArrayFirst',
         ]);
@@ -875,7 +875,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/ih6Oc5lEzTS2j30MugMVcIXCHkPkB4K8YU2xWk1f.txt',
+            'uri_test' => '/katas/php/ih6Oc5lEzTS2j30MugMVcIXCHkPkB4K8YU2xWk1f.txt',
             'signature' => 'function filtered($arr) {',
             'testClassName' => 'ArrayFiltered',
         ]);
@@ -917,7 +917,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/APqA4t8KNTBkgPq3DtWYnQWoPVDZ8hQ0DnXq7RQf.txt',
+            'uri_test' => '/katas/php/APqA4t8KNTBkgPq3DtWYnQWoPVDZ8hQ0DnXq7RQf.txt',
             'signature' => 'function arr2string($arr) {',
             'testClassName' => 'ArrayToString',
         ]);
@@ -963,7 +963,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/Ckss2SGJHxeZNcYYATzES41HaeWoQyevnjEe3tkv.txt',
+            'uri_test' => '/katas/php/Ckss2SGJHxeZNcYYATzES41HaeWoQyevnjEe3tkv.txt',
             'signature' => 'function bit_inverter($strBin) {',
             'testClassName' => 'BitInverter',
         ]);
@@ -1019,7 +1019,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $blitzModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/nPNSnlbIgxzF8NlOpVSDVPo1VjuWywjcvy55n9Ni.txt',
+            'uri_test' => '/katas/php/nPNSnlbIgxzF8NlOpVSDVPo1VjuWywjcvy55n9Ni.txt',
             'signature' => 'function decToBin($num) {',
             'testClassName' => 'DecToBinBitwise',
         ]);
@@ -1074,7 +1074,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/12dgGk17s7UeaOB1ZhkTVr7Iem8y0kY90Pab7Yfk.txt',
+            'uri_test' => '/katas/php/12dgGk17s7UeaOB1ZhkTVr7Iem8y0kY90Pab7Yfk.txt',
             'signature' => 'function leapYear($year) {',
             'testClassName' => 'LeapYear',
         ]);
@@ -1127,7 +1127,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/9va76OJRyuOVNPdSySBfGEsAnafqvYQD1F7Zrm4O.txt',
+            'uri_test' => '/katas/php/9va76OJRyuOVNPdSySBfGEsAnafqvYQD1F7Zrm4O.txt',
             'signature' => 'function factorial($num) {',
             'testClassName' => 'Factorial',
         ]);
@@ -1182,7 +1182,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/wrETHaLCjZCop45rmNdoB6zxvQSoMOgOKevftl84.txt',
+            'uri_test' => '/katas/php/wrETHaLCjZCop45rmNdoB6zxvQSoMOgOKevftl84.txt',
             'signature' => 'function mcd($a, $b) {',
             'testClassName' => 'MCD',
         ]);
@@ -1237,7 +1237,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/bmVvtUyoNHbr6GZ1Ywr3gHZ9e9fwzyZO8ygD6u6O.txt',
+            'uri_test' => '/katas/php/bmVvtUyoNHbr6GZ1Ywr3gHZ9e9fwzyZO8ygD6u6O.txt',
             'signature' => 'function mcm($a, $b) {',
             'testClassName' => 'MCM',
         ]);
@@ -1295,7 +1295,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/IbBdN6riFJ3teSOzmmJYkrL3LubKyVFIna2iuRI2.txt',
+            'uri_test' => '/katas/php/IbBdN6riFJ3teSOzmmJYkrL3LubKyVFIna2iuRI2.txt',
             'signature' => 'function fibonacci($num) {',
             'testClassName' => 'Fibonacci',
         ]);
@@ -1351,7 +1351,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $blitzModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/CBYzLCAR2l0WC5SpQXlKsxXM8Tjm4KX847ik2vts.txt',
+            'uri_test' => '/katas/php/CBYzLCAR2l0WC5SpQXlKsxXM8Tjm4KX847ik2vts.txt',
             'signature' => 'function trasposed($matrix) {',
             'testClassName' => 'TrasposedMatrix',
         ]);
@@ -1406,7 +1406,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/OS55Uj3N6sKLmKXfgjs7rkyEF17Bala9XAclQviY.txt',
+            'uri_test' => '/katas/php/OS55Uj3N6sKLmKXfgjs7rkyEF17Bala9XAclQviY.txt',
             'signature' => 'function multiplied($matrixA, $matrixB) {',
             'testClassName' => 'MultiplyMatrix',
         ]);
@@ -1460,7 +1460,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $blitzModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/Pv8tGHJEqowUZhZtmSDpGWgMp0nPJYwING2fGlQY.txt',
+            'uri_test' => '/katas/php/Pv8tGHJEqowUZhZtmSDpGWgMp0nPJYwING2fGlQY.txt',
             'signature' => 'function combinatorial($m, $n) {',
             'testClassName' => 'CombinatorialNumbers',
         ]);
@@ -1515,7 +1515,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $blitzModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/YjzEMtkTXq7W16KGWKSfqWCt9C99didgKNYRBYwN.txt',
+            'uri_test' => '/katas/php/YjzEMtkTXq7W16KGWKSfqWCt9C99didgKNYRBYwN.txt',
             'signature' => 'function generatePrimes($num) {',
             'testClassName' => 'PrimesBelowGivenNumber',
         ]);
@@ -1575,7 +1575,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/ocnfVOgV1QwhiDVPFXyKtetOTL4cuNpwtSXEBIII.txt',
+            'uri_test' => '/katas/php/ocnfVOgV1QwhiDVPFXyKtetOTL4cuNpwtSXEBIII.txt',
             'signature' => 'function isPrime($num) {',
             'testClassName' => 'IsPrime',
         ]);
@@ -1629,7 +1629,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $blitzModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/pzaE8teLjE9qpoElQF3U4ANDTg9p2C4su39wOpec.txt',
+            'uri_test' => '/katas/php/pzaE8teLjE9qpoElQF3U4ANDTg9p2C4su39wOpec.txt',
             'signature' => 'function sumDigit($str) {',
             'testClassName' => 'StringSumDigit',
         ]);
@@ -1687,7 +1687,7 @@ class ChallengeSeeder extends Seeder
             'owner_id' => $superadminID,
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
-            'uri_test' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/katas/php/VWdiyVmr1qRBksyIKuuHWWVpYTafiXpHeMtqDKtF.txt',
+            'uri_test' => '/katas/php/VWdiyVmr1qRBksyIKuuHWWVpYTafiXpHeMtqDKtF.txt',
             'signature' => 'function pascal($num) {',
             'testClassName' => 'PascalTriangle',
         ]);
