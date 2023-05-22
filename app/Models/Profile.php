@@ -392,4 +392,20 @@ class Profile extends Model
             $profile->save();
         }
     }
+
+    public function getProfileProgress()
+    {
+        $lastLevelUp = $this->rank->id === 1 ? 0 : Rank::find($this->rank_id - 1)->level_up;
+        $actualLevelUp = $this->rank->level_up;
+
+        $progress = ($this->exp - $lastLevelUp) / ($actualLevelUp - $lastLevelUp) * 100;
+
+        if (Rank::all()->count() === $this->rank_id
+            && $this->exp > $this->rank->level_up
+        ) {
+            $progress = 100;
+        }
+
+        return $progress;
+    }
 }

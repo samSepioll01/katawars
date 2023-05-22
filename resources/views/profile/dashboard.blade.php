@@ -87,7 +87,7 @@
 
                                 </div>
 
-                                <x-layout.progress-bar size="4" title="Rank Progress" />
+                                <x-layout.progress-bar :progress="$userValues['progress']" size="4" title="Rank Progress" />
 
                             </div>
 
