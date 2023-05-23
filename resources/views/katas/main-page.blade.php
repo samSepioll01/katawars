@@ -108,9 +108,13 @@
                                 <x-jet-button x-ref="check" id="check" class="absolute right-0 bottom-0">Check</x-jet-button>
                             </div>
                             <div class="errorkata">
-                                <div id="error-panel" class="flex flex-col justify-center items-center h-full w-full text-slate-700 dark:text-slate-200">
-                                    <h1 class="text-2xl font-bold text-violet-600 dark:text-tomato">Pro Tip</h1>
-                                    <h3 class="py-2">Press <i>Cntrl + Space</i> to <i>Check Code</i>.</h3>
+                                <div class="w-full text-slate-700 dark:text-slate-200">
+                                    <div id="error-panel" class="w-full h-96 overflow-y-auto scrollbar-inner-menu p-3 break-words">
+                                        <div id="tip" class="w-full h-full flex flex-col justify-center items-center">
+                                            <h1 class="text-2xl font-bold text-violet-600 dark:text-tomato">Pro Tip</h1>
+                                            <h3 class="py-2">Press <i>Cntrl + Space</i> to <i>Check Code</i>.</h3>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -125,9 +129,7 @@
                 </div>
             </div>
 
-            <x-layout.dinamicflash type="error" name="verifycode">
-                Paco!!!
-            </x-layout.dinamicflash>
+            <x-layout.dinamicflash type="error" name="verifycode"></x-layout.dinamicflash>
         </main>
         <style>
             .ace_active-line {

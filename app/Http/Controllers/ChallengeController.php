@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChallengeRequest;
 use App\Http\Requests\UpdateChallengeRequest;
 use App\Models\Challenge;
+use App\Models\Kata;
 use App\Models\Mode;
 use App\Models\Profile;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use ParseError;
 
 class ChallengeController extends Controller
 {
@@ -226,23 +229,87 @@ class ChallengeController extends Controller
             // aquí iría las validaciones con PHPSanbox
             // aquí iría las validaciones de FPM.
 
-            $userCode = $request->code;
-
-            $commandTest = base_path() . '/vendor/bin/phpunit';
-
             $kata = Challenge::where('slug', $request->slug)
                 ->firstOrFail()->katas()->first();
 
-            $signature = $kata->signature;
-            $testClassName = $kata->testClassName;
-            $testUri = $kata->uri_test;
-            $testCode = Storage::disk('s3')->get($testUri);
-            //Storage::disk('local')->put('/');
+            $testCode = Storage::disk('s3')->get($kata->uri_test);
+            $testLocalPath = $this->generateTestPath($kata);
 
-            return response()->json(['success' => true, 'code' => $commandTest]);
+            $userCode = $this->filterUserSignature(
+                $request->code,
+                $this->getMethodName($kata->signature),
+            );
+
+            $testCommand = $this->generateTestCommand($testLocalPath);
+
+            // Generate the test file
+            Storage::disk('local')->put($testLocalPath, $testCode);
+
+            // Add user code to the test
+            Storage::disk('local')->append($testLocalPath, $userCode);
+
+            exec($testCommand, $testResult); // Run test
+
+            Storage::disk('local')->delete($testLocalPath);
+
+            // filtrar la salida del test para saber si se ha superado o no.
+
+            return $this->checkTestResult($testResult);
+
         }
 
         return redirect()->back();
+    }
+
+    protected function checkTestResult(array $testResult)
+    {
+        if (substr( $testResult[count($testResult) - 1], 0, 2) === 'OK') {
+
+            $returnHTML = view('includes.katapanel', [
+                'passed' => true,
+                'testsCompleted' => trim(str_replace('.', '', $testResult[2])),
+                'asserts' => $testResult[count($testResult) - 1],
+            ])->render();
+
+            return response()->json([
+                'success' => true,
+                'message' => $returnHTML,
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'code' => $testResult
+        ]);
+    }
+
+    /**
+     * Generate the command to execute the test.
+     * @param string $testPath
+     *
+     * @return string
+     */
+    protected function generateTestCommand(string $testPath): string
+    {
+        $command = base_path() . '/vendor/bin/phpunit';
+        $testPath = storage_path() . '/app' . $testPath;
+        return $command . ' ' . $testPath;
+    }
+
+    /**
+     * Generate the uri path for the resource store in local storage.     *
+     * @param Kata $kata
+     *
+     * @return string
+     */
+    protected function generateTestPath(Kata $kata): string
+    {
+        $user = auth()->user()->id;
+        $language = strtolower($kata->language->name);
+        $extension = $kata->language->extension;
+        $testClassName = $kata->testClassName;
+
+        return "/katas-tmp/$user/$language/$testClassName" . $extension;
     }
 
     /**
@@ -252,10 +319,12 @@ class ChallengeController extends Controller
      * @param string $originalMethodName
      * @return string
      */
-    protected function filterUserSignature(string $code, string $originalMethodName): string
+    protected function filterUserSignature(
+        string $code, string $originalMethodName
+    ): string
     {
         $start = strpos($code, ' ') + 1;
-        $length = strpos($code, '(') - 1;
+        $length = strpos($code, '(');
         return substr_replace($code, $originalMethodName, $start, $length - $start);
     }
 
@@ -268,7 +337,7 @@ class ChallengeController extends Controller
     protected function getMethodName(string $signature): string
     {
         $start = strpos($signature, ' ') + 1;
-        $length = strpos($signature, '(') - 1;
+        $length = strpos($signature, '(');
 
         return substr($signature, $start, $length - $start);
     }

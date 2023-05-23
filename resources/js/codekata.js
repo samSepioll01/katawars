@@ -1,4 +1,6 @@
 
+const checkBTN = document.getElementById('check');
+
 document.addEventListener('DOMContentLoaded', eDCL => {
 
     // Ace Editor Config
@@ -39,19 +41,25 @@ document.addEventListener('DOMContentLoaded', eDCL => {
     // ShortHand for parser code with Cntrl + Spacebar.
     document.addEventListener("keydown", (eKeydown) => {
         if (eKeydown.ctrlKey && eKeydown.code === "Space") {
-            document.getElementById('check').click();
+            checkBTN.disabled = true;
+            checkBTN.classList.remove('active:translate-y-1');
+            checkCode();
         }
     });
 
     // Get the code in code editor and send it to parse.
-    document.getElementById('check')
-        .addEventListener('click', eClick => {
-            checkCode();
-        });
+    checkBTN.addEventListener('click', eClick => {
+        checkBTN.disabled = true;
+        checkBTN.classList.remove('active:translate-y-1');
+        checkCode();
+    });
 
 
 });
 
+/**
+ * Send request to check the code insert by the user and handle the responses.
+ */
 function checkCode()
 {
     const errorPanel = document.getElementById('error-panel');
@@ -70,18 +78,18 @@ function checkCode()
     .then(response => {
         if (response.data.success) {
             $flash.show('verifycode', 'success', 'Enhorabuena! Has Superado el Reto! (Debe mostrar el modal).');
-            console.log(response.data.code);
+            errorPanel.innerHTML = response.data.message;
+            checkBTN.disabled = false;
+            checkBTN.classList.add('active:translate-y-1');
         } else {
-            $flash.show('verifycode', 'warning', 'Existen algunos errores. (Debe mostrar el flash junto con los errores en el panel lateral.');
+            $flash.show('verifycode', 'error', 'Existen algunos errores. (Debe mostrar el flash junto con los errores en el panel lateral.');
+            checkBTN.disabled = false;
+            checkBTN.classList.add('active:translate-y-1');
             errorPanel.innerHTML = response.data.code;
         }
     })
-    .catch(errors => $flash.show('verifycode', 'error', 'Opps! Some was wrong! Sorry, try later.'));
-}
-
-
-
-function sendRequest()
-{
-
+    .catch(errors => {
+        $flash.show('verifycode', 'error', 'Opps! Some was wrong! Sorry, try later.');
+        console.log(errors);
+    });
 }
