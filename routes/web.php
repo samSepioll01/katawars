@@ -95,4 +95,7 @@ Route::middleware([
 
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');
+
+    Route::post('/katas/{slug}/verify-kata', [ChallengeController::class, 'verifyKata'])
+        ->name('katas.verify');
 });

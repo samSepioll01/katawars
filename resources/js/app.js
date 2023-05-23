@@ -43,6 +43,34 @@ window.$modals = {
     },
 }
 
+window.$flash = {
+    show(name, type, message) {
+        window.dispatchEvent(
+            new CustomEvent('flash', {
+                detail: {
+                    name: name,
+                    type: type,
+                    message: message,
+                },
+            })
+        );
+    },
+    status: {
+        success: 'bg-teal-600 border-teal-700 shadow-teal-400 text-white',
+        error: 'bg-rose-600 border-rose-800 shadow-rose-400 text-white',
+        warning: 'bg-yellow-500 border-yellow-700 text-orange-700',
+    },
+    removeStyles(target)
+    {
+        Object.values($flash.status)
+            .forEach(styles => target.classList.remove(...styles.split(' ')));
+    },
+    addStyles(target, styles)
+    {
+        target.classList.add(...styles.split(' '));
+    },
+}
+
 window.$theme = {
     change(theme) {
         window.dispatchEvent(
@@ -80,4 +108,9 @@ window.$aux = {
         }
         return elem;
     },
+    getUrlSlug(url = '')
+    {
+        let paths = url.split('/');
+        return paths[paths.length - 1];
+    }
 }

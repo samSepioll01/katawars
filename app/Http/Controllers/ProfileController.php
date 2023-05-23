@@ -47,12 +47,14 @@ class ProfileController extends Controller
     {
         $this->validateRequest($request->query());
 
+        $users = User::whereHas('roles', fn($query) => $query->where('name', 'user'))
+                    ->get()->except(auth()->user()->id);
+
 
         if ($request->ajax()) {
 
                 $search = User::search($request->query('search'))->get();
-                $users = User::whereHas('roles', fn($query) => $query->where('name', 'user'))->get();
-                $searchUsers = $users->intersect($search)->except(auth()->user()->id);
+                $searchUsers = $users->intersect($search);
 
                 if ($searchUsers->count()) {
 
@@ -68,9 +70,6 @@ class ProfileController extends Controller
                     'users' => $returnHTML,
                 ]);
         }
-
-        $users = User::whereHas('roles', fn($query) => $query->where('name', 'user'))
-            ->get()->except(auth()->user()->id);
 
         return view('dojo.index', [
             'users' => $users,
@@ -234,14 +233,9 @@ class ProfileController extends Controller
     public function showProfilesMainPage(Request $request)
     {
 
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'slug' => ['string', 'unique:profile', 'max:255'],
         ]);
-
-        if ($validator->fails()) {
-            abort(404);
-        }
-
 
         $profile = Profile::where('slug', $request->slug)->firstOrFail();
 

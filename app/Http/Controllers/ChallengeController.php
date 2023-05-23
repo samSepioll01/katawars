@@ -10,6 +10,7 @@ use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ChallengeController extends Controller
@@ -199,13 +200,77 @@ class ChallengeController extends Controller
      */
     public function showKataMainPage(Request $request)
     {
-        $challenge = Challenge::where('slug', $request->slug)->first();
+        $request->validate([
+            'slug' => ['string', 'max:255', 'alpha_dash', 'unique:challenge'],
+        ]);
+
+        $challenge = Challenge::where('slug', $request->slug)->firstOrFail();
 
         return view('katas.main-page', [
             'challenge' => $challenge,
             'owner' => $challenge->katas()->first()->owner->user,
             'signature' => $challenge->katas()->first()->signature,
         ]);
+    }
+
+    public function verifyKata(Request $request)
+    {
+        $request->validate([
+            'slug' => ['string', 'max:255', 'required', 'alpha_dash'],
+            'code' => ['string', 'required'],
+        ]);
+
+        if ($request->ajax()) {
+
+            // aquí iría el filtrado con regexp en busca de código sensible.
+            // aquí iría las validaciones con PHPSanbox
+            // aquí iría las validaciones de FPM.
+
+            $userCode = $request->code;
+
+            $commandTest = base_path() . '/vendor/bin/phpunit';
+
+            $kata = Challenge::where('slug', $request->slug)
+                ->firstOrFail()->katas()->first();
+
+            $signature = $kata->signature;
+            $testClassName = $kata->testClassName;
+            $testUri = $kata->uri_test;
+            $testCode = Storage::disk('s3')->get($testUri);
+            //Storage::disk('local')->put('/');
+
+            return response()->json(['success' => true, 'code' => $commandTest]);
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Replace the user function name for the original function name.
+     *
+     * @param string $code
+     * @param string $originalMethodName
+     * @return string
+     */
+    protected function filterUserSignature(string $code, string $originalMethodName): string
+    {
+        $start = strpos($code, ' ') + 1;
+        $length = strpos($code, '(') - 1;
+        return substr_replace($code, $originalMethodName, $start, $length - $start);
+    }
+
+    /**
+     * Get the method name for the test throught the kata signature field.
+     *
+     * @param string $signature
+     * @return string
+     */
+    protected function getMethodName(string $signature): string
+    {
+        $start = strpos($signature, ' ') + 1;
+        $length = strpos($signature, '(') - 1;
+
+        return substr($signature, $start, $length - $start);
     }
 
     /**

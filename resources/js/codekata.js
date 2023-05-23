@@ -46,10 +46,42 @@ document.addEventListener('DOMContentLoaded', eDCL => {
     // Get the code in code editor and send it to parse.
     document.getElementById('check')
         .addEventListener('click', eClick => {
-            let code = ace.edit('editor').getValue();
-            code = code.replaceAll('<?php', '');
-            console.log(code.trim());
+            checkCode();
         });
 
 
 });
+
+function checkCode()
+{
+    const errorPanel = document.getElementById('error-panel');
+    let code = ace.edit('editor').getValue();
+    code = code.replaceAll('<?php', '');
+
+    axios({
+        method: 'post',
+        url: window.location.href + '/verify-kata',
+        responseType: 'json',
+        data: {
+            slug: $aux.getUrlSlug(window.location.href),
+            code: code,
+        },
+    })
+    .then(response => {
+        if (response.data.success) {
+            $flash.show('verifycode', 'success', 'Enhorabuena! Has Superado el Reto! (Debe mostrar el modal).');
+            console.log(response.data.code);
+        } else {
+            $flash.show('verifycode', 'warning', 'Existen algunos errores. (Debe mostrar el flash junto con los errores en el panel lateral.');
+            errorPanel.innerHTML = response.data.code;
+        }
+    })
+    .catch(errors => $flash.show('verifycode', 'error', 'Opps! Some was wrong! Sorry, try later.'));
+}
+
+
+
+function sendRequest()
+{
+
+}
