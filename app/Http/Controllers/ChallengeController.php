@@ -8,13 +8,13 @@ use App\Models\Challenge;
 use App\Models\Kata;
 use App\Models\Mode;
 use App\Models\Profile;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use ParseError;
+use PHPParser\Error;
+use PhpParser\ParserFactory;
 
 class ChallengeController extends Controller
 {
@@ -225,6 +225,26 @@ class ChallengeController extends Controller
 
         if ($request->ajax()) {
 
+            $code = trim($request->input('code'));
+
+            $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+
+            try {
+                $parser->parse($code);
+
+            } catch (Error $error) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "{$error->getMessage()}\n",
+                    'flash' => "Exists some sintax errors parse your code and try it again!",
+                ]);
+            }
+
+            $code = str_replace('<?php', '', $code);
+
+
+
+
             // aquí iría el filtrado con regexp en busca de código sensible.
             // aquí iría las validaciones con PHPSanbox
             // aquí iría las validaciones de FPM.
@@ -236,7 +256,7 @@ class ChallengeController extends Controller
             $testLocalPath = $this->generateTestPath($kata);
 
             $userCode = $this->filterUserSignature(
-                $request->code,
+                $code,
                 $this->getMethodName($kata->signature),
             );
 
@@ -252,15 +272,16 @@ class ChallengeController extends Controller
 
             Storage::disk('local')->delete($testLocalPath);
 
-            // filtrar la salida del test para saber si se ha superado o no.
 
             return $this->checkTestResult($testResult);
-
         }
-
-        return redirect()->back();
     }
 
+    /**
+     * Check the result of the test and return the message to the user.
+     *
+     * @param array $testResult
+     */
     protected function checkTestResult(array $testResult)
     {
         if (substr( $testResult[count($testResult) - 1], 0, 2) === 'OK') {
@@ -275,12 +296,43 @@ class ChallengeController extends Controller
                 'success' => true,
                 'message' => $returnHTML,
             ]);
+        } else {
+
+            return response()->json([
+                'success' => false,
+                'message' => $this->getErrorLines($testResult),
+                'flash' => 'Exists some logic errors in your code!'
+            ]);
+        }
+    }
+
+    /**
+     * Get the error lines for be showed to the user.
+     *
+     * @param array $testResult
+     * @return string
+     */
+    protected function getErrorLines(array $testResult): array
+    {
+        $numLines = count($testResult);
+        $numFailed = substr_count($testResult[2], 'F');
+        $lines[] = 'Tests Run: ' . trim(str_replace('F', '', $testResult[2]));
+        $lines[] = $testResult[$numLines - 2];
+        $lines[] = $testResult[$numLines - 1];
+        $lines[] = $testResult[6];
+        $founded = 0;
+
+        for ($i = 0; $i < $numLines && $founded < $numFailed; $i++) {
+
+            if (str_starts_with($testResult[$i], $founded + 1)) {
+                $lines[] = explode(' ', $testResult[$i])[0] . " {$testResult[$i + 1]}";
+                $founded++;
+            }
         }
 
-        return response()->json([
-            'success' => false,
-            'code' => $testResult
-        ]);
+
+
+        return $lines;
     }
 
     /**

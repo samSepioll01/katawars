@@ -64,7 +64,6 @@ function checkCode()
 {
     const errorPanel = document.getElementById('error-panel');
     let code = ace.edit('editor').getValue();
-    code = code.replaceAll('<?php', '');
 
     axios({
         method: 'post',
@@ -76,20 +75,31 @@ function checkCode()
         },
     })
     .then(response => {
+        checkBTN.disabled = false;
+        checkBTN.classList.add('active:translate-y-1');
+
         if (response.data.success) {
-            $flash.show('verifycode', 'success', 'Enhorabuena! Has Superado el Reto! (Debe mostrar el modal).');
+            alert('show the modal');
             errorPanel.innerHTML = response.data.message;
-            checkBTN.disabled = false;
-            checkBTN.classList.add('active:translate-y-1');
         } else {
-            $flash.show('verifycode', 'error', 'Existen algunos errores. (Debe mostrar el flash junto con los errores en el panel lateral.');
-            checkBTN.disabled = false;
-            checkBTN.classList.add('active:translate-y-1');
-            errorPanel.innerHTML = response.data.code;
+            $flash.show('verifycode', 'error', response.data.flash);
+            errorPanel.innerHTML = generateErrorLines(response.data.message);
         }
     })
     .catch(errors => {
         $flash.show('verifycode', 'error', 'Opps! Some was wrong! Sorry, try later.');
         console.log(errors);
     });
+}
+
+/**
+ * Generate paragraphs to the error lines.
+ * @param {Array} errorLines Array with errors.
+ * @returns {String} HTML to show.
+ */
+function generateErrorLines(errorLines)
+{
+    let html = '';
+    errorLines.forEach(line => html += `<p class="py-2 text-sm">${line}</p>`);
+    return html;
 }
