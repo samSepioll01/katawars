@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CustomClasses\SecurityFilter;
 use App\Http\Requests\StoreChallengeRequest;
 use App\Http\Requests\UpdateChallengeRequest;
 use App\Models\Challenge;
@@ -13,6 +14,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use ParseError;
 use PHPParser\Error;
 use PhpParser\ParserFactory;
 
@@ -216,6 +218,11 @@ class ChallengeController extends Controller
         ]);
     }
 
+    /**
+     * Check thats the user code is correct.
+     *
+     * @param Request $request
+     */
     public function verifyKata(Request $request)
     {
         $request->validate([
@@ -226,55 +233,74 @@ class ChallengeController extends Controller
         if ($request->ajax()) {
 
             $code = trim($request->input('code'));
+            $code = str_starts_with($code, '<?php')
+                ? $code
+                : "<?php $code";
 
             $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
 
             try {
+
                 $parser->parse($code);
+
 
             } catch (Error $error) {
                 return response()->json([
                     'success' => false,
                     'message' => "{$error->getMessage()}\n",
-                    'flash' => "Exists some sintax errors parse your code and try it again!",
+                    'flash' => "Exists some syntax errors parse your code and try it again!",
                 ]);
             }
 
-            $code = str_replace('<?php', '', $code);
+            $code = trim(str_replace('<?php', '', $code));
 
-
+            SecurityFilter::parser($code);
 
 
             // aquí iría el filtrado con regexp en busca de código sensible.
             // aquí iría las validaciones con PHPSanbox
             // aquí iría las validaciones de FPM.
 
-            $kata = Challenge::where('slug', $request->slug)
-                ->firstOrFail()->katas()->first();
-
-            $testCode = Storage::disk('s3')->get($kata->uri_test);
-            $testLocalPath = $this->generateTestPath($kata);
-
-            $userCode = $this->filterUserSignature(
-                $code,
-                $this->getMethodName($kata->signature),
-            );
-
-            $testCommand = $this->generateTestCommand($testLocalPath);
-
-            // Generate the test file
-            Storage::disk('local')->put($testLocalPath, $testCode);
-
-            // Add user code to the test
-            Storage::disk('local')->append($testLocalPath, $userCode);
-
-            exec($testCommand, $testResult); // Run test
-
-            Storage::disk('local')->delete($testLocalPath);
-
+            $testResult = $this->executeTest($code, $request->slug);
 
             return $this->checkTestResult($testResult);
         }
+    }
+
+    /**
+     * Execute the test against the user code.
+     *
+     * @param string $code
+     * @param string $slug
+     *
+     * @return array
+     */
+    protected function executeTest(string $code, string $slug)
+    {
+        $kata = Challenge::where('slug', $slug)
+            ->firstOrFail()->katas()->first();
+
+        $testCode = Storage::disk('s3')->get($kata->uri_test);
+        $testLocalPath = $this->generateTestPath($kata);
+
+        $userCode = $this->filterUserSignature(
+            $code,
+            $this->getMethodName($kata->signature),
+        );
+
+        $testCommand = $this->generateTestCommand($testLocalPath);
+
+        // Generate the test file
+        Storage::disk('local')->put($testLocalPath, $testCode);
+
+        // Add user code to the test
+        Storage::disk('local')->append($testLocalPath, $userCode);
+
+        exec($testCommand, $testResult); // Run test
+
+        Storage::disk('local')->delete($testLocalPath);
+
+        return $testResult;
     }
 
     /**
@@ -285,6 +311,8 @@ class ChallengeController extends Controller
     protected function checkTestResult(array $testResult)
     {
         if (substr( $testResult[count($testResult) - 1], 0, 2) === 'OK') {
+
+            // Debe asignar los puntos al usuario. (Subir Nivel).
 
             $returnHTML = view('includes.katapanel', [
                 'passed' => true,
@@ -298,9 +326,14 @@ class ChallengeController extends Controller
             ]);
         } else {
 
+            $returnHTML = view('includes.katapanel', [
+                'passed' => false,
+                'errorLines' => $this->getErrorLines($testResult),
+            ])->render();
+
             return response()->json([
                 'success' => false,
-                'message' => $this->getErrorLines($testResult),
+                'message' => $returnHTML,
                 'flash' => 'Exists some logic errors in your code!'
             ]);
         }
@@ -329,8 +362,6 @@ class ChallengeController extends Controller
                 $founded++;
             }
         }
-
-
 
         return $lines;
     }

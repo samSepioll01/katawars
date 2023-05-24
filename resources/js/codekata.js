@@ -83,23 +83,12 @@ function checkCode()
             errorPanel.innerHTML = response.data.message;
         } else {
             $flash.show('verifycode', 'error', response.data.flash);
-            errorPanel.innerHTML = generateErrorLines(response.data.message);
+            errorPanel.innerHTML = response.data.message;
         }
     })
     .catch(errors => {
         $flash.show('verifycode', 'error', 'Opps! Some was wrong! Sorry, try later.');
-        console.log(errors);
+        checkBTN.disabled = false;
+        checkBTN.classList.add('active:translate-y-1');
     });
-}
-
-/**
- * Generate paragraphs to the error lines.
- * @param {Array} errorLines Array with errors.
- * @returns {String} HTML to show.
- */
-function generateErrorLines(errorLines)
-{
-    let html = '';
-    errorLines.forEach(line => html += `<p class="py-2 text-sm">${line}</p>`);
-    return html;
 }

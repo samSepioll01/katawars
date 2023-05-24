@@ -6,5 +6,7 @@
     </div>
 
 @else
-    <div>Muestra los errores</div>
+    @foreach ($errorLines as $line)
+        <p class="py-2 text-sm">{!!$line!!}</p>
+    @endforeach
 @endif
