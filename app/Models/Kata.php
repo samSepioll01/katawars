@@ -21,9 +21,10 @@ class Kata extends Model
         'challenge_id',
         'owner_id',
         'language_id',
-        'rank_id',
         'mode_id',
         'uri_test',
+        'signature',
+        'testClassName',
     ];
 
     /**
@@ -41,14 +42,6 @@ class Kata extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(Profile::class, 'owner_id', 'id');
-    }
-
-    /**
-     * This determines which rank was assigned to the kata.
-     */
-    public function rank(): BelongsTo
-    {
-        return $this->belongsTo(Rank::class);
     }
 
     /**
@@ -73,14 +66,6 @@ class Kata extends Model
     public function video(): BelongsTo
     {
         return $this->belongsTo(VideoSolution::class);
-    }
-
-    /**
-     * This determines which categories have been assigned to the kata.
-     */
-    public function categories(): BelongsToMany
-    {
-        return $this->belongsToMany(Category::class);
     }
 
     /**

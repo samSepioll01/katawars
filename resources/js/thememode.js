@@ -69,10 +69,12 @@ btnChangeMode.addEventListener('click', eClick => {
 
     if (elemHtml.classList.contains('dark')) {
         changeTheme('light');
+        $theme.change('light');
         sendAxiosChangeThemeRequest('light');
 
     } else {
         changeTheme('dark');
+        $theme.change('dark');
         sendAxiosChangeThemeRequest('dark');
     }
 });

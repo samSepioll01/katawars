@@ -13,6 +13,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="last_activity" content="{{ auth()->user()->sessions->first()->last_activity }}">
 
         <title>{{ config('app.name', 'KataWars') }}</title>
 
@@ -22,6 +23,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/thememode.js'])
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
 
         <!-- Import method throught Vite port without type module attribute -->
         <script src="{{ env('APP_VITE_URL') }}/resources/js/hubsidebar.js" async></script>
@@ -29,7 +31,7 @@
         @livewireStyles
     </head>
     <body x-data="hubSidebar()" :class="{ 'overflow-hidden': responsiveOpen}"
-          class="bg-slate-100 dark:bg-gradient-to-tr dark:from-cyan-700 dark:via-cyan-500 dark:to-violet-500 transition-all duration-300
+          class="min-h-screen bg-slate-100 dark:bg-gradient-to-tr dark:from-cyan-700 dark:via-cyan-500 dark:to-violet-500 transition-all duration-300
             @if (auth()->user()?->email_verified_at)
                 {{ auth()->user()->profile->is_darkmode ? 'scrollbar-dark' : 'scrollbar-light' }}
             @else
@@ -44,8 +46,8 @@
             <x-layout.sidebar-content />
         </x-layout.sidebar>
 
-            <!-- Page Content -->
-        <main class="font-sans text-gray-900 antialiased dark:bg-slate-900/70">
+        <!-- Page Content -->
+        <main class="font-sans text-gray-900 antialiased dark:bg-slate-900/70 min-h-screen">
             {{ $slot }}
         </main>
         <x-layout.footer />

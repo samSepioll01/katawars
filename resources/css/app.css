@@ -1,4 +1,6 @@
 @import 'cropperjs/dist/cropper.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -192,8 +194,27 @@
         }
     }
 
+    .animation-progress-bar {
+        transform-origin: left;
+        animation: progressBar 1s ease backwards;
+    }
+
+    @keyframes progressBar {
+        0% {
+            transform: scaleX(0);
+         }
+
+         100% {
+             transform: scaleX(1);
+         }
+    }
+
     .transform-origin-50 {
         transform-origin: 50%;
+    }
+
+    .transform-origin-left {
+        transform-origin: left;
     }
 
     /* Cropper Photo Preview Target */
@@ -203,6 +224,25 @@
         height: 240px;
         margin: 10px;
         border-radius: 50%;
+    }
+
+    .dot-shadow {
+        box-shadow: 0 0 0 4px #0bec7c22,
+        0 0 0 10px #0bec7c22,
+        0 0 20px #0bec7c,
+        0 0 40px 5px #0bec7c,
+        0 0 60px 10px #0bec7c;
+    }
+
+    .tab-active-marker-shadow {
+        box-shadow: 0 0 15px #5da6ff,
+        0 0 30px #5da6ff,
+        0 0 45px #5da6ff,
+        0 0 60px #5da6ff;
+    }
+
+    #editor {
+        font-family: 'Fira Code', monospace;
     }
 }
 
@@ -346,5 +386,83 @@
     .thumbnail-selected {
         @apply outline-none ring-2 ring-violet-600 scale-110 shadow-2xl shadow-violet-600
                 dark:ring-cyan-500 dark:shadow-cyan-400
+    }
+
+    .dot {
+        @apply after:absolute after:top-1/2 after:transform after:-translate-y-1/2 after:scale-125 after:w-3 after:h-3
+               after:bg-green-600 dark:after:bg-[#0bec7c] after:rounded-full after:ml-[70%];
+    }
+
+    .card-panel {
+        @apply bg-white dark:bg-[rgb(31,31,31)]/30 border border-slate-800/20 rounded-md shadow-xl;
+    }
+
+    .tab {
+        @apply relative text-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-50 py-5 transition-all duration-300 cursor-pointer;
+    }
+
+    .tab-bottom {
+        @apply  transition-all duration-300 rounded-md absolute bottom-0 h-[2px] left-0
+                w-full bg-[#7f5bd1ff] dark:bg-[#00b6e0ff] shadow-[#7f5bd1ff]
+                dark:shadow-[#00b6e0ff] shadow-outter-lg transform scale-x-0;
+    }
+
+    .tab-selected {
+        @apply  transition-all duration-300 rounded-md absolute bottom-0 h-[2px]
+                w-full bg-[#7f5bd1ff] dark:bg-[#00b6e0ff] left-0 shadow-[#7f5bd1ff]
+                dark:shadow-[#00b6e0ff] shadow-outter-sm scale-x-100;
+    }
+
+    .tab:hover > .tab-bottom {
+        @apply scale-x-100;
+    }
+
+    code {
+        @apply border border-slate-400 dark:border-cyan-600 px-1 text-center rounded-md bg-slate-200
+               dark:bg-slate-900 dark:text-slate-100;
+    }
+
+    .card-challenge {
+        @apply h-40 px-1 sm:px-6 py-2 mb-8 border border-slate-400 sm:rounded-xl
+               dark:border-slate-800 hover:border-violet-600 bg-slate-50 hover:bg-slate-200 dark:bg-slate-800/70 shadow-lg
+               dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-900 transition-all;
+    }
+
+    .card-users {
+        @apply h-48 px-1 sm:px-4 py-2 mb-8 border border-slate-400 rounded-xl
+               dark:border-slate-800 hover:border-violet-600 bg-slate-50 hover:bg-slate-200 dark:bg-slate-800/70 shadow-lg
+               dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-900 transition-all;
+    }
+
+    .select {
+        @apply cursor-pointer border dark:focus:border-cyan-600 focus:border-violet-600 dark:focus:ring-0 bg-white
+               dark:bg-slate-800/70 dark:text-slate-100 dark:border-slate-800 shadow-lg border-gray-300
+               rounded-full text-gray-600 h-10 pl-5 pr-10 hover:border-gray-400 mb-16;
+    }
+
+    .option {
+        @apply w-full py-1 cursor-pointer text-center hover:bg-slate-200 dark:hover:bg-slate-700 rounded-md
+               dark:text-slate-100 text-slate-700;
+    }
+
+    .search-btn {
+        @apply border border-slate-400 px-3 flex justify-center items-center rounded-r-full ml-1 cursor-pointer
+               transform transition-all duration-200 active:scale-95 dark:bg-slate-900/70 dark:border-slate-800
+               dark:hover:bg-slate-800/70 bg-slate-800 shadow-lg;
+    }
+
+    .search-input {
+        @apply transition-all duration-300 bg-slate-50 border-slate-400 dark:border-slate-700
+               shadow-lg dark:dark-placeholder;
+    }
+
+    .editorkata {
+        @apply w-full h-80 bg-slate-200/70 dark:bg-slate-700/70 border border-slate-300 dark:border-slate-800/70
+               shadow-xl transition-all duration-300 rounded-none md:rounded-md;
+    }
+
+    .errorkata {
+        @apply border border-slate-300 dark:border-slate-800/70 rounded-lg shadow-lg bg-slate-200/70 dark:bg-slate-700/70
+               col-span-12 lg:col-span-4 min-h-[380px];
     }
 }

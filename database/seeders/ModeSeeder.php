@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Mode;
 
 class ModeSeeder extends Seeder
 {
@@ -14,6 +15,8 @@ class ModeSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Mode::create(['denomination' => 'training']);
+        Mode::create(['denomination' => 'blitz']);
+        Mode::create(['denomination' => 'kumite']);
     }
 }

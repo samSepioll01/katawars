@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -34,6 +32,7 @@ class Profile extends Model
         'is_deleted',
         'is_banned',
         'rank_id',
+        'last_activity',
     ];
 
     /**
@@ -365,12 +364,12 @@ class Profile extends Model
     }
 
     /**
-     * Validate that the new nickname is abailable to generate url slug to the user's profile.
+     * Validate that the new nickname is available to generate url slug to the user's profile.
      */
     public static function validateUrlProfile(string $inputName, User $user = null): void
     {
         $slug = Str::slug($inputName);
-        $url = url("/users/$slug");
+        $url = url("/user/$slug");
         $errorBag = [
             'name' => "The name has already been taken.
                        This is showed as your main page nickname."
@@ -390,5 +389,21 @@ class Profile extends Model
             $profile->url = $url;
             $profile->save();
         }
+    }
+
+    public function getProfileProgress()
+    {
+        $lastLevelUp = $this->rank->id === 1 ? 0 : Rank::find($this->rank_id - 1)->level_up;
+        $actualLevelUp = $this->rank->level_up;
+
+        $progress = ($this->exp - $lastLevelUp) / ($actualLevelUp - $lastLevelUp) * 100;
+
+        if (Rank::all()->count() === $this->rank_id
+            && $this->exp > $this->rank->level_up
+        ) {
+            $progress = 100;
+        }
+
+        return $progress;
     }
 }

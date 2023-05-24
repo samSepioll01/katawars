@@ -197,6 +197,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
+        App\Providers\S3ServiceProvider::class,
+        App\Providers\SecurityFilterServiceProvider::class,
 
     ],
 
@@ -213,6 +215,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Redis' => Illuminate\Support\Facades\Redis::class,
+        'S3' => App\CustomClasses\S3::class,
+        'SecurityFilter' => App\CustomClasses\SecurityFilter::class,
     ])->toArray(),
 
 ];

@@ -8,11 +8,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Models\Profile;
-use App\Traits\AuxiliarFunctions;
+use App\CustomClasses\S3;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
-    use AuxiliarFunctions;
 
     /**
      * Validate and update the given user's profile information.
@@ -38,11 +37,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
             $filePath = $user->profile_photo_path;
             $file = Storage::disk('public')->get($filePath);
-            $S3photos = $this->getProfilePhotos(true);
+            $S3photos = S3::getProfilePhotos(true);
 
             if (count($S3photos) === 5) {
 
-                $S3path = $this->filterS3Path(
+                $S3path = S3::filterPath(
                     $S3photos->sortBy('lastModified')->first()['path']
                 );
 

@@ -3,17 +3,17 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
-use App\Traits\AuxiliarFunctions;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Spatie\Image\Image;
 use Illuminate\Support\Str;
+use App\CustomClasses\S3;
 
 class UpdateProfileInformationForm extends Component
 {
-    use WithFileUploads, AuxiliarFunctions;
+    use WithFileUploads;
 
     /**
      * The position for x edge of the crop image.
@@ -188,7 +188,7 @@ class UpdateProfileInformationForm extends Component
         $user = Auth::user();
         $user->deleteProfilePhoto('s3');
 
-        $photos = $this->getProfilePhotos(true)->sortByDesc('lastModified');
+        $photos = S3::getProfilePhotos(true)->sortByDesc('lastModified');
 
         count($photos)
             ? $user->profile_photo_path = $photos->first()['path']
@@ -235,7 +235,7 @@ class UpdateProfileInformationForm extends Component
      */
     public function render()
     {
-        $photos = $this->getProfilePhotos(true);
+        $photos = S3::getProfilePhotos(true);
         return view('livewire.update-profile-information-form', [
             'profilePhotos' => $photos->sortByDesc('lastModified'),
         ]);

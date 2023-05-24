@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -18,11 +19,13 @@ use Faker\Factory as Faker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Jetstream\Features;
+use Laravel\Scout\Searchable;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable,
-        TwoFactorAuthenticatable, HasRoles, SoftDeletes;
+        TwoFactorAuthenticatable, HasRoles, SoftDeletes, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -74,6 +77,19 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'bio' => $this->bio,
+        ];
+    }
 
     /**
      * Get the URL to the user's profile photo.
@@ -142,6 +158,58 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         Storage::disk($disk)->delete($path);
+    }
+
+    /**
+     * This determines the historial sessions for the user.
+     */
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
+    }
+
+    /**
+     * This determines if the passed user is online.
+     *
+     * @param \App\Models\User|null $user
+     * @return bool Return true if the user is online, false otherwise.
+     */
+    public static function isOnline(User $user = null): bool
+    {
+        return $user
+            ? (bool) Session::all()->where('user_id', $user->id )->count()
+            : false;
+    }
+
+    /**
+     * This determines the last activity for a user.
+     *
+     * @return string Online if the current user is Online in this moment,
+     *                the time since the last connection.
+     */
+    public function last_activity()
+    {
+        return self::isOnline($this)
+            ? 'Online'
+            : (new Carbon($this->profile->last_activity))->diffForHumans(now());
+    }
+
+    /**
+     * This determines the position in the global ranking for the users.
+     * Excluding admins users.
+     *
+     * @return int
+     */
+    public function ranking()
+    {
+        $ranking = Profile::whereHas('user', fn($query) => $query->role('user'))
+            ->orderByDesc('exp')->orderByDesc('honor')->get();
+
+        $userRanking = $ranking->search($ranking->find($this->id)) + 1;
+
+        return $this->hasRole(['superadmin', 'admin'])
+            ? 'Sannin'
+            : $userRanking;
     }
 
     /**

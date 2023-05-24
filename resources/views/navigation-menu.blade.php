@@ -15,9 +15,13 @@
                     <x-layout.hub class="hidden sm:inline-flex sm:items-start" />
                 @endauth
 
+                @php
+                    $authRoute = auth()?->user()?->hasRole(['superadmin', 'admin']) ? 'admin.dashboard' : 'dashboard';
+                @endphp
+
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="@auth() {{ route('dashboard') }} @else {{ route('home') }}@endauth" class=" flex flex-row">
+                    <a href="@auth() {{ route($authRoute) }} @else {{ route('home') }}@endauth" class=" flex flex-row">
                         <x-logo id="logo" type="text" class="rounded w-36 bg-white/80 dark:bg-slate-900/80 transition duration-300" />
                     </a>
                 </div>
@@ -212,13 +216,13 @@
                 <div class="mt-3 space-y-1 p-2">
 
                     <div class="text-lg text-gray-700 dark:text-slate-200 p-1">Katawars Ways</div>
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
+                    <x-jet-responsive-nav-link href="{{ route('dojo.index') }}">
                         {{ __('Dojo') }}
                     </x-jet-responsive-nav-link>
 
                     <x-layout.dropdown-separator />
 
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
+                    <x-jet-responsive-nav-link href="{{ route('challenges.training') }}">
                         {{ __('Training') }}
                     </x-jet-responsive-nav-link>
 
