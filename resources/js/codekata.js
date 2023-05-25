@@ -79,7 +79,7 @@ function checkCode()
         checkBTN.classList.add('active:translate-y-1');
 
         if (response.data.success) {
-            alert('show the modal');
+            $modals.show('passedkata-modal');
             errorPanel.innerHTML = response.data.message;
             document.getElementById('sidebar_progress-bar')
                 .style.width = response.data.progressbar;

@@ -74,6 +74,7 @@
         x-transition:leave="ease-in duration-200"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
+        @click.away ="show = false"
     >
         <div class="flex flex-col justify-evenly min-h-[300px] sm:h-full">
             <header>

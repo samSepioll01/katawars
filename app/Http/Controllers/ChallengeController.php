@@ -218,6 +218,7 @@ class ChallengeController extends Controller
             'challenge' => $challenge,
             'owner' => $challenge->katas()->first()->owner->user,
             'signature' => $challenge->katas()->first()->signature,
+            'score' => Score::where('denomination', 'training')->first()->points,
         ]);
     }
 
@@ -269,18 +270,18 @@ class ChallengeController extends Controller
 
                 // If the user not passed the kata previously sum exp
                 // and save the solution.
-                if (!$profile->passedKatas()->get()->contains($kata->id)) {
+                // if (!$profile->passedKatas()->get()->contains($kata->id)) {
 
-                    $profile->passedKatas()->attach($kata->id, [
-                        'code' => $code,
-                    ]);
+                //     $profile->passedKatas()->attach($kata->id, [
+                //         'code' => $code,
+                //     ]);
 
-                    $profile->exp = Score::where('denomination', 'training')
-                        ->first()->points;
-                    $profile->save();
+                //     $profile->exp = Score::where('denomination', 'training')
+                //         ->first()->points;
+                //     $profile->save();
 
-                    // crea variables con valores para modal.
-                }
+                //     // crea variables con valores para modal.
+                // }
 
 
                 $returnHTML = view('includes.katapanel', [
