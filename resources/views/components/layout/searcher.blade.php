@@ -30,7 +30,7 @@
                     .catch(error => console.log(error));
                 "
             />
-            <span class="w-10 absolute top-[3px] right-1 text-center text-3xl text-slate-400 cursor-pointer trasition-all duration-300 hover:text-slate-700"
+            <span class="w-10 absolute top-[3px] right-1 text-center text-3xl text-slate-400 cursor-pointer transition-all duration-300 hover:text-slate-700"
                   x-show="write"
                   x-on:click.prevent="
                     write = false;

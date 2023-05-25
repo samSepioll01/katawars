@@ -2,7 +2,7 @@
     <x-layout.wrapped-main-section>
 
         <main
-            x-data="{instructions: false, code: true, resources: false, solutions: false}"
+            x-data="{instructions: true, code: false, resources: false, solutions: false}"
             class="sm:mt-8 grid grid-flow-row sm:card-panel"
         >
             <nav class="grid grid-flow-col grid-cols-12 shadow-xl relative overflow-hidden dark:text-slate-200">
@@ -128,8 +128,82 @@
                     </section>
                 </div>
             </div>
+            <x-layout.modal name="passedkata-modal" maxWidth="2xl">
+                <x-slot name="title">
+                    <div class="text-3xl text-center text-violet-600 dark:text-tomato tracking-wider">
+                        {{ __('Congratulations!!!') }}
+                    </div>
+                    <div class="py-4 text-center">
+                        Challenge Complete!!
+                    </div>
+                    <div class="cross-menu" @click.prevent="show = false">
+                        &times;
+                    </div>
+                </x-slot>
+
+                <x-slot name="body">
+                    @if (auth()->user()->profile->passedKatas->contains($challenge->katas->first()->id))
+                        <div class="w-full p-10 text-center text-slate-900">
+                            <span class="text-2xl dark:text-slate-100">You passed this Challenge Previously.</span>
+                        </div>
+                    @else
+                        <div class="w-full p-10 text-center text-slate-900">
+                            <span class="text-6xl text-slate-100">{{ $score }}</span><span class="text-slate-100 text-4xl px-2">EXP</span>
+                        </div>
+                        <div class="w-full flex flex-row justify-center items-center p-10">
+                            <div class="w-11/12">
+                                <x-layout.progress-bar :sidebar="true" size="5" title="" />
+                            </div>
+                        </div>
+                    @endif
+
+
+                </x-slot>
+
+                @php
+                    $isFav = auth()->user()->profile->favorites()->exists($challenge->katas->first()->id)
+                @endphp
+
+                <x-slot name="footer">
+                    <div class="w-1/2 flex justify-between">
+                        <div class="w-16 h-16">
+                            <img
+                                src="
+                                    @if ($isFav)
+                                        https://s3.eu-south-2.amazonaws.com/katawars.es/app/icons/favoritos2.png
+                                    @else
+                                        https://s3.eu-south-2.amazonaws.com/katawars.es/app/icons/favoritos1.png
+                                    @endif
+                                "
+                                x-ref="imagemarker"
+                                x-on:click="
+                                    if ($event.target.src === $katawars.S3.icons.favoritesOn) {
+                                        $event.target.src = $katawars.S3.icons.favoritesOff;
+                                    } else {
+                                        $event.target.src = $katawars.S3.icons.favoritesOn;
+                                    }
+                                "
+                                class="cursor-pointer"
+                            >
+                        </div>
+                    </div>
+                    <form action="{{ route('katas.next') }}" method="get">
+                        <x-jet-button>
+                            Next Challenge
+                        </x-jet-button>
+                    </form>
+
+                </x-slot>
+            </x-layout.modal>
 
             <x-layout.dinamicflash type="error" name="verifycode"></x-layout.dinamicflash>
+
+            @if (session()->has('syncStatus'))
+                <x-layout.flash type="{{ session('syncStatus') }}">
+                    {{ session('syncMessage') }}
+                </x-layout.flash>
+            @endif
+
         </main>
         <style>
             .ace_active-line {

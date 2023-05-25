@@ -9,6 +9,9 @@ use App\Models\Challenge;
 use App\Models\Kata;
 use App\Models\Mode;
 use App\Models\Profile;
+use App\Models\Score;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -215,7 +218,29 @@ class ChallengeController extends Controller
             'challenge' => $challenge,
             'owner' => $challenge->katas()->first()->owner->user,
             'signature' => $challenge->katas()->first()->signature,
+            'score' => Score::where('denomination', 'training')->first()->points,
         ]);
+    }
+
+    /**
+     * Show the next challenged to complete.
+     */
+    public function showNextChallenge()
+    {
+        $profile = Auth::user()->profile;
+        $passedKatas = $profile->passedKatas()->get();
+        $trainingKatas = Mode::where('denomination', 'training')->first()->katas;
+        $katasAvailables = $trainingKatas->diff($passedKatas);
+
+        if ($katasAvailables->count()) {
+            $nextChallenge = $katasAvailables->random()->challenge;
+            return redirect()->route('katas.main-page', ['slug' => $nextChallenge->slug]);
+        }
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'You have completed all the available challenges. Create then yourself or wait for the community to add them.');
+
+        return redirect()->back();
     }
 
     /**
@@ -240,11 +265,10 @@ class ChallengeController extends Controller
             $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
 
             try {
-
                 $parser->parse($code);
 
-
             } catch (Error $error) {
+
                 return response()->json([
                     'success' => false,
                     'message' => "{$error->getMessage()}\n",
@@ -256,14 +280,52 @@ class ChallengeController extends Controller
 
             SecurityFilter::parser($code);
 
+            $kata = Challenge::where('slug', $request->slug)
+                ->firstOrFail()->katas()->first();
 
-            // aquí iría el filtrado con regexp en busca de código sensible.
-            // aquí iría las validaciones con PHPSanbox
-            // aquí iría las validaciones de FPM.
+            $testResult = $this->executeTest($code, $kata);
 
-            $testResult = $this->executeTest($code, $request->slug);
+            if ($this->checkTestResult($testResult)) {
 
-            return $this->checkTestResult($testResult);
+                $profile = Auth::user()->profile;
+
+                // If the user not passed the kata previously sum exp
+                // and save the solution.
+                if (!$profile->passedKatas()->get()->contains($kata->id)) {
+
+                    $profile->passedKatas()->attach($kata->id, [
+                        'code' => $code,
+                    ]);
+
+                    $profile->exp = Score::where('denomination', 'training')
+                        ->first()->points;
+                    $profile->save();
+                }
+
+
+                $returnHTML = view('includes.katapanel', [
+                    'passed' => true,
+                    'testsCompleted' => trim(str_replace('.', '', $testResult[2])),
+                    'asserts' => $testResult[count($testResult) - 1],
+                ])->render();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => $returnHTML,
+                    'progressbar' => $profile->getProfileProgress() . '%',
+                ]);
+            }
+
+            $returnHTML = view('includes.katapanel', [
+                'passed' => false,
+                'errorLines' => $this->getErrorLines($testResult),
+            ])->render();
+
+            return response()->json([
+                'success' => false,
+                'message' => $returnHTML,
+                'flash' => 'Exists some logic errors in your code!'
+            ]);
         }
     }
 
@@ -271,15 +333,12 @@ class ChallengeController extends Controller
      * Execute the test against the user code.
      *
      * @param string $code
-     * @param string $slug
+     * @param Kata $kata
      *
      * @return array
      */
-    protected function executeTest(string $code, string $slug)
+    protected function executeTest(string $code, Kata $kata)
     {
-        $kata = Challenge::where('slug', $slug)
-            ->firstOrFail()->katas()->first();
-
         $testCode = Storage::disk('s3')->get($kata->uri_test);
         $testLocalPath = $this->generateTestPath($kata);
 
@@ -310,33 +369,7 @@ class ChallengeController extends Controller
      */
     protected function checkTestResult(array $testResult)
     {
-        if (substr( $testResult[count($testResult) - 1], 0, 2) === 'OK') {
-
-            // Debe asignar los puntos al usuario. (Subir Nivel).
-
-            $returnHTML = view('includes.katapanel', [
-                'passed' => true,
-                'testsCompleted' => trim(str_replace('.', '', $testResult[2])),
-                'asserts' => $testResult[count($testResult) - 1],
-            ])->render();
-
-            return response()->json([
-                'success' => true,
-                'message' => $returnHTML,
-            ]);
-        } else {
-
-            $returnHTML = view('includes.katapanel', [
-                'passed' => false,
-                'errorLines' => $this->getErrorLines($testResult),
-            ])->render();
-
-            return response()->json([
-                'success' => false,
-                'message' => $returnHTML,
-                'flash' => 'Exists some logic errors in your code!'
-            ]);
-        }
+        return substr($testResult[count($testResult) - 1], 0, 2) === 'OK';
     }
 
     /**

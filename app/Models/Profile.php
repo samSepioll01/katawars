@@ -118,6 +118,27 @@ class Profile extends Model
     }
 
     /**
+     * Exp Attribute Mutator Method for set the level_up, under the hood,
+     * the user rank if the exp earned overtake the level_up attribute.
+     *
+     * @param int $exp
+     * @return void
+     */
+    public function setExpAttribute(int $exp): void
+    {
+        $this->attributes['exp'] += $exp;
+
+        $current_rank = $this->rank;
+
+        $next_rank = Rank::where('id', '>', $current_rank->id)
+            ->orderBy('id')->first();
+
+        if ($next_rank && $this->exp >= $current_rank->level_up) {
+            $this->attributes['rank_id'] = $next_rank->id;
+        }
+    }
+
+    /**
      * This determines the solutions of the profile.
      */
     public function solutions(): HasMany
@@ -391,12 +412,21 @@ class Profile extends Model
         }
     }
 
+    /**
+     * Get the value for the progress bar of the user.
+     */
     public function getProfileProgress()
     {
         $lastLevelUp = $this->rank->id === 1 ? 0 : Rank::find($this->rank_id - 1)->level_up;
         $actualLevelUp = $this->rank->level_up;
 
         $progress = ($this->exp - $lastLevelUp) / ($actualLevelUp - $lastLevelUp) * 100;
+
+        $previousRank = Rank::where('id', '<', $this->rank_id)->orderBy('id')->first();
+
+        if ($progress === $previousRank?->level_up) {
+            $progress = 0;
+        }
 
         if (Rank::all()->count() === $this->rank_id
             && $this->exp > $this->rank->level_up
