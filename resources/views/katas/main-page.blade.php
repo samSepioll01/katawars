@@ -2,7 +2,7 @@
     <x-layout.wrapped-main-section>
 
         <main
-            x-data="{instructions: false, code: true, resources: false, solutions: false}"
+            x-data="{instructions: true, code: false, resources: false, solutions: false}"
             class="sm:mt-8 grid grid-flow-row sm:card-panel"
         >
             <nav class="grid grid-flow-col grid-cols-12 shadow-xl relative overflow-hidden dark:text-slate-200">
