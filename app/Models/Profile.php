@@ -130,7 +130,8 @@ class Profile extends Model
 
         $current_rank = $this->rank;
 
-        $next_rank = Rank::where('id', '>', $current_rank->id)->orderBy('id')->first();
+        $next_rank = Rank::where('id', '>', $current_rank->id)
+            ->orderBy('id')->first();
 
         if ($next_rank && $this->exp >= $current_rank->level_up) {
             $this->attributes['rank_id'] = $next_rank->id;

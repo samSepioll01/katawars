@@ -7,6 +7,7 @@
 
 @php
     $sidebar = $sidebar ?? false;
+    $id = $sidebar ? 'sidebar_progress-bar' : '';
     $bgColor = $sidebar ? 'dark:bg-gray-700/40' : 'dark:bg-gray-900/40';
     $textSize = $sidebar ? 'text-sm' : 'text-md';
     $progress = $progress ?: auth()->user()->profile->getProfileProgress();
@@ -44,7 +45,7 @@
     <div class="w-full mt-2 rounded-md bg-gray-900/10 {{ $bgColor }} saturate-150"
          style="height: {{ $size }}px"
     >
-        <div style="width: {{ $progress }}%" class="h-full bg-green-600 dark:bg-[#0bec7c]
+        <div id="{{$id}}" style="width: {{ $progress }}%" class="h-full bg-green-600 dark:bg-[#0bec7c]
                     animation-progress-bar rounded-md transition-all duration-500
                     dark:shadow-outter-md dark:shadow-green-400"
         ></div>

@@ -267,6 +267,8 @@ class ChallengeController extends Controller
 
                 $profile = Auth::user()->profile;
 
+                // If the user not passed the kata previously sum exp
+                // and save the solution.
                 if (!$profile->passedKatas()->get()->contains($kata->id)) {
 
                     $profile->passedKatas()->attach($kata->id, [
@@ -290,6 +292,7 @@ class ChallengeController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => $returnHTML,
+                    'progressbar' => $profile->getProfileProgress() . '%',
                 ]);
             }
 
