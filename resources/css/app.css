@@ -465,4 +465,9 @@
         @apply border border-slate-300 dark:border-slate-800/70 rounded-lg shadow-lg bg-slate-200/70 dark:bg-slate-700/70
                col-span-12 lg:col-span-4 min-h-[380px];
     }
+
+    .cross-menu {
+        @apply w-10 absolute top-2 right-2 text-center text-3xl text-slate-400 cursor-pointer transition-all duration-300
+               hover:text-slate-800 dark:hover:text-slate-100;
+    }
 }

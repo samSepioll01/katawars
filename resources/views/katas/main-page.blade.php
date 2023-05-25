@@ -136,6 +136,9 @@
                     <div class="py-4 text-center">
                         Challenge Complete!!
                     </div>
+                    <div class="cross-menu" @click.prevent="show = false">
+                        &times;
+                    </div>
                 </x-slot>
 
                 <x-slot name="body">
@@ -184,13 +187,23 @@
                             >
                         </div>
                     </div>
-                    <x-jet-button @click.prevent="">
-                        Next Challenge
-                    </x-jet-button>
+                    <form action="{{ route('katas.next') }}" method="get">
+                        <x-jet-button>
+                            Next Challenge
+                        </x-jet-button>
+                    </form>
+
                 </x-slot>
             </x-layout.modal>
 
             <x-layout.dinamicflash type="error" name="verifycode"></x-layout.dinamicflash>
+
+            @if (session()->has('syncStatus'))
+                <x-layout.flash type="{{ session('syncStatus') }}">
+                    {{ session('syncMessage') }}
+                </x-layout.flash>
+            @endif
+
         </main>
         <style>
             .ace_active-line {

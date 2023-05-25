@@ -223,6 +223,27 @@ class ChallengeController extends Controller
     }
 
     /**
+     * Show the next challenged to complete.
+     */
+    public function showNextChallenge()
+    {
+        $profile = Auth::user()->profile;
+        $passedKatas = $profile->passedKatas()->get();
+        $trainingKatas = Mode::where('denomination', 'training')->first()->katas;
+        $katasAvailables = $trainingKatas->diff($passedKatas);
+
+        if ($katasAvailables->count()) {
+            $nextChallenge = $katasAvailables->random()->challenge;
+            return redirect()->route('katas.main-page', ['slug' => $nextChallenge->slug]);
+        }
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'You have completed all the available challenges. Create then yourself or wait for the community to add them.');
+
+        return redirect()->back();
+    }
+
+    /**
      * Check thats the user code is correct.
      *
      * @param Request $request
@@ -270,18 +291,16 @@ class ChallengeController extends Controller
 
                 // If the user not passed the kata previously sum exp
                 // and save the solution.
-                // if (!$profile->passedKatas()->get()->contains($kata->id)) {
+                if (!$profile->passedKatas()->get()->contains($kata->id)) {
 
-                //     $profile->passedKatas()->attach($kata->id, [
-                //         'code' => $code,
-                //     ]);
+                    $profile->passedKatas()->attach($kata->id, [
+                        'code' => $code,
+                    ]);
 
-                //     $profile->exp = Score::where('denomination', 'training')
-                //         ->first()->points;
-                //     $profile->save();
-
-                //     // crea variables con valores para modal.
-                // }
+                    $profile->exp = Score::where('denomination', 'training')
+                        ->first()->points;
+                    $profile->save();
+                }
 
 
                 $returnHTML = view('includes.katapanel', [
