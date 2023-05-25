@@ -423,7 +423,7 @@ class Profile extends Model
 
         $previousRank = Rank::where('id', '<', $this->rank_id)->orderBy('id')->first();
 
-        if ($progress === $previousRank->level_up) {
+        if ($progress === $previousRank?->level_up) {
             $progress = 0;
         }
 

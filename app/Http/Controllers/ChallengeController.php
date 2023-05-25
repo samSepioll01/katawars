@@ -11,6 +11,7 @@ use App\Models\Mode;
 use App\Models\Profile;
 use App\Models\Score;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -264,17 +265,17 @@ class ChallengeController extends Controller
 
             if ($this->checkTestResult($testResult)) {
 
-                $user = User::find(Auth::user()->id);
+                $profile = Auth::user()->profile;
 
-                if (!$user->passedKatas()->get()->contains($kata->id)) {
+                if (!$profile->passedKatas()->get()->contains($kata->id)) {
 
-                    $profile = $user->profile;
-                    $profile->passedKata()->attach($kata->id, [
+                    $profile->passedKatas()->attach($kata->id, [
                         'code' => $code,
                     ]);
 
                     $profile->exp = Score::where('denomination', 'training')
                         ->first()->points;
+                    $profile->save();
 
                     // crea variables con valores para modal.
                 }
@@ -345,7 +346,7 @@ class ChallengeController extends Controller
      */
     protected function checkTestResult(array $testResult)
     {
-        return substr( $testResult[count($testResult) - 1], 0, 2) === 'OK';
+        return substr($testResult[count($testResult) - 1], 0, 2) === 'OK';
     }
 
     /**

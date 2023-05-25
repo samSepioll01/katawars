@@ -22,7 +22,7 @@
 
         $previousRank = App\Models\Rank::where('id', '<', auth()->user()->profile->rank_id)->orderBy('id')->first();
 
-        if ($progress === $previousRank->level_up) {
+        if ($progress === $previousRank?->level_up) {
             $progress = 0;
         }
 
