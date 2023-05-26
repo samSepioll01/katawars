@@ -97,6 +97,9 @@ Route::middleware([
     Route::get('/saved-katas', [SavedKatasController::class, 'index'])
         ->name('katas.saved');
 
+    Route::post('/saved-katas/update', [SavedKatasController::class, 'update'])
+        ->name('katas.update');
+
     Route::get('/katas/next', [ChallengeController::class, 'showNextChallenge'])
         ->name('katas.next');
 

@@ -55,11 +55,11 @@ list.addEventListener('drag', (eDrag) => {
 
 list.addEventListener('drop', (eDrop) => {
 
-    let modifiedOrder = [...list.querySelectorAll('.elemento')].map((elem) => elem.id);
+    let modifiedOrder = [...list.querySelectorAll('.card-challenge')].map((elem) => elem.id);
 
     axios({
         method: 'post',
-        url: "/saved-katas/updated",
+        url: "/saved-katas/update",
         responseType: 'json',
         data: {
             modifiedOrder: modifiedOrder,

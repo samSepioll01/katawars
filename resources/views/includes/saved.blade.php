@@ -1,5 +1,5 @@
 @foreach ($savedKatas as $savedKata)
-    <div class="card-challenge  grid grid-cols-12">
+    <div class="card-challenge  grid grid-cols-12" id="{{ $savedKata->id }}">
 
         <aside class="handle cursor-grab flex justify-start items-center cols-span-1 transition-all duration-500 overflow-hidden">
             <div class="hubgrab">

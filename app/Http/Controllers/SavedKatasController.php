@@ -64,6 +64,7 @@ class SavedKatasController extends Controller
             'savedKatas' => $savedKatas,
             'nextCursor' => $nextCursor,
             'lastUpdated' => $lastUpdated,
+            'totalSavedKatas' => auth()->user()->profile->savedKatas()->count(),
         ]);
     }
 
@@ -114,13 +115,69 @@ class SavedKatasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'target' => ['integer', 'required'],
+            'modifiedOrder' => ['array', 'required'],
+        ]);
+
+        if ($request->ajax()) {
+
+            $originalOrder = Profile::getSavedKatas()->get()
+                                ->map(fn($elem) => $elem->id);
+
+            $originalPos = $originalOrder->search($request->target) + 1;
+            $destinationPos = collect($request->modifiedOrder)
+                                ->search($request->target) + 1;
+
+            if ($originalPos === $destinationPos) {
+                return response()->json(['success' => true]);
+            }
+
+            $target = Profile::getSavedKatas($request->target)->pivot;
+            $target->num_orden = $destinationPos;
+            $target->save();
+
+            if ($originalPos < $destinationPos) {
+                $elems2Mod = Profile::getSavedKatas()->get()
+                    ->filter(fn($elem) =>
+                        $elem->pivot->num_orden > $originalPos
+                        &&
+                        $elem->pivot->num_orden <= $destinationPos
+                    )
+                    ->except($request->target);
+
+                $elems2Mod->each(function($elem) {
+                    $elem = $elem->pivot;
+                    $elem->num_orden -= 1;
+                    $elem->save();
+                });
+            }
+
+            if ($originalPos > $destinationPos) {
+                $elems2Mod = Profile::getSavedKatas()->get()
+                    ->filter(fn($elem) =>
+                        $elem->pivot->num_orden >= $destinationPos
+                        &&
+                        $elem->pivot->num_orden < $originalPos
+                    )
+                    ->except($request->target);
+
+                $elems2Mod->each(function($elem) {
+                    $elem = $elem->pivot;
+                    $elem->num_orden += 1;
+                    $elem->save();
+                });
+
+            }
+        }
+
+        return response()->json(['success' => true]);
     }
+
 
     /**
      * Remove the specified resource from storage.
