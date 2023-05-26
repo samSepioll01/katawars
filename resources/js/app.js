@@ -17,6 +17,10 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
+import Sortable from 'sortablejs';
+
+window.Sortable = Sortable;
+
 window.$katawars = {
     AWS_APP_URL: 'https://s3.eu-south-2.amazonaws.com/katawars.es/app',
 }

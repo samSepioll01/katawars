@@ -244,6 +244,22 @@
     #editor {
         font-family: 'Fira Code', monospace;
     }
+
+    .hubgrab {
+        width: 25px;
+        height: 25px;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bar {
+        width: 1em;
+        padding: .7px;
+        margin: 3px;
+        border-radius: 3px;
+    }
 }
 
 @layer components {
@@ -469,5 +485,9 @@
     .cross-menu {
         @apply w-10 absolute top-2 right-2 text-center text-3xl text-slate-400 cursor-pointer transition-all duration-300
                hover:text-slate-800 dark:hover:text-slate-100;
+    }
+
+    .hubgrab:hover .bar{
+        @apply saturate-150 bg-violet-600 dark:bg-slate-100;
     }
 }

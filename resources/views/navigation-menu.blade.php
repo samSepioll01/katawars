@@ -244,7 +244,7 @@
                         {{ __('My Katas') }}
                     </x-jet-responsive-nav-link>
 
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
+                    <x-jet-responsive-nav-link href="{{ route('katas.saved') }}">
                         {{ __('Saved Katas') }}
                     </x-jet-responsive-nav-link>
 

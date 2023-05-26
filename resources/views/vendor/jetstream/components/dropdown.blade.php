@@ -26,7 +26,7 @@ $width = $widths[$width];
 @endphp
 
 <div
-    class="relative"
+    class="relative w-fit"
     x-data="{ open: false }"
     @click.away="open = false"
     @close.stop="open = false"
@@ -38,7 +38,7 @@ $width = $widths[$width];
     "
 >
 
-    <div @click="open = ! open">
+    <div @click="open = ! open" class="w-fit">
         {{ $trigger }}
     </div>
 

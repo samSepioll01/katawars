@@ -93,6 +93,9 @@ Route::middleware([
     Route::get('/dojo', [ProfileController::class, 'showDojo'])
         ->name('dojo.index');
 
+    Route::get('/saved-katas', [ChallengeController::class, 'showSavedKatas'])
+        ->name('katas.saved');
+
     Route::get('/katas/next', [ChallengeController::class, 'showNextChallenge'])
         ->name('katas.next');
 

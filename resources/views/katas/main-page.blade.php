@@ -66,8 +66,9 @@
                             </div>
                             <div class="py-2 flex flex-row justify-start items-center">
                                 @foreach ($challenge->categories as $category)
+
                                     <div class="bg-violet-600 dark:bg-slate-900 border border-slate-400 dark:border-slate-800 shadow-md text-slate-100 px-2 rounded-lg mr-2 cursor-pointer"
-                                         x-on:click="window.location.href = window.location.origin + '/training'"
+                                         x-on:click="window.location.href = window.location.origin + '/training?category={{$category->name}}'"
                                     >
                                         {{ $category->name }}
                                     </div>

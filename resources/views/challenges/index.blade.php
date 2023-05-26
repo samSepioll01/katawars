@@ -110,13 +110,14 @@
 
                             <div class="w-full flex flex-row justify-start items-center">
                                 @foreach ($challenge->categories as $category )
-                                    <div class="bg-slate-50 dark:bg-slate-900 border border-slate-400 dark:border-slate-800 shadow-md hover:bg-violet-600 dark:hover:bg-violet-600 hover:text-slate-100 cursor-pointer px-2 rounded-lg mr-2">
-
+                                    <div class="bg-slate-50 dark:bg-slate-900 @if($selected === $category->name) category-selected bg-violet-600 dark:bg-violet-600 text-slate-100 @endif border border-slate-400 dark:border-slate-800 shadow-md hover:bg-violet-600 dark:hover:bg-violet-600 hover:text-slate-100 cursor-pointer px-2 rounded-lg mr-2">
                                         <span class="category"
+                                              :class="{'category-selected': (new URLSearchParams(window.location.search)).get('category') == '{{$category->name}}' }"
                                               x-on:click="
+                                                selected = $el.parentNode.classList.contains('category-selected');
                                                 axios({
                                                     method: 'get',
-                                                    url: '/training?category={{$category->name}}' + '&rank=' + $refs.rank.value + '&sort=' + $refs.date.value,
+                                                    url: '/training?category={{$category->name}}' + '&rank=' + $refs.rank.value + '&sort=' + $refs.date.value + '&selected=' + selected,
                                                     responseType: 'json',
                                                 })
                                                 .then(response => {
