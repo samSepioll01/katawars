@@ -460,25 +460,6 @@ class ChallengeController extends Controller
         return substr($signature, $start, $length - $start);
     }
 
-    public function showSavedKatas()
-    {
-        $lastUpdated = Auth::user()->profile->savedKatas()
-            ->orderByPivot('updated_at', 'desc')
-            ->first()
-            ?->pivot->updated_at;
-
-        if ($lastUpdated) {
-            $lastUpdated = $lastUpdated->diffForHumans(now());
-            if ($lastUpdated === '1 day before') $lastUpdated = 'yesterday';
-            if (Str::of($lastUpdated)->contains('hour')) $lastUpdated = 'today';
-        }
-
-        return view('katas.saved', [
-            'savedKatas' => Auth::user()->profile->savedKatas()->orderByPivot('num_orden')->get(),
-            'lastUpdated' => $lastUpdated,
-        ]);
-    }
-
     /**
      * Show the form for creating a new resource.
      *
