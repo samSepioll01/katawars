@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/thememode.js',
                 'resources/js/codekata.js',
+                'resources/js/savedkatas.js',
             ],
             refresh: [
                 ...refreshPaths,

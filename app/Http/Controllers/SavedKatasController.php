@@ -2,19 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Cursor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class SavedKatasController extends Controller
 {
+    private const PER_PAGE = 5;
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $request->validate([
+            'nextCursor' => ['string', 'max:255', 'nullable'],
+        ]);
+
+        $nextCursor = $request->query('nextCursor')
+            ? Cursor::fromEncoded($request->query('nextCursor'))
+            : null;
+
+        $savedKatas = Profile::getSavedKatas()
+            ->cursorPaginate(self::PER_PAGE, ['*'], 'cursor', $nextCursor);
+
+        if ($savedKatas->hasMorePages()) {
+            $nextCursor = $savedKatas->nextCursor()->encode();
+        }
+
+        if ($request->ajax()) {
+            $returnHTML = view('includes.saved', [
+                'savedKatas' => $savedKatas
+            ])->render();
+
+            return response()->json([
+                'success' => true,
+                'html' => $returnHTML,
+                'nextCursor' => $nextCursor ?? '',
+            ]);
+        }
+
         $lastUpdated = Auth::user()->profile->savedKatas()
             ->orderByPivot('updated_at', 'desc')
             ->first()
@@ -23,11 +54,15 @@ class SavedKatasController extends Controller
         if ($lastUpdated) {
             $lastUpdated = $lastUpdated->diffForHumans(now());
             if ($lastUpdated === '1 day before') $lastUpdated = 'yesterday';
-            if (Str::of($lastUpdated)->contains('hour')) $lastUpdated = 'today';
+
+            if (Str::of($lastUpdated)->contains(['hour','minute', 'second'])) {
+                $lastUpdated = 'today';
+            }
         }
 
         return view('katas.saved', [
-            'savedKatas' => Auth::user()->profile->savedKatas()->orderByPivot('num_orden')->get(),
+            'savedKatas' => $savedKatas,
+            'nextCursor' => $nextCursor,
             'lastUpdated' => $lastUpdated,
         ]);
     }
