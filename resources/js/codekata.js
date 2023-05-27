@@ -81,8 +81,7 @@ function checkCode()
         if (response.data.success) {
             $modals.show('passedkata-modal');
             errorPanel.innerHTML = response.data.message;
-            document.getElementById('sidebar_progress-bar')
-                .style.width = response.data.progressbar;
+            document.getElementById('sidebar_progress-bar').style.width = response.data.progressbar;
         } else {
             $flash.show('verifycode', 'error', response.data.flash);
             errorPanel.innerHTML = response.data.message;
