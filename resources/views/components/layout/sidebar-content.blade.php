@@ -44,7 +44,7 @@
         {{ __('Saved Katas') }}
     </x-jet-dropdown-link>
 
-    <x-jet-dropdown-link href="{{ route('dashboard') }}" class="text-md items-center">
+    <x-jet-dropdown-link href="{{ route('katas.favorites') }}" class="text-md items-center">
         <x-layout.dropdown-icon srcPath="favorites" class="mr-6" sidebar />
         {{ __('Favorites') }}
     </x-jet-dropdown-link>

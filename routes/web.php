@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
 use App\Http\Controllers\ChallengeController;
+use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\SavedKatasController;
 use Illuminate\Support\Facades\Route;
@@ -114,4 +115,7 @@ Route::middleware([
 
     Route::post('/katas/{slug}/verify-kata', [ChallengeController::class, 'verifyKata'])
         ->name('katas.verify');
+
+    Route::get('/favorites', [FavoritesController::class, 'index'])
+        ->name('katas.favorites');
 });

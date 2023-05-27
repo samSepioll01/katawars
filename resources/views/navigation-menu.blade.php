@@ -248,7 +248,7 @@
                         {{ __('Saved Katas') }}
                     </x-jet-responsive-nav-link>
 
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
+                    <x-jet-responsive-nav-link href="{{ route('katas.favorites') }}">
                         {{ __('Favorites') }}
                     </x-jet-responsive-nav-link>
 
