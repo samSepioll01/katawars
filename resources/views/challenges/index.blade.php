@@ -134,7 +134,7 @@
                             </div>
 
                             @php
-                                $isSaved = auth()->user()->profile->savedKatas()->exists($challenge->katas->first()->id);
+                                $isSaved = auth()->user()->profile->savedKatas()->get()->contains($challenge->katas->first()->id);
                             @endphp
 
 
@@ -148,12 +148,21 @@
                                     @endif"
                                     class="h-8 w-8 cursor-pointer"
                                     x-ref="imagemarker"
+                                    id="{{ $challenge->katas()->first()->id }}"
                                     x-on:click="
                                         if ($event.target.src === $katawars.S3.icons.markerOn) {
                                             $event.target.src = $katawars.S3.icons.markerOff;
                                         } else {
                                             $event.target.src = $katawars.S3.icons.markerOn;
                                         }
+
+                                        axios({
+                                            method: 'post',
+                                            url: '/saved-katas/' + $event.target.id,
+                                            responseType: 'json',
+                                        })
+                                        .then(response => console.log(response.data.success))
+                                        .catch(errors => console.log(errors));
                                     "
                                 />
 

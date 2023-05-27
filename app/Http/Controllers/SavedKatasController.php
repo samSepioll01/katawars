@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kata;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Cursor;
@@ -87,7 +88,27 @@ class SavedKatasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'id' => ['integer'],
+        ]);
+
+        $kata = Kata::where('id', $request->id)->firstOrFail();
+        $savedKatas = Auth::user()->profile->savedKatas();
+
+        if ($savedKatas->get()->contains($kata->id)) {
+
+            $savedKatas->detach($kata->id);
+        } else {
+
+            $num_orden = $savedKatas->orderByPivot('num_orden', 'desc')
+                ->first()->pivot->num_orden + 1;
+
+            $savedKatas->attach($kata->id, [
+                'num_orden' => $num_orden,
+            ]);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     /**

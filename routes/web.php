@@ -97,6 +97,9 @@ Route::middleware([
     Route::get('/saved-katas', [SavedKatasController::class, 'index'])
         ->name('katas.saved');
 
+    Route::post('/saved-katas/{id}', [SavedKatasController::class, 'store'])
+        ->name('katas.store');
+
     Route::patch('/saved-katas/update', [SavedKatasController::class, 'update'])
         ->name('katas.update');
 
