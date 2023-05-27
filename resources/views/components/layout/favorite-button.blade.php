@@ -16,7 +16,7 @@
 @endphp
 
 
-<div class="w-1/2 flex justify-between">
+<div class="flex justify-between items-center">
     <div class="{{ $size }}">
         <img
             src="

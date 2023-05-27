@@ -35,9 +35,16 @@
                     </div>
                 </a>
             </div>
-            <div id="{{ $savedKata->id }}" class="cross-savedkata">
-                <div class="cross">
-                    &times;
+            <div class="absolute right-0 top-0">
+                <div class="w-56 flex flex-row justify-center items-center">
+                    @if (auth()->user()->profile->passedKatas()->get()->contains($savedKata->id))
+                        <x-layout.favorite-button size="md" />
+                    @endif
+                    <div id="{{ $savedKata->id }}" class="cross-savedkata">
+                        <div class="cross">
+                            &times;
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

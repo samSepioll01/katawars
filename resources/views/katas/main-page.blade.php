@@ -174,6 +174,7 @@
 
                 <x-slot name="footer">
                     <x-layout.favorite-button :id="$challenge->katas->first()->id" size="xl"/>
+                        <div class="px-5"></div>
                     <form action="{{ route('katas.next') }}" method="get">
                         <x-jet-button>
                             Next Challenge
