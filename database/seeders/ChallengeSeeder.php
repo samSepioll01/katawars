@@ -786,7 +786,7 @@ class ChallengeSeeder extends Seeder
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
             'uri_test' => '/katas/php/5hTH3wO9QL4T2GgLlsJKJedpSNgz7er9hxiaQvUg.txt',
-            'signature' => 'function count_str($str) {',
+            'signature' => 'function count_str($haystack, $needle) {',
             'testClassName' => 'CountSubstring',
         ]);
 

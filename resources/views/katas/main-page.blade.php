@@ -49,9 +49,21 @@
                     <section x-show="instructions" style="display: none;">
                         <div class="dark:text-slate-100 p-10">
                             <div>
-                                <h1 class="text-3xl text-bold">
-                                    {{ $challenge->title }}
-                                </h1>
+                                <div class="flex flex-row justify-between items-center">
+                                    <h1 class="text-3xl text-bold">
+                                        {{ $challenge->title }}
+                                    </h1>
+                                    <div class="flex flex-row justify-between items-center w-36">
+                                        <x-layout.saved-marker :id="$challenge->katas->first()->id"/>
+                                        <div class="px-5"></div>
+
+                                        @if (auth()->user()->profile->passedKatas()->get()->contains($challenge->katas->first()->id))
+                                            <x-layout.favorite-button :id="$challenge->katas->first()->id" size="lg" />
+                                        @endif
+
+                                    </div>
+                                </div>
+
                                 <h3 class="flex flex-row items-center text-sm py-2">
                                     <span>Published by</span>
                                     <a href="{{ $owner->profile->url }}" class="flex flex-row pl-2 items-center">
@@ -66,8 +78,9 @@
                             </div>
                             <div class="py-2 flex flex-row justify-start items-center">
                                 @foreach ($challenge->categories as $category)
+
                                     <div class="bg-violet-600 dark:bg-slate-900 border border-slate-400 dark:border-slate-800 shadow-md text-slate-100 px-2 rounded-lg mr-2 cursor-pointer"
-                                         x-on:click="window.location.href = window.location.origin + '/training'"
+                                         x-on:click="window.location.href = window.location.origin + '/training?category={{$category->name}}'"
                                     >
                                         {{ $category->name }}
                                     </div>
@@ -128,6 +141,7 @@
                     </section>
                 </div>
             </div>
+
             <x-layout.modal name="passedkata-modal" maxWidth="2xl">
                 <x-slot name="title">
                     <div class="text-3xl text-center text-violet-600 dark:text-tomato tracking-wider">
@@ -156,43 +170,15 @@
                             </div>
                         </div>
                     @endif
-
-
                 </x-slot>
 
-                @php
-                    $isFav = auth()->user()->profile->favorites()->exists($challenge->katas->first()->id)
-                @endphp
-
                 <x-slot name="footer">
-                    <div class="w-1/2 flex justify-between">
-                        <div class="w-16 h-16">
-                            <img
-                                src="
-                                    @if ($isFav)
-                                        https://s3.eu-south-2.amazonaws.com/katawars.es/app/icons/favoritos2.png
-                                    @else
-                                        https://s3.eu-south-2.amazonaws.com/katawars.es/app/icons/favoritos1.png
-                                    @endif
-                                "
-                                x-ref="imagemarker"
-                                x-on:click="
-                                    if ($event.target.src === $katawars.S3.icons.favoritesOn) {
-                                        $event.target.src = $katawars.S3.icons.favoritesOff;
-                                    } else {
-                                        $event.target.src = $katawars.S3.icons.favoritesOn;
-                                    }
-                                "
-                                class="cursor-pointer"
-                            >
-                        </div>
-                    </div>
+                    <x-layout.favorite-button :id="$challenge->katas->first()->id" size="xl"/>
                     <form action="{{ route('katas.next') }}" method="get">
                         <x-jet-button>
                             Next Challenge
                         </x-jet-button>
                     </form>
-
                 </x-slot>
             </x-layout.modal>
 

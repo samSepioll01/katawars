@@ -10,8 +10,6 @@ use App\Models\Kata;
 use App\Models\Mode;
 use App\Models\Profile;
 use App\Models\Score;
-use App\Models\User;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 use ParseError;
 use PHPParser\Error;
 use PhpParser\ParserFactory;
+use Illuminate\Support\Str;
 
 class ChallengeController extends Controller
 {
@@ -122,9 +121,12 @@ class ChallengeController extends Controller
             ]);
         }
 
+        $selected = $request->query('category') ?: null;
+
         // Resources returned the first time that call the view.
         return view('challenges.index', [
-            'challenges' => $this->filteredChallenges([], $ord)->get(),
+            'challenges' => $this->filteredChallenges($request->query(), $ord)->get(),
+            'selected' => $selected,
         ]);
     }
 

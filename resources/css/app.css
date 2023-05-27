@@ -244,6 +244,22 @@
     #editor {
         font-family: 'Fira Code', monospace;
     }
+
+    .hubgrab {
+        width: 25px;
+        height: 25px;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bar {
+        width: 1em;
+        padding: .7px;
+        margin: 3px;
+        border-radius: 3px;
+    }
 }
 
 @layer components {
@@ -425,7 +441,7 @@
     .card-challenge {
         @apply h-40 px-1 sm:px-6 py-2 mb-8 border border-slate-400 sm:rounded-xl
                dark:border-slate-800 hover:border-violet-600 bg-slate-50 hover:bg-slate-200 dark:bg-slate-800/70 shadow-lg
-               dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-900 transition-all;
+               dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:border-slate-900 transition-colors;
     }
 
     .card-users {
@@ -469,5 +485,25 @@
     .cross-menu {
         @apply w-10 absolute top-2 right-2 text-center text-3xl text-slate-400 cursor-pointer transition-all duration-300
                hover:text-slate-800 dark:hover:text-slate-100;
+    }
+
+    .hubgrab:hover .bar{
+        @apply saturate-150 bg-violet-600 dark:bg-slate-100;
+    }
+
+    .cross-savedkata {
+        @apply w-6 h-6 absolute top-0 right-0 flex items-center justify-center text-xl rounded-lg bg-slate-300
+               dark:bg-slate-900/40 dark:hover:bg-rose-600 hover:bg-violet-600 hover:shadow-outter-sm text-slate-100
+               hover:shadow-violet-600 dark:hover:shadow-outter-sm dark:hover:shadow-rose-600 hover:text-slate-100
+               dark:text-slate-400 dark:hover:text-slate-100 cursor-pointer opacity-0 transform transition-all
+               duration-300 active:scale-90;
+    }
+
+    .card-challenge:hover .cross-savedkata {
+        @apply opacity-100;
+    }
+
+    .bg-katarose {
+        @apply bg-[#ff01c2ff];
     }
 }

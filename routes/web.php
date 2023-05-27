@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
 use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\SavedKatasController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -92,6 +93,18 @@ Route::middleware([
 
     Route::get('/dojo', [ProfileController::class, 'showDojo'])
         ->name('dojo.index');
+
+    Route::get('/saved-katas', [SavedKatasController::class, 'index'])
+        ->name('katas.saved');
+
+    Route::post('/saved-katas/{id}', [SavedKatasController::class, 'store'])
+        ->name('katas.store');
+
+    Route::patch('/saved-katas/update', [SavedKatasController::class, 'update'])
+        ->name('katas.update');
+
+    Route::delete('/saved-katas/{id}', [SavedKatasController::class, 'destroy'])
+        ->name('katas.destroy');
 
     Route::get('/katas/next', [ChallengeController::class, 'showNextChallenge'])
         ->name('katas.next');
