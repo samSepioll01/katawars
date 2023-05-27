@@ -187,6 +187,37 @@ class SavedKatasController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (request()->ajax()) {
+
+            $savedKatas = Profile::getSavedKatas()->get();
+            $savedKata = $savedKatas->find($id);
+            $savedKata ?? abort(404);
+            $numOrden = $savedKata->pivot->num_orden;
+            $nextSavedKata = $savedKatas->filter(fn($savedKata) =>
+                    $savedKata->pivot->num_orden === $numOrden + self::PER_PAGE
+            );
+
+            $returnHTML = view('includes.saved', [
+                'savedKatas' => $nextSavedKata,
+            ])->render();
+
+            $savedKatas->slice($numOrden)->each(function($elem) {
+                $pivot = $elem->pivot;
+                $pivot->num_orden -= 1;
+                $pivot->save();
+            });
+
+            Profile::getsavedKatas()->detach($id);
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'html' => $returnHTML,
+                    'totalSavedKatas' => auth()->user()->profile->savedKatas()->count(),
+                ]
+            );
+        }
+
+        return redirect()->back();
     }
 }

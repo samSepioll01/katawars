@@ -490,4 +490,20 @@
     .hubgrab:hover .bar{
         @apply saturate-150 bg-violet-600 dark:bg-slate-100;
     }
+
+    .cross-savedkata {
+        @apply w-6 h-6 absolute top-0 right-0 flex items-center justify-center text-xl rounded-lg bg-slate-300
+               dark:bg-slate-900/40 dark:hover:bg-rose-600 hover:bg-violet-600 hover:shadow-outter-sm text-slate-100
+               hover:shadow-violet-600 dark:hover:shadow-outter-sm dark:hover:shadow-rose-600 hover:text-slate-100
+               dark:text-slate-400 dark:hover:text-slate-100 cursor-pointer opacity-0 transform transition-all
+               duration-300 active:scale-90;
+    }
+
+    .card-challenge:hover .cross-savedkata {
+        @apply opacity-100;
+    }
+
+    .bg-katarose {
+        @apply bg-[#ff01c2ff];
+    }
 }

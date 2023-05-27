@@ -26,7 +26,12 @@
                             </a>
                         </div>
                         <div class="w-full pt text-sm pt-10 inline-flex justify-evenly items-center">
-                            <span>{{ $totalSavedKatas }} Saved Katas</span>
+                            <span>
+                                <span
+                                    @updatesaved.window="
+                                        $el.textContent = $event.detail;
+                                    "
+                                >{{ $totalSavedKatas }}</span> Saved Katas</span>
                             <span>Updated {{ $lastUpdated ?? 'never' }}</span>
                         </div>
                     </div>
@@ -34,7 +39,6 @@
             </div>
 
             <div class="col-span-12 lg:col-span-8 py-2" x-ref="challenges">
-
                 <div class="pb-8">
                     <x-jet-dropdown align="left" width="64">
                         <x-slot name="trigger">
@@ -80,7 +84,7 @@
                                     </div>
                                 </aside>
 
-                                <div class="col-span-11">
+                                <div class="col-span-11 relative">
                                     <div class="w-full flex flex-row justify-between">
                                         <div class="w-full flex flex-row justify-start items-center">
                                             @foreach ($savedKata->challenge->categories as $category )
@@ -107,6 +111,11 @@
                                             </div>
                                         </a>
                                     </div>
+                                    <div id="{{ $savedKata->id }}" class="cross-savedkata">
+                                        <div class="cross">
+                                            &times;
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -120,6 +129,5 @@
                 @endif
             </div>
         </main>
-
     </x-layout.wrapped-main-section>
 </x-app-layout>

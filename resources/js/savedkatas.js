@@ -58,7 +58,7 @@ list.addEventListener('drop', (eDrop) => {
     let modifiedOrder = [...list.querySelectorAll('.card-challenge')].map((elem) => elem.id);
 
     axios({
-        method: 'post',
+        method: 'patch',
         url: "/saved-katas/update",
         responseType: 'json',
         data: {
@@ -71,4 +71,53 @@ list.addEventListener('drop', (eDrop) => {
         : null
     )
     .catch(error => console.log(error));
+});
+
+
+// Delete Saved Kata.
+
+list.addEventListener('click', (eClick) => {
+
+    let getID = {
+        'cross-savedkata': eClick.target.id,
+        'cross': eClick.target.parentNode.id,
+    }
+
+    let savedKataID = getID[eClick.target.classList[0]];
+
+    let savedKata = [...list.querySelectorAll(".card-challenge")]
+            .filter(elem => elem.id === savedKataID)
+            .shift();
+
+    savedKata.style.transition = '.3s';
+    savedKata.style.overflow = 'hidden';
+    savedKata.style.opacity = '0%';
+    savedKata.style.padding = '0px';
+    savedKata.style.height = '0px';
+
+    setTimeout(() => savedKata.style.display = 'none', 300);
+
+    if (savedKataID) {
+        axios.delete('/saved-katas/' + savedKataID)
+        .then(response => {
+
+            if (response.data.success) {
+                let savedKata = [...list.querySelectorAll(".card-challenge")]
+                    .filter(elem => elem.id === savedKataID)
+                    .shift();
+
+                setTimeout(elem => {
+                    list.removeChild(savedKata);
+                }, 700);
+
+                list.insertAdjacentHTML('beforeend', response.data.html);
+                window.dispatchEvent(
+                    new CustomEvent('updatesaved', {
+                        detail: response.data.totalSavedKatas,
+                    })
+                );
+            }
+        })
+        .catch(error => console.log(error));
+    }
 });

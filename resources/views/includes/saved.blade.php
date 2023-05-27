@@ -8,7 +8,7 @@
             </div>
         </aside>
 
-        <div class="col-span-11">
+        <div class="col-span-11 relative">
             <div class="w-full flex flex-row justify-between">
                 <div class="w-full flex flex-row justify-start items-center">
                     @foreach ($savedKata->challenge->categories as $category )
@@ -34,6 +34,11 @@
                         </span>
                     </div>
                 </a>
+            </div>
+            <div id="{{ $savedKata->id }}" class="cross-savedkata">
+                <div class="cross">
+                    &times;
+                </div>
             </div>
         </div>
     </div>
