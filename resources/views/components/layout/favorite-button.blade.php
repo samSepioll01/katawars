@@ -12,7 +12,7 @@
         '2xl' => 'w-20 h-20',
     ][$size ?? 'lg'];
 
-    $isFav = auth()->user()->profile->favorites()->get()->contains($id)
+    $isFav = auth()->user()->profile->solutions()->where('kata_id', $id)->first()->favorite;
 @endphp
 
 
@@ -34,7 +34,14 @@
                 } else {
                     $event.target.src = $katawars.S3.icons.favoritesOn;
                 }
-                console.log($event.target.id);
+
+                axios({
+                    method: 'put',
+                    url: '/favorites/' + $event.target.id,
+                    responseType: 'json',
+                })
+                .then(response => console.log(response.data.success))
+                .catch(errors => console.log(errors));
             "
             class="cursor-pointer"
         >

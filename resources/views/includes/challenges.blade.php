@@ -26,9 +26,12 @@
             </div>
 
             <div class=" w-full flex flex-row justify-end gap-8 item-center">
-                <x-layout.saved-marker :id="$challenge->katas->first()->id" />
-                    @if (auth()->user()->profile->passedKatas()->get()->contains($challenge->katas()->first()->id))
-                        <x-layout.favorite-button size="md" />
+                @php
+                    $id = $challenge->katas()->first()->id;
+                @endphp
+                <x-layout.saved-marker :id="$id" />
+                    @if (auth()->user()->profile->passedKatas()->get()->contains($id))
+                        <x-layout.favorite-button :id="$id" size="md" />
                     @endif
             </div>
         </div>

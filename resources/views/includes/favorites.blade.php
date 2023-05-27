@@ -2,10 +2,7 @@
     <div class="card-challenge  grid grid-cols-12" id="{{ $favoriteKata->id }}">
 
         <aside class="handle cursor-grab flex justify-start items-center cols-span-1 transition-all duration-500 overflow-hidden">
-            <div class="hubgrab">
-                <div class="bar bg-slate-500/70 dark:bg-slate-500/70 transition-all duration-300"></div>
-                <div class="bar bg-slate-500/70 dark:bg-slate-500/70 transition-all duration-300"></div>
-            </div>
+            <div class="hubgrab"></div>
         </aside>
 
         <div class="col-span-11 relative">

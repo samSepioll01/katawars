@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Favorite;
+use App\Models\Kata;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -54,7 +56,7 @@ class FavoritesController extends Controller
         }
 
         return view('katas.favorites', [
-            'favoritesKatas' => $favoritesKatas,
+            'favorites' => $favoritesKatas->get(),
             'lastUpdated' => $lastUpdated,
             'totalFavorites' => Auth::user()->profile->favorites()->count(),
         ]);
@@ -78,7 +80,39 @@ class FavoritesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'id' => ['integer'],
+        ]);
+
+        $solution = Auth::user()->profile->solutions()
+            ->where('kata_id', $request->id)
+            ->firstOrFail();
+
+
+
+        $isFavorite = (bool) $solution
+            ->favorite()
+            ->count();
+
+        if ($isFavorite) {
+
+            $favorite = Auth::user()->profile->favorites()
+                ->where('solution_id', $solution->id)
+                ->firstOrFail();
+            $favorite->delete();
+
+        } else {
+
+            $favorite = new Favorite;
+            $favorite->profile_id = Auth::user()->profile->id;
+            $favorite->solution_id = $solution->id;
+            $favorite->save();
+        }
+
+        return response()->json([
+            'success' => true,
+        ]);
+
     }
 
     /**

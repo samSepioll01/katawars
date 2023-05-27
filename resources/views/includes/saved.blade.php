@@ -38,7 +38,7 @@
             <div class="absolute right-0 top-0">
                 <div class="w-56 flex flex-row justify-center items-center">
                     @if (auth()->user()->profile->passedKatas()->get()->contains($savedKata->id))
-                        <x-layout.favorite-button size="md" />
+                        <x-layout.favorite-button :id="$savedKata->id" size="md" />
                     @endif
                     <div id="{{ $savedKata->id }}" class="cross-savedkata">
                         <div class="cross">

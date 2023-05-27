@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-layout.wrapped-main-section>
-        @vite(['resources/js/savedkatas.js'])
+        @vite(['resources/js/favorites.js'])
 
         <main class="grid grid-cols-12 mt-8 gap-8">
             <div class="max-h-screen col-span-12 lg:col-span-4 sm:rounded-xl relative">
@@ -39,46 +39,48 @@
             </div>
 
             <div class="col-span-12 lg:col-span-8 py-2" x-ref="challenges">
-                @if ($favoritesKatas->count())
+                @if ($favorites->count())
+                <div id="list" class="lista" x-ref="list">
                     <x-layout.order-button routeAsc="{{ route('katas.favorites') }}" routeDesc="{{ route('katas.favorites') }}" />
-                    <div id="list" class="lista" x-ref="list">
-                        @foreach ($favoriteKatas as $favoriteKata)
-                            <div class="card-challenge grid grid-cols-12" id="{{ $favoriteKata->id }}">
+                        @foreach ($favorites as $favorite)
 
-                                <aside class="handle cursor-grab flex justify-start items-center cols-span-1 transition-all duration-500 overflow-hidden">
-                                    <div class="hubgrab">
-                                        <div class="bar bg-slate-500/70 dark:bg-slate-500/70 transition-all duration-300"></div>
-                                        <div class="bar bg-slate-500/70 dark:bg-slate-500/70 transition-all duration-300"></div>
-                                    </div>
+                            @php
+                                $challenge = $favorite->solution->kata->challenge;
+                            @endphp
+
+                            <div class="card-challenge grid grid-cols-12" id="{{ $challenge->id }}">
+
+                                <aside class="flex justify-start items-center cols-span-1 transition-all duration-500 overflow-hidden">
+                                    <div class="hubgrab"></div>
                                 </aside>
 
                                 <div class="col-span-11 relative">
                                     <div class="w-full flex flex-row justify-between">
                                         <div class="w-full flex flex-row justify-start items-center">
-                                            @foreach ($favoriteKata->challenge->categories as $category )
+                                            @foreach ($challenge->categories as $category )
                                                 <a href="{{ route('challenges.training') }}?category={{$category->name}}">
                                                     <div class="bg-slate-50 dark:bg-slate-900 border border-slate-400 dark:border-slate-800 shadow-md hover:bg-violet-600 dark:hover:bg-violet-600 hover:text-slate-100 cursor-pointer px-2 rounded-lg mr-2">
                                                         <span class="category">{{ $category->name }}</span>
                                                     </div>
                                                 </a>
                                             @endforeach
-                                            <x-utilities.rank size="4" :rank="$favoriteKata->challenge->rank->name" />
+                                            <x-utilities.rank size="4" :rank="$challenge->rank->name" />
                                         </div>
                                     </div>
 
                                     <div class="py-2">
-                                        <a href="{{ $favoriteKata->challenge->url }}" class="">
+                                        <a href="{{ $challenge->url }}" class="">
                                             <div class="text-center text-ellipsis-1 text-xl text-violet-600 dark:text-tomato">
-                                                {{ $favoriteKata->challenge->title }}
+                                                {{ $challenge->title }}
                                             </div>
                                             <div class="text-ellipsis-3">
                                                 <span>
-                                                    {!! $favoriteKata->challenge->description !!}
+                                                    {!! $challenge->description !!}
                                                 </span>
                                             </div>
                                         </a>
                                     </div>
-                                    <div id="{{ $favoriteKata->id }}" class="cross-savedkata">
+                                    <div id="{{ $challenge->id }}" class="cross-savedkata">
                                         <div class="cross">
                                             &times;
                                         </div>

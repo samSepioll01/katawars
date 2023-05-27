@@ -98,9 +98,11 @@ Route::middleware([
     Route::get('/saved-katas', [SavedKatasController::class, 'index'])
         ->name('katas.saved');
 
+    // Add Saved Kata to the list
     Route::post('/saved-katas/{id}', [SavedKatasController::class, 'store'])
         ->name('katas.store');
 
+    // Manually Sort
     Route::patch('/saved-katas/update', [SavedKatasController::class, 'update'])
         ->name('katas.update');
 
@@ -118,4 +120,7 @@ Route::middleware([
 
     Route::get('/favorites', [FavoritesController::class, 'index'])
         ->name('katas.favorites');
+
+    Route::put('favorites/{id}', [FavoritesController::class, 'store'])
+        ->name('favorites.store');
 });
