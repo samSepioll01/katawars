@@ -39,41 +39,8 @@
             </div>
 
             <div class="col-span-12 lg:col-span-8 py-2" x-ref="challenges">
-                <div class="pb-8">
-                    <x-jet-dropdown align="left" width="64">
-                        <x-slot name="trigger">
-                            <div
-                                class="w-fit p-2 cursor-pointer active:scale-90 hover:bg-slate-200/70 dark:hover:bg-slate-800/50 rounded-full transform transition-all duration-100"
-                                :class="{'shadow-lg bg-slate-200/70 dark:bg-slate-800/50': open, 'bg-transparent': !open}"
-                            >
-                                <img class="hidden sm:block h-8 w-8 rounded-full object-cover" src="https://s3.eu-south-2.amazonaws.com/katawars.es/app/icons/hub-menu1.png" alt="">
-                            </div>
-                        </x-slot>
-
-                        <x-slot name="content">
-                            <div>
-                                <x-jet-dropdown-link
-                                    :button="true"
-                                    class="cursor-pointer"
-                                    @click="alert('asc')"
-                                >
-                                    {{ __('Ascending (from less to more)') }}
-                                </x-jet-dropdown-link>
-
-                                <x-jet-dropdown-link
-                                    :button="true"
-                                    class="cursor-pointer"
-                                    @click="alert('desc')"
-                                >
-                                    {{ __('Descending (from more to less)') }}
-                                </x-jet-dropdown-link>
-                            </div>
-                        </x-slot>
-                    </x-jet-dropdown>
-                </div>
-
                 @if ($savedKatas->count())
-                    <div id="list" class="lista">
+                    <div id="list" class="lista" x-ref="list">
                         @foreach ($savedKatas as $savedKata)
                             <div class="card-challenge grid grid-cols-12" id="{{ $savedKata->id }}">
 
@@ -93,7 +60,6 @@
                                                         <span class="category">{{ $category->name }}</span>
                                                     </div>
                                                 </a>
-
                                             @endforeach
                                             <x-utilities.rank size="4" :rank="$savedKata->challenge->rank->name" />
                                         </div>
@@ -124,6 +90,7 @@
                             {{ $nextCursor }}
                         </div>
                     </div>
+
                 @else
                     <h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>
                 @endif

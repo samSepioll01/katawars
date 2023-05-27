@@ -35,6 +35,7 @@ class SavedKatasController extends Controller
         }
 
         if ($request->ajax()) {
+
             $returnHTML = view('includes.saved', [
                 'savedKatas' => $savedKatas
             ])->render();
