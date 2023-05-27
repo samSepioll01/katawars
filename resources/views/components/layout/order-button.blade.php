@@ -1,6 +1,5 @@
 @props([
-    'routeAsc' => '',
-    'routeDesc' => '',
+    'route' => '',
 ])
 
 <div class="pb-8">
@@ -16,11 +15,41 @@
 
         <x-slot name="content">
             <div>
-                <x-jet-dropdown-link href="{{ $routeAsc }}?ord=asc" class="cursor-pointer">
+                <x-jet-dropdown-link :button="true"
+                    x-on:click="
+                        axios({
+                            method: 'get',
+                            url: '{{ $route }}?ord=asc',
+                            responseType: 'json',
+                        })
+                        .then(response => {
+                            if (response.data.success) {
+                                $refs.list.innerHTML = response.data.html;
+                            }
+                        })
+                        .catch(errors => console.log(errors));
+                    "
+                    class="cursor-pointer"
+                >
                     {{ __('Ascending (from less to more)') }}
                 </x-jet-dropdown-link>
 
-                <x-jet-dropdown-link href="{{ $routeDesc }}?ord=desc" class="cursor-pointer">
+                <x-jet-dropdown-link
+                    :button="true"
+                    x-on:click="
+                        axios({
+                            method: 'get',
+                            url: '{{ $route }}?ord=desc',
+                            responseType: 'json',
+                        })
+                        .then(response => {
+                            if (response.data.success) {
+                                $refs.list.innerHTML = response.data.html;
+                            }
+                        })
+                        .catch(errors => console.log(errors));
+                    "
+                    class="cursor-pointer">
                     {{ __('Descending (from more to less)') }}
                 </x-jet-dropdown-link>
             </div>

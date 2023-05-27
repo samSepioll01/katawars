@@ -41,7 +41,7 @@
             <div class="col-span-12 lg:col-span-8 py-2" x-ref="challenges">
                 @if ($favorites->count())
                 <div id="list" class="lista" x-ref="list">
-                    <x-layout.order-button routeAsc="{{ route('katas.favorites') }}" routeDesc="{{ route('katas.favorites') }}" />
+                    <x-layout.order-button route="{{ route('katas.favorites') }}" />
                         @foreach ($favorites as $favorite)
 
                             @php

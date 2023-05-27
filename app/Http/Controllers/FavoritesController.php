@@ -22,17 +22,17 @@ class FavoritesController extends Controller
             'ord' => ['string', 'max:10'],
         ]);
 
-        $favoritesKatas = Auth::user()->profile->favorites();
+        $favorites = Auth::user()->profile->favorites();
 
         if ($request->ajax()) {
 
-            $favoritesKatas = $favoritesKatas->orderBy(
+            $favorites = $favorites->orderBy(
                 'id',
-                $request->query('sort'),
+                $request->query('ord'),
             )->get();
 
             $returnHTML = view('includes.favorites', [
-                'favoritesKatas' => $favoritesKatas
+                'favorites' => $favorites
             ])->render();
 
             return response()->json([
@@ -56,7 +56,7 @@ class FavoritesController extends Controller
         }
 
         return view('katas.favorites', [
-            'favorites' => $favoritesKatas->get(),
+            'favorites' => $favorites->get(),
             'lastUpdated' => $lastUpdated,
             'totalFavorites' => Auth::user()->profile->favorites()->count(),
         ]);
