@@ -39,9 +39,12 @@ if (list) {
                             list.removeChild(favorite);
                         }, 700);
 
-                        list.insertAdjacentHTML('beforeend', response.data.html);
+                        if (!response.data.totalfavorites) {
+                            list.innerHTML = '<h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>';
+                        }
+
                         window.dispatchEvent(
-                            new CustomEvent('updatesaved', {
+                            new CustomEvent('updatefavorites', {
                                 detail: response.data.totalfavorites,
                             })
                         );
@@ -49,11 +52,6 @@ if (list) {
                 })
                 .catch(error => console.log(error));
             }
-
         }
     });
 }
-
-// Delete Favorites.
-
-

@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Favorite;
 use App\Models\Kata;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class FavoritesController extends Controller
 {
@@ -155,8 +158,29 @@ class FavoritesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $request->validate([
+            'id' => ['integer'],
+        ]);
+
+        if (request()->ajax()) {
+
+            $favorites = Auth::user()->profile->favorites();
+
+            $favorite = $favorites->where('id', $id)
+                ->firstOrFail();
+            $favorite->delete();
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'totalfavorites' => Auth::user()->profile->favorites()
+                        ->count(),
+                ]
+            );
+        }
+
+        return redirect()->back();
     }
 }

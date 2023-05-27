@@ -123,4 +123,7 @@ Route::middleware([
 
     Route::put('favorites/{id}', [FavoritesController::class, 'store'])
         ->name('favorites.store');
+
+    Route::delete('favorites/{id}', [FavoritesController::class, 'destroy'])
+        ->name('favorites.destroy');
 });

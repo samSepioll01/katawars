@@ -28,7 +28,7 @@
                         <div class="w-full pt text-sm pt-10 inline-flex justify-evenly items-center">
                             <span>
                                 <span
-                                    @updatefavorite.window="
+                                    @updatefavorites.window="
                                         $el.textContent = $event.detail;
                                     "
                                 >{{ $totalFavorites }}</span> Favorites</span>
@@ -40,15 +40,15 @@
 
             <div class="col-span-12 lg:col-span-8 py-2" x-ref="challenges">
                 @if ($favorites->count())
-                <div id="list" class="lista" x-ref="list">
-                    <x-layout.order-button route="{{ route('katas.favorites') }}" />
+                    <div id="list" class="lista" x-ref="list">
+                        <x-layout.order-button route="{{ route('katas.favorites') }}" />
                         @foreach ($favorites as $favorite)
 
                             @php
                                 $challenge = $favorite->solution->kata->challenge;
                             @endphp
 
-                            <div class="card-challenge grid grid-cols-12" id="{{ $challenge->id }}">
+                            <div class="card-challenge grid grid-cols-12" id="{{ $favorite->id }}">
 
                                 <aside class="flex justify-start items-center cols-span-1 transition-all duration-500 overflow-hidden">
                                     <div class="hubgrab"></div>
@@ -80,7 +80,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div id="{{ $challenge->id }}" class="cross-savedkata">
+                                    <div id="{{ $favorite->id }}" class="cross-savedkata">
                                         <div class="cross">
                                             &times;
                                         </div>
@@ -89,7 +89,6 @@
                             </div>
                         @endforeach
                     </div>
-
                 @else
                     <h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>
                 @endif

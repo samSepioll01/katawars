@@ -6,7 +6,7 @@
         $challenge = $favorite->solution->kata->challenge;
     @endphp
 
-    <div class="card-challenge  grid grid-cols-12" id="{{ $challenge->id }}">
+    <div class="card-challenge  grid grid-cols-12" id="{{ $favorite->id }}">
 
         <aside class="handle cursor-grab flex justify-start items-center cols-span-1 transition-all duration-500 overflow-hidden">
             <div class="hubgrab"></div>
