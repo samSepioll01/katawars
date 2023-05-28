@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Favorite;
-use App\Models\Kata;
-use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class FavoritesController extends Controller
 {
@@ -25,7 +21,7 @@ class FavoritesController extends Controller
             'ord' => ['string', 'max:10'],
         ]);
 
-        $favorites = Auth::user()->profile->favorites();
+        $favorites = Auth::user()->profile->favorites()->where('is_active', true);
 
         if ($request->ajax()) {
 
@@ -61,7 +57,8 @@ class FavoritesController extends Controller
         return view('katas.favorites', [
             'favorites' => $favorites->get(),
             'lastUpdated' => $lastUpdated,
-            'totalFavorites' => Auth::user()->profile->favorites()->count(),
+            'totalFavorites' => Auth::user()->profile->favorites()
+                ->where('is_active', true)->count(),
         ]);
     }
 
@@ -91,25 +88,17 @@ class FavoritesController extends Controller
             ->where('kata_id', $request->id)
             ->firstOrFail();
 
+        if ($favorite = $solution->favorite) {
 
-
-        $isFavorite = (bool) $solution
-            ->favorite()
-            ->count();
-
-        if ($isFavorite) {
-
-            $favorite = Auth::user()->profile->favorites()
-                ->where('solution_id', $solution->id)
-                ->firstOrFail();
-            $favorite->delete();
+            $favorite->update(['is_active' => !$favorite->is_active]);
 
         } else {
 
-            $favorite = new Favorite;
-            $favorite->profile_id = Auth::user()->profile->id;
-            $favorite->solution_id = $solution->id;
-            $favorite->save();
+            Favorite::create([
+                'profile_id' => Auth::user()->profile->id,
+                'solution_id' => $solution->id,
+                'is_active' => true,
+            ]);
         }
 
         return response()->json([
@@ -164,19 +153,18 @@ class FavoritesController extends Controller
             'id' => ['integer'],
         ]);
 
-        if (request()->ajax()) {
+        if ($request->ajax()) {
 
             $favorites = Auth::user()->profile->favorites();
-
-            $favorite = $favorites->where('id', $id)
-                ->firstOrFail();
-            $favorite->delete();
+            $favorite = $favorites->where('id', $id)->firstOrFail();
+            $favorite->is_active = false;
+            $favorite->save();
 
             return response()->json(
                 [
                     'success' => true,
                     'totalfavorites' => Auth::user()->profile->favorites()
-                        ->count(),
+                        ->where('is_active', true)->count(),
                 ]
             );
         }

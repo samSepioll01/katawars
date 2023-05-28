@@ -12,7 +12,9 @@
         '2xl' => 'w-20 h-20',
     ][$size ?? 'lg'];
 
-    $isFav = auth()->user()->profile->solutions()->where('kata_id', $id)->first()->favorite;
+    $isFav = auth()->user()->profile->solutions()
+        ->where('kata_id', $id)->first()?->favorite
+        ->where('is_active', true)->count();
 @endphp
 
 

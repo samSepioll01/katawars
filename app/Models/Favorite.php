@@ -16,7 +16,7 @@ class Favorite extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['profile_id', 'solution_id'];
+    protected $fillable = ['profile_id', 'solution_id', 'is_active'];
 
     /**
      * This determine which profile is associated with a favorite.

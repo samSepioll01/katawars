@@ -45,9 +45,16 @@
     <div class="w-full mt-2 rounded-md bg-gray-900/10 {{ $bgColor }} saturate-150"
          style="height: {{ $size }}px"
     >
-        <div id="{{$id}}" style="width: {{ $progress }}%" class="h-full bg-green-600 dark:bg-[#0bec7c]
-                    animation-progress-bar rounded-md transition-all duration-500
-                    dark:shadow-outter-md dark:shadow-green-400"
+        <div
+            id="{{$id}}"
+            style="width: {{ $progress }}%"
+            class="h-full bg-green-600 dark:bg-[#0bec7c] animation-progress-bar rounded-md
+                   transition-all duration-500 dark:shadow-outter-md dark:shadow-green-400"
+            @updateprogress.window="
+                $el.width = $event.target.detail;
+                $el.classList.toggle('animation-progress-bar');
+                $el.classList.toggle('animation-progress-bar');
+            "
         ></div>
     </div>
 </div>

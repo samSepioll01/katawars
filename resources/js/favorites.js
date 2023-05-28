@@ -35,12 +35,13 @@ if (list) {
                             .filter(elem => elem.id === favoriteID)
                             .shift();
 
-                        setTimeout(elem => {
+                        let timeout = setTimeout(elem => {
                             list.removeChild(favorite);
                         }, 700);
 
                         if (!response.data.totalfavorites) {
                             list.innerHTML = '<h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>';
+                            clearTimeout(timeout);
                         }
 
                         window.dispatchEvent(
