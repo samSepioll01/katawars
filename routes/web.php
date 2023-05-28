@@ -109,8 +109,11 @@ Route::middleware([
     Route::delete('/saved-katas/{id}', [SavedKatasController::class, 'destroy'])
         ->name('katas.destroy');
 
-    Route::get('/katas/next', [ChallengeController::class, 'showNextChallenge'])
-        ->name('katas.next');
+    Route::get('/katas/next-available', [ChallengeController::class, 'showNextChallengeAvailable'])
+        ->name('katas.next-available');
+
+    Route::get('/katas/change/{id}', [ChallengeController::class, 'changeChallenge'])
+        ->name('katas.change');
 
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');

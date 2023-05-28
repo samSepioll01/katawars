@@ -53,8 +53,6 @@ document.addEventListener('DOMContentLoaded', eDCL => {
         checkBTN.classList.remove('active:translate-y-1');
         checkCode();
     });
-
-
 });
 
 /**

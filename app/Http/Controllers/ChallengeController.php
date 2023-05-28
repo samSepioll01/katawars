@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CustomClasses\CircularCollection;
 use App\CustomClasses\SecurityFilter;
 use App\Http\Requests\StoreChallengeRequest;
 use App\Http\Requests\UpdateChallengeRequest;
@@ -11,6 +12,7 @@ use App\Models\Mode;
 use App\Models\Profile;
 use App\Models\Score;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +20,6 @@ use Illuminate\Support\Facades\Validator;
 use ParseError;
 use PHPParser\Error;
 use PhpParser\ParserFactory;
-use Illuminate\Support\Str;
 
 class ChallengeController extends Controller
 {
@@ -214,20 +215,51 @@ class ChallengeController extends Controller
             'slug' => ['string', 'max:255', 'alpha_dash', 'unique:challenge'],
         ]);
 
-        $challenge = Challenge::where('slug', $request->slug)->firstOrFail();
+        $katas = Kata::where('mode_id', 1)
+            ->where('language_id', 1)
+            ->orderBy('id')
+            ->get();
+
+        $challenges = $katas->map(fn($kata) => $kata->challenge);
+
+        $challenge = $challenges->where('slug', $request->slug)
+            ->firstOrFail();
+
+        $circular = CircularCollection::make($challenges);
 
         return view('katas.main-page', [
             'challenge' => $challenge,
             'owner' => $challenge->katas()->first()->owner->user,
             'signature' => $challenge->katas()->first()->signature,
             'score' => Score::where('denomination', 'training')->first()->points,
+            'previous' => $circular->previous($challenge)->id,
+            'next' => $circular->next($challenge)->id,
         ]);
+    }
+
+    /**
+     * Show the previous challenge throught id of the showed actually challenge.
+     *
+     * @param Request $request
+     */
+    public function changeChallenge(Request $request)
+    {
+        $request->validate([
+            'id' => ['integer'],
+        ]);
+
+        return redirect()->route(
+            'katas.main-page',
+            [
+                'slug' => Challenge::find($request->id)->slug,
+            ]
+        );
     }
 
     /**
      * Show the next challenged to complete.
      */
-    public function showNextChallenge()
+    public function showNextChallengeAvailable()
     {
         $profile = Auth::user()->profile;
         $passedKatas = $profile->passedKatas()->get();
