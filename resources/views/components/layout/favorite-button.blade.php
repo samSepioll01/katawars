@@ -14,7 +14,7 @@
 
     $isFav = auth()->user()->profile->solutions()
         ->where('kata_id', $id)->first()?->favorite
-        ->where('is_active', true)->count();
+        ?->where('is_active', true)?->count();
 @endphp
 
 

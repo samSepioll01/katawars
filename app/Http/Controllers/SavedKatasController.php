@@ -37,9 +37,15 @@ class SavedKatasController extends Controller
 
         if ($request->ajax()) {
 
-            $returnHTML = view('includes.saved', [
-                'savedKatas' => $savedKatas
-            ])->render();
+            $numSavedKatas = Auth::user()->profile->savedKatas->count();
+
+            if ($numSavedKatas > self::PER_PAGE) {
+                $returnHTML = view('includes.saved', [
+                    'savedKatas' => $savedKatas
+                ])->render();
+            } else {
+                $returnHTML = '';
+            }
 
             return response()->json([
                 'success' => true,
