@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use App\Models\Favorite;
-use App\Models\Kata;
 use App\Models\Profile;
 use App\Models\Resource;
 use App\Models\Score;
@@ -11,6 +10,7 @@ use App\Models\ScoreRecord;
 use App\Models\Solution;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Facades\Auth;
 
 trait Scoreable
 {
@@ -44,7 +44,7 @@ trait Scoreable
      */
     public function createScoreRecord(int $voterID = null)
     {
-        $voterID = $voterID ?? auth()->user()->id;
+        $voterID = $voterID ?? Auth::user()->profile->id;
 
         if ($this->scoredBy($voterID) || !$this->profileExist($voterID)
             || $voterID === $this->selectForeignKey() ) {

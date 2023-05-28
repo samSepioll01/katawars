@@ -94,11 +94,20 @@ class FavoritesController extends Controller
 
         } else {
 
-            Favorite::create([
-                'profile_id' => Auth::user()->profile->id,
+            $profile = Auth::user()->profile;
+
+            $favorite = Favorite::create([
+                'profile_id' => $profile->id,
                 'solution_id' => $solution->id,
                 'is_active' => true,
             ]);
+
+            // Generate profile record fro the score type.
+            if ($favorite->createScoreRecord($profile->id)) {
+                // Assign Score for the owner of resource.
+                $favorite->assignScore();
+            }
+
         }
 
         return response()->json([
