@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-layout.wrapped-main-section>
-        @vite(['resources/js/savedkatas.js'])
+        @vite(['resources/js/favorites.js'])
 
         <main class="grid grid-cols-12 mt-8 gap-8">
             <div class="max-h-screen col-span-12 lg:col-span-4 sm:rounded-xl relative">
@@ -13,7 +13,7 @@
 
                     <div class="text-slate-700 dark:text-slate-100">
                         <div class="text-4xl font-bold tracking-wider">
-                            {{ __('Saved Katas') }}
+                            {{ __('Favorites') }}
                         </div>
                         <div class="pt-5 text-lg">
                             <a href="{{ route('dashboard') }}" class="inline-flex items-center">
@@ -28,10 +28,10 @@
                         <div class="w-full pt text-sm pt-10 inline-flex justify-evenly items-center">
                             <span>
                                 <span
-                                    @updatesaved.window="
+                                    @updatefavorites.window="
                                         $el.textContent = $event.detail;
                                     "
-                                >{{ $totalSavedKatas }}</span> Saved Katas</span>
+                                >{{ $totalFavorites }}</span> Favorites</span>
                             <span>Updated {{ $lastUpdated ?? 'never' }}</span>
                         </div>
                     </div>
@@ -39,65 +39,56 @@
             </div>
 
             <div class="col-span-12 lg:col-span-8 py-2" x-ref="challenges">
-                @if ($savedKatas->count())
+                @if ($favorites->count())
                     <div id="list" class="lista" x-ref="list">
-                        @foreach ($savedKatas as $savedKata)
-                            <div class="card-challenge grid grid-cols-12" id="{{ $savedKata->id }}">
+                        <x-layout.order-button route="{{ route('katas.favorites') }}" />
+                        @foreach ($favorites as $favorite)
 
-                                <aside class="handle cursor-grab flex justify-start items-center cols-span-1 transition-all duration-500 overflow-hidden">
-                                    <div class="hubgrab">
-                                        <div class="bar bg-slate-500/70 dark:bg-slate-500/70 transition-all duration-300"></div>
-                                        <div class="bar bg-slate-500/70 dark:bg-slate-500/70 transition-all duration-300"></div>
-                                    </div>
+                            @php
+                                $challenge = $favorite->solution->kata->challenge;
+                            @endphp
+
+                            <div class="card-challenge grid grid-cols-12" id="{{ $favorite->id }}">
+
+                                <aside class="flex justify-start items-center cols-span-1 transition-all duration-500 overflow-hidden">
+                                    <div class="hubgrab"></div>
                                 </aside>
 
                                 <div class="col-span-11 relative">
                                     <div class="w-full flex flex-row justify-between">
                                         <div class="w-full flex flex-row justify-start items-center">
-                                            @foreach ($savedKata->challenge->categories as $category )
+                                            @foreach ($challenge->categories as $category )
                                                 <a href="{{ route('challenges.training') }}?category={{$category->name}}">
                                                     <div class="bg-slate-50 dark:bg-slate-900 border border-slate-400 dark:border-slate-800 shadow-md hover:bg-violet-600 dark:hover:bg-violet-600 hover:text-slate-100 cursor-pointer px-2 rounded-lg mr-2">
                                                         <span class="category">{{ $category->name }}</span>
                                                     </div>
                                                 </a>
                                             @endforeach
-                                            <x-utilities.rank size="4" :rank="$savedKata->challenge->rank->name" />
+                                            <x-utilities.rank size="4" :rank="$challenge->rank->name" />
                                         </div>
                                     </div>
 
                                     <div class="py-2">
-                                        <a href="{{ $savedKata->challenge->url }}" class="">
+                                        <a href="{{ $challenge->url }}" class="">
                                             <div class="text-center text-ellipsis-1 text-xl text-violet-600 dark:text-tomato">
-                                                {{ $savedKata->challenge->title }}
+                                                {{ $challenge->title }}
                                             </div>
                                             <div class="text-ellipsis-3">
                                                 <span>
-                                                    {!! $savedKata->challenge->description !!}
+                                                    {!! $challenge->description !!}
                                                 </span>
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="absolute right-0 top-0">
-                                        <div class="w-56 flex flex-row justify-center items-center">
-                                            @if (auth()->user()->profile->passedKatas()->get()->contains($savedKata->id))
-                                                <x-layout.favorite-button :id="$savedKata->id" size="md" />
-                                            @endif
-                                            <div id="{{ $savedKata->id }}" class="cross-savedkata">
-                                                <div class="cross">
-                                                    &times;
-                                                </div>
-                                            </div>
+                                    <div id="{{ $favorite->id }}" class="cross-savedkata">
+                                        <div class="cross">
+                                            &times;
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
-
-                        <div id="next-cursor" class="hidden">
-                            {{ $nextCursor }}
-                        </div>
                     </div>
-
                 @else
                     <h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>
                 @endif

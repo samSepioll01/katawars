@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
 use App\Http\Controllers\ChallengeController;
+use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\SavedKatasController;
 use Illuminate\Support\Facades\Route;
@@ -97,21 +98,35 @@ Route::middleware([
     Route::get('/saved-katas', [SavedKatasController::class, 'index'])
         ->name('katas.saved');
 
+    // Add Saved Kata to the list
     Route::post('/saved-katas/{id}', [SavedKatasController::class, 'store'])
         ->name('katas.store');
 
+    // Manually Sort
     Route::patch('/saved-katas/update', [SavedKatasController::class, 'update'])
         ->name('katas.update');
 
     Route::delete('/saved-katas/{id}', [SavedKatasController::class, 'destroy'])
         ->name('katas.destroy');
 
-    Route::get('/katas/next', [ChallengeController::class, 'showNextChallenge'])
-        ->name('katas.next');
+    Route::get('/katas/next-available', [ChallengeController::class, 'showNextChallengeAvailable'])
+        ->name('katas.next-available');
+
+    Route::get('/katas/change/{id}', [ChallengeController::class, 'changeChallenge'])
+        ->name('katas.change');
 
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');
 
     Route::post('/katas/{slug}/verify-kata', [ChallengeController::class, 'verifyKata'])
         ->name('katas.verify');
+
+    Route::get('/favorites', [FavoritesController::class, 'index'])
+        ->name('katas.favorites');
+
+    Route::put('favorites/{id}', [FavoritesController::class, 'store'])
+        ->name('favorites.store');
+
+    Route::delete('favorites/{id}', [FavoritesController::class, 'destroy'])
+        ->name('favorites.destroy');
 });

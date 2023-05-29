@@ -16,7 +16,7 @@ class Favorite extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['profile_id', 'solution_id'];
+    protected $fillable = ['profile_id', 'solution_id', 'is_active'];
 
     /**
      * This determine which profile is associated with a favorite.
@@ -32,5 +32,14 @@ class Favorite extends Model
     public function solution(): BelongsTo
     {
         return $this->belongsTo(Solution::class, 'solution_id', 'id', 'solutions');
+    }
+
+    /**
+     * This determines which score record was created when the profile
+     * added the resource to his favorite list.
+     */
+    public function scoreRecords()
+    {
+        return $this->morphMany(ScoreRecord::class, 'scoreables');
     }
 }

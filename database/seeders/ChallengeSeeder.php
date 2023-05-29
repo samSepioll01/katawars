@@ -1190,12 +1190,12 @@ class ChallengeSeeder extends Seeder
 
         // MCM
 
-        $slug = Str::slug('Least Common Divisor');
+        $slug = Str::slug('Least Common Multiple');
 
         $challenge = Challenge::create([
             'slug' => $slug,
             'url' => url("/katas/$slug"),
-            'title' => 'Calculate the Least Common Divisor',
+            'title' => 'Calculate the Least Common Multiple',
             'rank_id' => 3,
             'description' => <<<EOL
                 <p>Write a function named <code>mcm</code> that takes two arguments of type <code>int</code> named <code>a</code> and <code>b</code> and returns the least common multiple (LCM) of them. The LCM of two numbers is the smallest positive integer that is divisible by both numbers without leaving a remainder. For example, the LCM of 4 and 6 is 12.</p>

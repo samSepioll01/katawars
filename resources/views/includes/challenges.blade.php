@@ -25,31 +25,14 @@
                 <x-utilities.rank :size="4" :rank="$challenge->rank->name"/>
             </div>
 
-            @php
-                $isSaved = auth()->user()->profile->savedKatas()->exists($challenge->katas->first()->id);
-            @endphp
-
-            <div class="w-56 flex flex-row justify-evenly items-center">
-                <div class="w-56 flex flex-row justify-end items-center" >
-                    <img
-                        src="
-                        @if ($isSaved)
-                            https://s3.eu-south-2.amazonaws.com/katawars.es/app/icons/marcador2.png
-                        @else
-                            https://s3.eu-south-2.amazonaws.com/katawars.es/app/icons/marcador1.png
-                        @endif"
-                        class="h-8 w-8 cursor-pointer"
-                        x-ref="imagemarker"
-                        x-on:click="
-                            if ($event.target.src === $katawars.S3.icons.markerOn) {
-                                $event.target.src = $katawars.S3.icons.markerOff;
-                            } else {
-                                $event.target.src = $katawars.S3.icons.markerOn;
-                            }
-                        "
-                    />
-
-                </div>
+            <div class=" w-full flex flex-row justify-end gap-8 item-center">
+                @php
+                    $id = $challenge->katas()->first()->id;
+                @endphp
+                <x-layout.saved-marker :id="$id" />
+                    @if (auth()->user()->profile->passedKatas()->get()->contains($id))
+                        <x-layout.favorite-button :id="$id" size="md" />
+                    @endif
             </div>
         </div>
 

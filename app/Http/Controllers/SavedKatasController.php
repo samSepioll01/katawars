@@ -37,9 +37,15 @@ class SavedKatasController extends Controller
 
         if ($request->ajax()) {
 
-            $returnHTML = view('includes.saved', [
-                'savedKatas' => $savedKatas
-            ])->render();
+            $numSavedKatas = Auth::user()->profile->savedKatas->count();
+
+            if ($numSavedKatas > self::PER_PAGE) {
+                $returnHTML = view('includes.saved', [
+                    'savedKatas' => $savedKatas
+                ])->render();
+            } else {
+                $returnHTML = '';
+            }
 
             return response()->json([
                 'success' => true,
@@ -100,8 +106,12 @@ class SavedKatasController extends Controller
             $savedKatas->detach($kata->id);
         } else {
 
-            $num_orden = $savedKatas->orderByPivot('num_orden', 'desc')
-                ->first()->pivot->num_orden + 1;
+            if ($savedKatas->count()) {
+                $num_orden = $savedKatas->orderByPivot('num_orden', 'desc')
+                    ->first()->pivot->num_orden + 1;
+            } else {
+                $num_orden = 1;
+            }
 
             $savedKatas->attach($kata->id, [
                 'num_orden' => $num_orden,
@@ -231,11 +241,15 @@ class SavedKatasController extends Controller
 
             Profile::getsavedKatas()->detach($id);
 
+            $totalSavedKatas = auth()->user()->profile->savedKatas()->count();
+
+            if (!$totalSavedKatas) $returnHTML = '<h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>';
+
             return response()->json(
                 [
                     'success' => true,
                     'html' => $returnHTML,
-                    'totalSavedKatas' => auth()->user()->profile->savedKatas()->count(),
+                    'totalSavedKatas' => $totalSavedKatas,
                 ]
             );
         }

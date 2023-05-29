@@ -25,6 +25,7 @@ return new class extends Migration
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('solution_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->boolean('is_active');
             $table->timestamps();
             $table->unique(['profile_id', 'solution_id']);
         });

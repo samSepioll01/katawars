@@ -133,7 +133,13 @@
                                 <x-utilities.rank size="4" :rank="$challenge->rank->name" />
                             </div>
 
-                            <x-layout.saved-marker :id="$challenge->katas->first()->id" />
+                            <div class=" w-full flex flex-row justify-end gap-8 item-center">
+                                <x-layout.saved-marker :id="$challenge->katas->first()->id" />
+                                    @if (auth()->user()->profile->passedKatas()->get()->contains($challenge->katas()->first()->id))
+                                        <x-layout.favorite-button :id="$challenge->katas()->first()->id" size="md" />
+                                    @endif
+                            </div>
+
                         </div>
 
                         <div class="py-2">

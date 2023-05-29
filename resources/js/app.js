@@ -85,6 +85,16 @@ window.$theme = {
     }
 }
 
+window.$progressbar = {
+    update(progress) {
+        window.dispatchEvent(
+            new CustomEvent('updateprogress', {
+                detail: progress,
+            })
+        );
+    }
+}
+
 window.$aux = {
     createElement(elem = null, attributes = {}, textNode = '') {
 

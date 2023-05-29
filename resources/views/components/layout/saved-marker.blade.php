@@ -5,7 +5,7 @@
 @endphp
 
 
-<div class="w-56 flex flex-row justify-end items-center" >
+<div class="flex flex-row justify-end items-center" >
     <img
         src="
         @if ($isSaved)

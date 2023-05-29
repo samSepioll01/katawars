@@ -1,6 +1,14 @@
 <x-app-layout>
     <x-layout.wrapped-main-section>
+        <div id="cont_btn" class="w-full flex flex-row justify-between items-center p-2">
+            <form action="{{ route('katas.change', ['id' => $previous]) }}" method="get">
+                <x-jet-button class="w-32 flex justify-center">Previous</x-jet-button>
+            </form>
 
+            <form action="{{ route('katas.change', ['id' => $next]) }}" method="get">
+                <x-jet-button id="next_btn" class="w-32 flex justify-center">Next</x-jet-button>
+            </form>
+        </div>
         <main
             x-data="{instructions: true, code: false, resources: false, solutions: false}"
             class="sm:mt-8 grid grid-flow-row sm:card-panel"
@@ -174,7 +182,8 @@
 
                 <x-slot name="footer">
                     <x-layout.favorite-button :id="$challenge->katas->first()->id" size="xl"/>
-                    <form action="{{ route('katas.next') }}" method="get">
+                        <div class="px-5"></div>
+                    <form action="{{ route('katas.next-available') }}" method="get">
                         <x-jet-button>
                             Next Challenge
                         </x-jet-button>
