@@ -17,6 +17,8 @@ class LoginResponse implements LoginResponseContract
             ? '/admin/dashboard'
             : '/user/dashboard';
 
+        Auth::login(Auth::user());
+
         return $request->wantsJson()
                     ? response()->json(['two_factor' => false])
                     : redirect($home);

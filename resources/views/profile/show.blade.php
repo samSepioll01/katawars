@@ -18,25 +18,27 @@
                     @livewire('profile.update-password-form')
                 </div>
 
-                <x-jet-section-border />
             @endif
 
-            @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
+            @if (auth()->user()->email_verified_at)
+                @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
+                    <x-jet-section-border />
+                    <div class="mt-10 sm:mt-0">
+                        @livewire('profile.two-factor-authentication-form')
+                    </div>
+
+                    <x-jet-section-border />
+                @endif
+
                 <div class="mt-10 sm:mt-0">
-                    @livewire('profile.two-factor-authentication-form')
+                    @livewire('profile.logout-other-browser-sessions-form')
                 </div>
 
                 <x-jet-section-border />
+                <div class="mt-10 sm:mt-0">
+                    @livewire('git-hub-sync-account')
+                </div>
             @endif
-
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.logout-other-browser-sessions-form')
-            </div>
-
-            <x-jet-section-border />
-            <div class="mt-10 sm:mt-0">
-                @livewire('git-hub-sync-account')
-            </div>
 
             @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
                 <x-jet-section-border />

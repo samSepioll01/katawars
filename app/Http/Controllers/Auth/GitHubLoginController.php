@@ -205,7 +205,7 @@ class GitHubLoginController extends Controller
 
         Profile::create([
             'slug' => $slug,
-            'url' => url("/users/$slug"),
+            'url' => url("/user/$slug"),
             'exp' => 0,
             'honor' => 0,
             'is_darkmode' => true,

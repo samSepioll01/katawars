@@ -8,6 +8,7 @@ use App\Models\Profile;
 use App\Events\ThemeModeUpdated;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -48,7 +49,7 @@ class ProfileController extends Controller
         $this->validateRequest($request->query());
 
         $users = User::whereHas('roles', fn($query) => $query->where('name', 'user'))
-                    ->get()->except(auth()->user()->id);
+                    ->get()->except(Auth::user()->id);
 
 
         if ($request->ajax()) {
@@ -167,13 +168,13 @@ class ProfileController extends Controller
             session()->missing('theme') ? 'dark' : null
         );
 
-        if (auth()->check()) {
+        if (Auth::check()) {
 
-            if (auth()->user()->hasRole(['superadmin', 'admin'])) {
+            if (Auth::user()->hasRole(['superadmin', 'admin'])) {
                 return redirect()->route('admin.dashboard');
             }
 
-            if (auth()->user()->hasRole(['user'])) {
+            if (Auth::user()->hasRole(['user'])) {
                 return redirect()->route('dashboard');
             }
 
@@ -187,7 +188,7 @@ class ProfileController extends Controller
      */
     public function authUserThemeConfig()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         // Hold the theme selected by the guest user for 1 minute.
         // After, hold the theme selected by the auth user.
@@ -209,15 +210,15 @@ class ProfileController extends Controller
     {
         if (request()->ajax()) {
 
-            if (auth()->check()) {
-                $profile = auth()->user()->profile;
+            if (Auth::check()) {
+                $profile = Auth::user()->profile;
                 $profile->is_darkmode = request()->theme === 'dark' ? true : false;
                 $profile->save();
             }
 
             $this->setSessionTheme(request()->theme);
 
-            event( (new ThemeModeUpdated(auth()->user()))
+            event( (new ThemeModeUpdated(Auth::user()))
                 ->dontBroadcastToCurrentUser()
             );
 
@@ -275,7 +276,7 @@ class ProfileController extends Controller
             'count_followers' => $user->profile->followers()->count(),
             'count_following' => $user->profile->following()->count(),
             'ranking' => $user->ranking(),
-            'progress' => $user->profile->getProfileProgress(),
+            'progress' => $user->profile?->getProfileProgress(),
         ];
     }
 }

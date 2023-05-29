@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -126,15 +127,20 @@ class Profile extends Model
      */
     public function setExpAttribute(int $exp): void
     {
-        $this->attributes['exp'] += $exp;
+        if (array_key_exists('exp', $this->attributes)) {
 
-        $current_rank = $this->rank;
+            $this->attributes['exp'] += $exp;
 
-        $next_rank = Rank::where('id', '>', $current_rank->id)
-            ->orderBy('id')->first();
+            $current_rank = $this->rank;
 
-        if ($next_rank && $this->exp >= $current_rank->level_up) {
-            $this->attributes['rank_id'] = $next_rank->id;
+            $next_rank = Rank::where('id', '>', $current_rank->id)
+                ->orderBy('id')->first();
+
+            if ($next_rank && $this->exp >= $current_rank->level_up) {
+                $this->attributes['rank_id'] = $next_rank->id;
+            }
+        } else {
+            $this->attributes['exp'] = $exp;
         }
     }
 
@@ -251,6 +257,17 @@ class Profile extends Model
         return $this->belongsToMany(
             Profile::class, 'followers', 'follower_id', 'profile_id'
         );
+    }
+
+    /**
+     * This determines whether the profile follow to another profile.
+     *
+     * @param Profile $profile
+     * @return bool Return true it follow, false otherwise.
+     */
+    public function isFollowing(Profile $profile)
+    {
+        return $this->following->contains($profile->id);
     }
 
     /**
