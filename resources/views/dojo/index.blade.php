@@ -15,7 +15,9 @@
                                     <x-utilities.rank size="4" :rank="$user->profile->rank->name" />
                                 </div>
 
-                                @livewire('follow-button', ['profile' => $user->profile])
+                                <div class="absolute top-3 right-3">
+                                    @livewire('follow-button', ['profile' => $user->profile])
+                                </div>
 
                                 <div class="w-full h-full flex flex-row items-center justify-start pl-7">
 

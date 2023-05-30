@@ -3,7 +3,14 @@
         <div class="max-w-7xl mx-auto md:px-6 lg:px-8">
             <div class="sm:rounded-lg">
 
-                <header class="md:py-6 w-full sm:card-panel">
+                <header class="md:py-6 w-full sm:card-panel relative">
+
+                    @if (auth()->user()->id != $userValues['id'])
+                        <div class="p-10 absolute top-0 left-0 flex justify-center items-center">
+                            @livewire('follow-button', ['profile' => \App\Models\Profile::find((int)$userValues['id'])])
+                        </div>
+                    @endif
+
 
                     <div class="grid grid-flow-row md:grid-flow-col md:grid-cols-12 gap-4">
 
@@ -24,7 +31,12 @@
                             <div class="w-full flex justify-evenly text-sm dark:text-slate-200">
 
                                 <a href="" class="hover:text-violet-600 trasition-colors duration-300">
-                                    <span class="font-bold">{{ $userValues['count_followers'] }}</span>
+                                    <span class="font-bold" @followersupdated.window="
+                                        $el.textContent = $event.detail.followers;
+                                    "
+                                    >
+                                        {{ $userValues['count_followers'] }}
+                                    </span>
                                     <span class="pl-1 tracking-wide">Followers</span>
                                 </a>
                                 <a href="" class="hover:text-violet-600 trasition-colors duration-300">
@@ -74,7 +86,6 @@
                                         </div>
 
                                     </div>
-
 
                                     <div class="grid col-span-3 dark:text-slate-200">
                                         <div class="flex flex-col justify-evenly">

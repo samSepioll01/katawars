@@ -2,12 +2,9 @@
 
 namespace App\Http\Livewire;
 
-use App\Jobs\NewFollowerJob;
 use App\Jobs\ReportNewFollower;
-use App\Mail\NewFollower;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class FollowButton extends Component
@@ -27,14 +24,21 @@ class FollowButton extends Component
     public function follow(): void
     {
         $userProfile = Auth::user()->profile;
-        $userProfile->following()->toggle($this->profile);
 
-        if ($userProfile->isFollowing($this->profile) ) {
+        if ($userProfile->id !== $this->profile->id) {
 
-            //Mail::send(new NewFollower($userProfile, $this->profile));
+            $userProfile->following()->toggle($this->profile);
 
-            ReportNewFollower::dispatch($userProfile, $this->profile)
-                ->onQueue('sendMailQueue');
+            if ($userProfile->isFollowing($this->profile) ) {
+
+                ReportNewFollower::dispatch($userProfile, $this->profile)
+                    ->onQueue('sendMailQueue');
+            }
+
+            $this->dispatchBrowserEvent('followersupdated', [
+                'followers' => $this->profile->followers()->count(),
+            ]);
+
         }
 
     }
