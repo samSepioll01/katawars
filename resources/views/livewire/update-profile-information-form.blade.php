@@ -82,7 +82,7 @@
 
                 {{-- Cropper Modal --}}
                 <div wire:ignore>
-                    <x-layout.modal name="cropper-modal" maxWidth="4xl">
+                    <x-layout.modal name="cropper-modal" maxWidth="4xl" display="justify-evenly">
                         <x-slot name="title">
                             {{ __('Crop Image Area') }}
                         </x-slot>

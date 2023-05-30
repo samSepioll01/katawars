@@ -276,7 +276,9 @@ class ProfileController extends Controller
             'count_followers' => $user->profile->followers()->count(),
             'count_following' => $user->profile->following()->count(),
             'ranking' => $user->ranking(),
-            'progress' => $user->profile?->getProfileProgress(),
+            'progress' => $user->profile->getProfileProgress(),
+            'followers' => $user->profile->followers,
+            'followees' => $user->profile->following,
         ];
     }
 }

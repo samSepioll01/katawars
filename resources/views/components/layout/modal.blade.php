@@ -1,4 +1,4 @@
-@props(['name', 'maxWidth'])
+@props(['name', 'maxWidth', 'display' => ''])
 
 @php
     $maxWidth = [
@@ -76,8 +76,8 @@
         x-transition:leave-end="opacity-0"
         @click.away ="show = false"
     >
-        <div class="flex flex-col justify-evenly min-h-[300px] sm:h-full">
-            <header>
+        <div class="flex flex-col {{ $display ?: 'justify-evenly' }} min-h-[300px] sm:h-full">
+            <header class="relative">
                 <h3 class="font-bold text-lg dark:text-slate-50 p-5">
                     {{ $title }}
                 </h3>

@@ -30,7 +30,12 @@
 
                             <div class="w-full flex justify-evenly text-sm dark:text-slate-200">
 
-                                <a href="" class="hover:text-violet-600 trasition-colors duration-300">
+                                <span
+                                    x-on:click="
+                                        $modals.show('followers-modal');
+                                    "
+                                    class="hover:text-violet-600 trasition-colors duration-300 cursor-pointer"
+                                >
                                     <span class="font-bold" @followersupdated.window="
                                         $el.textContent = $event.detail.followers;
                                     "
@@ -38,11 +43,16 @@
                                         {{ $userValues['count_followers'] }}
                                     </span>
                                     <span class="pl-1 tracking-wide">Followers</span>
-                                </a>
-                                <a href="" class="hover:text-violet-600 trasition-colors duration-300">
+                                </span>
+                                <span
+                                    x-on:click="
+                                        $modals.show('following-modal')
+                                    "
+                                    class="hover:text-violet-600 trasition-colors duration-300 cursor-pointer"
+                                >
                                     <span class="font-bold">{{ $userValues['count_following'] }}</span>
                                     <span class="pl-1 tracking-wide">Following</span>
-                                </a>
+                                </span>
 
                             </div>
 
@@ -164,6 +174,105 @@
                     </div>
                 </main>
             </div>
+            <x-layout.modal name="followers-modal" maxWidth="4xl" display="justify-start">
+                <x-slot name="title">
+                    <div class="cross-savedkata opacity-100" x-on:click="show = false;">
+                        <div class="cross" x-on:click="show = false;">
+                            &times;
+                        </div>
+                    </div>
+                    <div class="text-6xl font-thin text-center text-slate-700/90 dark:text-slate-100 pb-5">
+                        Followers
+                    </div>
+                </x-slot>
+
+                <x-slot name="body">
+                    <div class="flex flex-col justify-center items-center text-slate-800">
+
+                        @if (count($userValues['followers']))
+                            @foreach ($userValues['followers'] as $follower)
+                                <div class="card-challenge w-full md:w-1/2 h-28">
+
+                                    <a href="{{ $follower->url }}">
+                                        <div class="flex flex-row justify-evenly items-center m-auto">
+                                            <div class="flex flex-row justify-between items-center">
+                                                <div class="h-20 w-20 rounded-full">
+                                                    <img src="{{ $follower->user->profile_photo_url }}" alt="" class="rounded-full" />
+                                                </div>
+                                                <div class="text-xl pl-3">
+                                                    {{ $follower->user->name }}
+                                                </div>
+                                            </div>
+
+                                            <div class="pl-8">
+                                                @livewire('follow-button', ['profile' => $follower])
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="mt-40">
+                                <h1 class="text-slate-700/70 dark:text-slate-100 text-xl font-bold">Nothing that show for the momment.</h1>
+                            </div>
+                        @endif
+                    </div>
+                </x-slot>
+
+                <x-slot name="footer"></x-slot>
+            </x-layout.modal>
+
+            <x-layout.modal name="following-modal" maxWidth="4xl" display="justify-start">
+                <x-slot name="title">
+                    <div class="cross-savedkata opacity-100" x-on:click="show = false;">
+                        <div class="cross" x-on:click="show = false;">
+                            &times;
+                        </div>
+                    </div>
+
+                    <div class="text-6xl font-thin text-center text-slate-700/90 dark:text-slate-100 pb-5 relative">
+                        Following
+                    </div>
+
+
+                </x-slot>
+
+                <x-slot name="body">
+                    <div class="flex flex-col justify-center items-center text-slate-800">
+
+                        @if (count($userValues['followees']))
+                            @foreach ($userValues['followees'] as $followee)
+                                <div class="card-challenge w-full md:w-1/2 h-28">
+
+                                    <a href="{{ $followee->url }}">
+                                        <div class="flex flex-row justify-evenly items-center m-auto">
+                                            <div class="flex flex-row justify-between items-center">
+                                                <div class="h-20 w-20 rounded-full">
+                                                    <img src="{{ $followee->user->profile_photo_url }}" alt="" class="rounded-full" />
+                                                </div>
+                                                <div class="text-xl pl-3">
+                                                    {{ $followee->user->name }}
+                                                </div>
+                                            </div>
+
+                                            <div class="pl-8">
+                                                @livewire('follow-button', ['profile' => $followee])
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="mt-40">
+                                <h1 class="text-slate-700/70 dark:text-slate-100 text-xl font-bold">Nothing that show for the momment.</h1>
+                            </div>
+                        @endif
+
+                    </div>
+                </x-slot>
+
+                <x-slot name="footer"></x-slot>
+            </x-layout.modal>
         </div>
     </div>
 </x-app-layout>
