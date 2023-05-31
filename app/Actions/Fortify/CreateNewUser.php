@@ -52,7 +52,7 @@ class CreateNewUser implements CreatesNewUsers
             'is_deleted' => false,
             'is_banned' => false,
             'rank_id' => 1,
-            'last_activity' => now(),
+            'last_activity' => (int) now()->valueOf(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
