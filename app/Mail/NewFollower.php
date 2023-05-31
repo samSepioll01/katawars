@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Profile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,16 +10,15 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class AddFavorite extends Mailable
+class NewFollower extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
-    public $voterUsername;
-    public $score;
-    public $typeScore;
-    public $challenge;
+    public $newFollowerName;
+    public $name;
+    public $email;
     public $url;
+    public $numFollowers;
 
 
     /**
@@ -26,14 +26,13 @@ class AddFavorite extends Mailable
      *
      * @return void
      */
-    public function __construct($favorite)
+    public function __construct(Profile $follower, Profile $followee)
     {
-        $this->user = $favorite->solution->kata->owner->user;
-        $this->voterUsername = $favorite->profile->user->name;
-        $this->score = $favorite->scoreRecords->first()->score->points;
-        $this->typeScore = $favorite->scoreRecords->first()->score->type;
-        $this->challenge = $favorite->solution->kata->challenge->title;
-        $this->url = $favorite->solution->kata->challenge->url;
+        $this->newFollowerName = $follower->user->name;
+        $this->name = $followee->user->name;
+        $this->email = $followee->user->email;
+        $this->url = $followee->url;
+        $this->numFollowers = $followee->followers->count();
     }
 
     /**
@@ -44,8 +43,8 @@ class AddFavorite extends Mailable
     public function envelope()
     {
         return new Envelope(
-            to: [$this->user->name => $this->user->email],
-            subject: 'Your resources has been voted!',
+            to: [$this->name => $this->email],
+            subject: 'You have a New Follower!',
         );
     }
 
@@ -57,20 +56,19 @@ class AddFavorite extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mail.favorite',
+            view: 'mail.new-follower',
             with: [
-                'greeting' => "Dear " . $this->user->name . "!",
+                'greeting' => "Dear " . $this->name . "!",
                 'url' => $this->url,
-                'challenge' => $this->challenge,
-                'score' => $this->score,
-                'typeScore' => $this->typeScore,
-                'voterUsername' => $this->voterUsername,
+                'name' => $this->name,
+                'numFollowers' => $this->numFollowers,
+                'newFollowerName' => $this->newFollowerName,
                 'introLines' => [
-                    "You have won:"
+                    "In this moment you have:"
                 ],
                 'outroLines' => [
-                    'Thanks you so much for give content to our website.',
-                    'Continue for this path and enjoy coding!',
+                    'Thanks you so much for using our website.',
+                    'Awesome! Continue for this path and enjoy coding!',
                     'Regards,',
                     'Katawars.',
                 ],

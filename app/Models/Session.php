@@ -26,8 +26,11 @@ class Session extends Model
                     ->last_activity;
 
         $user = Auth::user();
-        $profile = $user->profile;
-        $profile->last_activity = $last;
-        $profile->save();
+
+        if ($user->email_verified_at) {
+            $profile = $user->profile;
+            $profile->last_activity = $last;
+            $profile->save();
+        }
     }
 }

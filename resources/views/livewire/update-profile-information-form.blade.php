@@ -9,7 +9,7 @@
 
     <x-slot name="form">
         <!-- Profile Photo -->
-        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos() && auth()->user()->email_verified_at)
 
             <div
                 x-data="{photoName: null, photoPreview: null}"
@@ -82,7 +82,7 @@
 
                 {{-- Cropper Modal --}}
                 <div wire:ignore>
-                    <x-layout.modal name="cropper-modal" maxWidth="4xl">
+                    <x-layout.modal name="cropper-modal" maxWidth="4xl" display="justify-evenly">
                         <x-slot name="title">
                             {{ __('Crop Image Area') }}
                         </x-slot>
@@ -229,17 +229,20 @@
             @endif
         </div>
 
-        <!-- Bio -->
-        <div class="col-span-6 xl:col-span-4">
-            <x-jet-label for="bio" value="{{ __('Bio') }}" />
+        @if (auth()->user()->email_verified_at)
+            <!-- Bio -->
+            <div class="col-span-6 xl:col-span-4">
+                <x-jet-label for="bio" value="{{ __('Bio') }}" />
 
-            <x-profile.bio>
-                {{ auth()->user()->bio }}
-            </x-profile.bio>
+                <x-profile.bio>
+                    {{ auth()->user()->bio }}
+                </x-profile.bio>
 
-            <x-jet-input-error for="bio" class="mt-2" />
+                <x-jet-input-error for="bio" class="mt-2" />
 
-        </div>
+            </div>
+        @endif
+
     </x-slot>
 
     <x-slot name="actions">

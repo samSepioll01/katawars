@@ -1,7 +1,12 @@
 <div>
-    <div class="w-full pb-4 px-1 text-gray-700 dark:text-slate-200">
-        <x-layout.progress-bar size="4" title="Rank {{ ucwords(auth()->user()->profile->rank->name) }} Progress" :sidebar="true" />
-    </div>
+
+    @if (auth()->user()->email_verified_at)
+        <div class="w-full pb-4 px-1 text-gray-700 dark:text-slate-200">
+            <x-layout.progress-bar size="4" title="Rank {{ ucwords(auth()->user()->profile->rank->name) }} Progress" :sidebar="true" />
+        </div>
+    @endif
+
+
 
     <x-layout.dropdown-separator />
 

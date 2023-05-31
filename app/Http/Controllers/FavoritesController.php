@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\FavoriteJob;
-use App\Mail\AddFavorite;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class FavoritesController extends Controller

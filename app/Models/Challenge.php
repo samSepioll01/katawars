@@ -31,10 +31,10 @@ class Challenge extends Model
     /**
      * Laravel Scout only indexes the challenges of training mode in Algolia.
      */
-    public function shouldBeSearchable()
-    {
-        return $this->katas()->where('mode_id', 1)->exists();
-    }
+    // public function shouldBeSearchable()
+    // {
+    //     return $this->katas()->where('mode_id', 1)->exists();
+    // }
 
     /**
      * Get the indexable data array for the model.

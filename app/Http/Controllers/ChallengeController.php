@@ -47,6 +47,9 @@ class ChallengeController extends Controller
                 $challenges = $this->filteredChallenges()->get();
             } else {
                 $challenges = Challenge::search($request->query('search'))->get();
+                $challenges = $challenges->filter(
+                    fn($challenge) => $challenge->katas->first()->mode_id !== 2
+                );
             }
 
             if ($challenges->count()) {
