@@ -232,20 +232,29 @@ class ProfileController extends Controller
         }
     }
 
+    /**
+     * Show the public main page for the profiles.
+     */
     public function showProfilesMainPage(Request $request)
     {
-
         $request->validate([
             'slug' => ['string', 'unique:profile', 'max:255'],
         ]);
 
         $profile = Profile::where('slug', $request->slug)->firstOrFail();
 
+        if ($profile->is_deleted) {
+            abort(404);
+        }
+
         return view('profile.dashboard', [
             'userValues' => $this->getUserDashboardValues($profile->user),
         ]);
     }
 
+    /**
+     * Get the users thats follows to the current user.
+     */
     public function getFollowers(Request $request)
     {
         $request->validate([
@@ -267,6 +276,9 @@ class ProfileController extends Controller
         }
     }
 
+    /**
+     * Get the users that the profile is following.
+     */
     public function getFollowees(Request $request)
     {
         $request->validate([
@@ -289,6 +301,9 @@ class ProfileController extends Controller
 
     }
 
+    /**
+     * Allow whether a user follow o not another user.
+     */
     public function changeFollow(Request $request)
     {
         $request->validate([

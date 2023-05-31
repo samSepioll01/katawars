@@ -8,11 +8,7 @@
             </div>
 
             <div class="absolute top-3 right-3">
-                @if (auth()->user()->following?->get()->contains($user->id))
-                    <x-jet-button x-on:click.prevent="">Unfollow</x-jet-button>
-                @else
-                    <x-jet-button x-on:click.prevent="">Follow</x-jet-button>
-                @endif
+                @livewire('follow-button', ['profile' => $user->profile])
             </div>
 
             <div class="w-full h-full flex flex-row items-center justify-start pl-7">
