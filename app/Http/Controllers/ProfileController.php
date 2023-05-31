@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProfileRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Profile;
 use App\Events\ThemeModeUpdated;
+use App\Jobs\ReportNewFollower;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -243,8 +244,112 @@ class ProfileController extends Controller
         return view('profile.dashboard', [
             'userValues' => $this->getUserDashboardValues($profile->user),
         ]);
+    }
 
+    public function getFollowers(Request $request)
+    {
+        $request->validate([
+            'slug' => ['string', 'max:255', 'alpha_num']
+        ]);
 
+        if ($request->ajax()) {
+
+            $profile = Profile::where('slug', $request->slug)->firstOrFail();
+
+            $returnHTML = view('includes.follow', [
+                'follows' => $profile->followers()->get(),
+            ])->render();
+
+            return response()->json([
+                'success' => true,
+                'returnHTML' => $returnHTML,
+            ]);
+        }
+    }
+
+    public function getFollowees(Request $request)
+    {
+        $request->validate([
+            'slug' => ['string', 'max:255', 'alpha_num']
+        ]);
+
+        if ($request->ajax()) {
+
+            $profile = Profile::where('slug', $request->slug)->firstOrFail();
+
+            $returnHTML = view('includes.follow', [
+                'follows' => $profile->following()->get(),
+            ])->render();
+
+            return response()->json([
+                'success' => true,
+                'returnHTML' => $returnHTML,
+            ]);
+        }
+
+    }
+
+    public function changeFollow(Request $request)
+    {
+        $request->validate([
+            'slug' => ['string', 'max:255', 'alpha_num']
+        ]);
+
+        if ($request->ajax()) {
+
+            $userProfile = Auth::user()->profile;
+            $profileTarget = Profile::where('slug', $request->slug)->firstOrFail();
+
+            if ($userProfile->id !== $profileTarget->id) {
+
+                $userProfile->following()->toggle($profileTarget);
+
+                if ($userProfile->isFollowing($profileTarget) ) {
+
+                    ReportNewFollower::dispatch($userProfile, $profileTarget)
+                        ->onQueue('sendMailQueue');
+                }
+
+                $url = request()->session()->get('_previous.url');
+                $slug = $this->getUrlSlug($url);
+
+                if ($slug === $userProfile->slug || $slug === 'dashboard') {
+
+                    $followers = $userProfile->followers()->count();
+                    $following = $userProfile->following()->count();
+
+                } else {
+
+                    $profileMainPage = Profile::where('slug', $slug)->firstOrFail();
+                    $followers = $profileMainPage->followers()->count();
+                    $following = $profileMainPage->following()->count();
+                }
+
+                $refreshBTN = view('includes.follow-btn', [
+                    'profile' => $profileTarget,
+                ])->render();
+
+                return response()->json([
+                    'success' => true,
+                    'refreshbutton' => $refreshBTN,
+                    'followers' => $followers,
+                    'following' => $following,
+                ]);
+
+            }
+        }
+    }
+
+    /**
+     * Get the slug of a url.
+     *
+     * @param string $url
+     * @return string
+     */
+    protected function getUrlSlug(string $url): string
+    {
+        $routes = explode('/', $url);
+        return $routes[count($routes) - 1];
     }
 
     /**
@@ -267,6 +372,7 @@ class ProfileController extends Controller
             'id' => $user->id,
             'nickname' => $user->name,
             'bio' => $user->bio,
+            'slug' => $user->profile->slug,
             'avatar' => $user->profile_photo_url,
             'rank' => $user->profile->rank->name,
             'time_elapsed' => $user->created_at->diffForHumans(now()),

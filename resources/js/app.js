@@ -95,6 +95,27 @@ window.$progressbar = {
     }
 }
 
+window.$refresh = {
+    follows (followers, following) {
+        window.dispatchEvent(
+            new CustomEvent('followsupdated', {
+                detail: {
+                    followers: followers,
+                    following: following,
+                },
+            })
+        );
+    },
+
+    following (followees) {
+        window.dispatchEvent(
+            new CustomEvent('followeesupdated', {
+                detail: followees,
+            })
+        );
+    }
+}
+
 window.$aux = {
     createElement(elem = null, attributes = {}, textNode = '') {
 

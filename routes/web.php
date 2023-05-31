@@ -61,7 +61,16 @@ Route::prefix('user')->middleware([
         ->name('github.sync');
 
     Route::get('/{slug}', [ProfileController::class, 'showProfilesMainPage'])
-    ->name('users.main');
+        ->name('users.main');
+
+    Route::post('/{slug}/change-follow', [ProfileController::class, 'changeFollow'])
+        ->name('user.change-follow');
+
+    Route::get('/{slug}/followers', [ProfileController::class, 'getFollowers'])
+        ->name('user.followers');
+
+    Route::get('/{slug}/following', [ProfileController::class, 'getFollowees'])
+        ->name('user.following');
 });
 
 

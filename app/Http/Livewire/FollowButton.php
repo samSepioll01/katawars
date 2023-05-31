@@ -34,13 +34,7 @@ class FollowButton extends Component
                 ReportNewFollower::dispatch($userProfile, $this->profile)
                     ->onQueue('sendMailQueue');
             }
-
-            $this->dispatchBrowserEvent('followersupdated', [
-                'followers' => $this->profile->followers()->count(),
-            ]);
-
         }
-
     }
 
     /**
