@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Resource;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateResourceRequest extends FormRequest
 {
@@ -13,7 +15,8 @@ class UpdateResourceRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->resource->profile_id === Auth::user()->profile->id
+            || Auth::user()->hasRole(['admin', 'superadmin']);
     }
 
     /**
@@ -24,7 +27,9 @@ class UpdateResourceRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:255'],
+            'url' => ['required', 'string', 'max:255'],
         ];
     }
 }

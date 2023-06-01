@@ -138,6 +138,7 @@ class Profile extends Model
 
             if ($next_rank && $this->exp >= $current_rank->level_up) {
                 $this->attributes['rank_id'] = $next_rank->id;
+                $this->attributes['honor'] += Score::where('denomination', 'level_up ' . $this->rank->name);
             }
         } else {
             $this->attributes['exp'] = $exp;

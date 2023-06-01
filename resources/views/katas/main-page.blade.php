@@ -10,7 +10,7 @@
             </form>
         </div>
         <main
-            x-data="{instructions: true, code: false, resources: false, solutions: false}"
+            x-data="{instructions: false, code: false, resources: true, solutions: false}"
             class="sm:mt-8 grid grid-flow-row sm:card-panel"
         >
             <nav class="grid grid-flow-col grid-cols-12 shadow-xl relative overflow-hidden dark:text-slate-200">
@@ -142,7 +142,85 @@
                         </div>
                     </section>
                     <section x-show="resources" style="display: none;">
-                        Resources
+                        <div class="w-full flex justify-end">
+                            <div class="pr-12">
+                                <x-jet-button class="" x-on:click="
+                                    $modals.show('create-resource-modal');
+                                ">
+                                    Add
+                                </x-jet-button>
+                            </div>
+
+                        </div>
+                        <div class="w-full px-10 py-5 flex justify-center">
+
+                            <div class="w-3/4">
+
+                                @if ($resources->count())
+                                    @foreach ($resources as $resource)
+                                        <div class="card-challenge relative">
+
+                                            <div class="w-full flex flex-row justify-between">
+
+                                                <div class=" w-full flex flex-row justify-end gap-8 item-center">
+                                                    @livewire('like-button', ['model' => $resource])
+                                                </div>
+
+                                            </div>
+
+                                            <div class="py-2">
+                                                <a href="{{ $resource->url }}" target="_blank" class="">
+                                                    <div class="text-center text-ellipsis-1 text-xl text-violet-600 dark:text-tomato">
+                                                        {{ $resource->title }}
+                                                    </div>
+                                                    <div class="text-sm text-center">
+                                                        {{ $resource->url }}
+                                                    </div>
+                                                    <div class="text-ellipsis-3 py-1">
+                                                        <span>
+                                                            {!! $resource->description !!}
+                                                        </span>
+                                                    </div>
+                                                    <div class="absolute left-3 top-1 text-xs">
+                                                        Published <span> {{ $resource->created_at->diffForHumans(now()) }} </span>
+                                                    </div>
+                                                </a>
+                                            </div>
+
+                                            @if (auth()->user()->profile->id === $resource->profile_id || auth()->user()->hasRole(['admin', 'superadmin']))
+                                                <div class="absolute bottom-1 right-3">
+                                                    <x-jet-button x-on:click="
+                                                        axios({
+                                                            method: 'get',
+                                                            url: location.origin + '/katas/{{$challenge->slug}}/get-resource/' + {{$resource->id}},
+                                                            responseType: 'json',
+                                                        })
+                                                        .then(response => {
+                                                            if (response.data.success) {
+                                                                document.getElementById('edit-title').value = response.data.title;
+                                                                document.getElementById('edit-url').value = response.data.url;
+                                                                document.getElementById('edit-description').textContent = response.data.description;
+                                                                document.getElementById('edit-form').action = response.data.action;
+                                                            }
+                                                        })
+                                                        .catch(errors => console.log(erros));
+                                                        $modals.show('edit-resource-modal');
+                                                    ">Edit</x-jet-button>
+                                                </div>
+                                            @endif
+
+                                        </div>
+                                    @endforeach
+
+                                @else
+                                        <div class="w-full h-3/4 flex justify-center items-center">
+                                            <h1 class="text-slate-700/70 dark:text-slate-100 font-bold text-xl">Be the first in publish a resource.</h1>
+                                        </div>
+
+                                @endif
+
+                            </div>
+                        </div>
                     </section>
                     <section x-show="solutions" style="display: none;">
                         Solutions
@@ -191,6 +269,123 @@
                 </x-slot>
             </x-layout.modal>
 
+            <x-layout.modal name="create-resource-modal" maxWidth="2xl" display="justify-start">
+                <x-slot name="title">
+                    <div class="py-4 text-center">
+                        Create Resource
+                    </div>
+                    <div class="cross-menu" @click.prevent="show = false">
+                        &times;
+                    </div>
+                </x-slot>
+
+                <x-slot name="body">
+
+                    <form action="{{ route('katas.create-resource', $challenge->slug) }}" method="post" class="flex flex-col justify-between items-center">
+                        @csrf
+                        <div class="w-3/4 py-5">
+                            <x-jet-label for="title" value="{{ __('Title') }}" />
+                            <x-jet-input id="title" type="text" name="title" class="mt-1 block w-full text-slate-700/70" value="{{ old('title') }}"/>
+                            <x-jet-input-error for="title" class="mt-2" id="error-title" />
+                            <p id="error-title" class="text-sm text-red-600"></p>
+                        </div>
+
+                        <div class="w-3/4 py-5">
+                            <x-jet-label for="url" value="{{ __('Url') }}" />
+                            <x-jet-input id="url" type="text" name="url" class="mt-1 block w-full text-slate-700/70" value="{{ old('url', '') }}" />
+                            <x-jet-input-error for="url" class="mt-2" id="error-url"/>
+                            <p id="error-url" class="text-sm text-red-600"></p>
+                        </div>
+
+                        <div class="w-3/4 py-5">
+                            <x-jet-label for="description" value="{{ __('Description') }}" />
+
+                            <textarea name="description" id="description" type="description" cols="30" rows="5" maxlength="250"
+                                      class="w-full block mt-1 rounded-md transition border border-gray-300 text-slate-700/70
+                                            dark:bg-[rgb(255,255,255)]/20 dark:text-slate-100
+                                            focus:outline-none focus:ring-1 focus:saturate-150 focus:ring-violet-600
+                                            dark:focus:shadow-outter-lg dark:focus:ring-transparent
+                                            dark:focus:border-cyan-300 dark:focus:shadow-cyan-700 dark:focus:bg-[rgb(255,255,255)]/30"
+                            >{{ old('description', '') }}</textarea>
+                            <x-jet-input-error for="description" class="mt-2" id="error-description"/>
+                            <p id="error-description" class="text-sm text-red-600"></p>
+
+                        </div>
+
+                        <div class="w-full flex justify-end items-center py-5 pr-5">
+                            <x-jet-button id="publish-resource">
+                                Publish
+                            </x-jet-button>
+                        </div>
+
+
+                    </form>
+
+                </x-slot>
+
+                <x-slot name="footer">
+
+                </x-slot>
+            </x-layout.modal>
+
+            <x-layout.modal name="edit-resource-modal" maxWidth="2xl" display="justify-start">
+                <x-slot name="title">
+                    <div class="py-4 text-center">
+                        Edit Resource
+                    </div>
+                    <div class="cross-menu" @click.prevent="show = false">
+                        &times;
+                    </div>
+                </x-slot>
+
+                <x-slot name="body">
+                    <form id="edit-form" x-ref="edit-form" action="" method="post" class="flex flex-col justify-between items-center">
+                        @csrf
+                        <div class="w-3/4 py-5">
+                            <x-jet-label for="title" value="{{ __('Title') }}" />
+                            <x-jet-input id="edit-title" x-ref="edit-title" type="text" name="title" class="mt-1 block w-full text-slate-700/70" value="{{ old('title', '' ) }}"/>
+                            <x-jet-input-error for="title" class="mt-2" id="error-title" />
+                            <p id="edit-error-title" class="text-sm text-red-600"></p>
+                        </div>
+
+                        <div class="w-3/4 py-5">
+                            <x-jet-label for="url" value="{{ __('Url') }}" />
+                            <x-jet-input id="edit-url" x-ref="edit-url" type="text" name="url" class="mt-1 block w-full text-slate-700/70" value="{{ old('url', '') }}" />
+                            <x-jet-input-error for="url" class="mt-2" id="error-url"/>
+                            <p id="edit-error-url" class="text-sm text-red-600"></p>
+                        </div>
+
+                        <div class="w-3/4 py-5">
+                            <x-jet-label for="description" value="{{ __('Description') }}" />
+
+                            <textarea name="description" id="edit-description" x-ref="edit-description" type="description" cols="30" rows="5" maxlength="250"
+                                      class="w-full block mt-1 rounded-md transition border border-gray-300 text-slate-700/70
+                                            dark:bg-[rgb(255,255,255)]/20 dark:text-slate-100
+                                            focus:outline-none focus:ring-1 focus:saturate-150 focus:ring-violet-600
+                                            dark:focus:shadow-outter-lg dark:focus:ring-transparent
+                                            dark:focus:border-cyan-300 dark:focus:shadow-cyan-700 dark:focus:bg-[rgb(255,255,255)]/30"
+                            >{{ old('description', '') }}</textarea>
+                            <x-jet-input-error for="description" class="mt-2" id="edit-error-description"/>
+                            <p id="edit-error-description" class="text-sm text-red-600"></p>
+
+                        </div>
+
+                        <div class="w-full flex justify-end items-center py-5 pr-5">
+                            <x-jet-button id="update-resource">
+                                Edit
+                            </x-jet-button>
+                        </div>
+
+
+                    </form>
+
+                </x-slot>
+
+                <x-slot name="footer">
+
+                </x-slot>
+            </x-layout.modal>
+
             <x-layout.dinamicflash type="error" name="verifycode"></x-layout.dinamicflash>
 
             @if (session()->has('syncStatus'))
@@ -224,6 +419,159 @@
             }
         </style>
         @vite(['resources/js/codekata.js'])
+        <script>
+
+            window.addEventListener('DOMContentLoaded', (eDCL) => {
+                iodine = new Iodine();
+
+                const rules = {
+                    title: ['required', 'string', 'maxLength:255'],
+                    url: ['required', 'url', 'maxLength:255'],
+                    description: ['required', 'string', 'maxLength:255'],
+                };
+
+                document.getElementById('title')
+                    .addEventListener('blur', (eBlur) => {
+                        let title =  document.getElementById('title').value;
+                        let assert = iodine.assert(title, rules.title);
+                        console.log(title);
+                        if (!assert.valid) {
+                            document.getElementById('error-title').textContent = assert.error;
+                        } else {
+                            document.getElementById('error-title').textContent = '';
+                        }
+                    });
+
+                document.getElementById('url')
+                    .addEventListener('blur', (eBlur) => {
+                        let url =  document.getElementById('url').value;
+                        let assert = iodine.assert(url, rules.url);
+                        if (!assert.valid) {
+                            document.getElementById('error-url').textContent = assert.error;
+                        } else {
+                            document.getElementById('error-url').textContent = '';
+                        }
+                    });
+
+                document.getElementById('description')
+                    .addEventListener('blur', (eBlur) => {
+                        let description =  document.getElementById('description').value;
+                        let assert = iodine.assert(description, rules.description);
+                        if (!assert.valid) {
+                            document.getElementById('error-description').textContent = assert.error;
+                        } else {
+                            document.getElementById('error-description').textContent = '';
+                        }
+                    });
+
+
+                document.getElementById('send-resource').addEventListener('click', (eClick) => {
+
+                    let titleValue =  document.getElementById('title').value;
+                    let urlValue =  document.getElementById('url').value;
+                    let descriptionValue =  document.getElementById('description').value;
+
+                    let title = iodine.assert(titleValue, rules.title);
+                    let url = iodine.assert(urlValue, rules.url);
+                    let description = iodine.assert(descriptionValue, rules.description);
+
+                    if (!title.valid && !url.valid && !description.valid) {
+                        eClick.preventDefault();
+                        eClick.stopImmediatePropagation();
+                        if (!title.valid) {
+                            document.getElementById('error-title').textContent = title.error;
+                        } else {
+                            document.getElementById('error-title').textContent = '';
+                        }
+
+                        if (!title.valid) {
+                            document.getElementById('error-url').textContent = url.error;
+                        } else {
+                            document.getElementById('error-url').textContent = '';
+                        }
+
+                        if (!description.valid) {
+                            document.getElementById('error-description').textContent = description.error;
+                        } else {
+                            document.getElementById('error-description').textContent = '';
+                        }
+                    }
+                })
+
+                // Edit modal
+
+                document.getElementById('edit-title')
+                    .addEventListener('blur', (eBlur) => {
+                        let title =  document.getElementById('edit-title').value;
+                        let assert = iodine.assert(title, rules.title);
+                        console.log(title);
+                        if (!assert.valid) {
+                            document.getElementById('edit-error-title').textContent = assert.error;
+                        } else {
+                            document.getElementById('edit-error-title').textContent = '';
+                        }
+                    });
+
+                document.getElementById('edit-url')
+                    .addEventListener('blur', (eBlur) => {
+                        let url =  document.getElementById('edit-url').value;
+                        let assert = iodine.assert(url, rules.url);
+                        if (!assert.valid) {
+                            document.getElementById('edit-error-url').textContent = assert.error;
+                        } else {
+                            document.getElementById('edit-error-url').textContent = '';
+                        }
+                    });
+
+                document.getElementById('edit-description')
+                    .addEventListener('blur', (eBlur) => {
+                        let description =  document.getElementById('edit-description').value;
+                        let assert = iodine.assert(description, rules.description);
+                        if (!assert.valid) {
+                            document.getElementById('edit-error-description').textContent = assert.error;
+                        } else {
+                            document.getElementById('edit-error-description').textContent = '';
+                        }
+                    });
+
+
+                document.getElementById('send-resource').addEventListener('click', (eClick) => {
+
+                    let titleValue =  document.getElementById('edit-title').value;
+                    let urlValue =  document.getElementById('edit-url').value;
+                    let descriptionValue =  document.getElementById('edit-description').value;
+
+                    let title = iodine.assert(titleValue, rules.title);
+                    let url = iodine.assert(urlValue, rules.url);
+                    let description = iodine.assert(descriptionValue, rules.description);
+
+                    if (!title.valid && !url.valid && !description.valid) {
+                        eClick.preventDefault();
+                        eClick.stopImmediatePropagation();
+                        if (!title.valid) {
+                            document.getElementById('edit-error-title').textContent = title.error;
+                        } else {
+                            document.getElementById('edit-error-title').textContent = '';
+                        }
+
+                        if (!title.valid) {
+                            document.getElementById('edit-error-url').textContent = url.error;
+                        } else {
+                            document.getElementById('edit-error-url').textContent = '';
+                        }
+
+                        if (!description.valid) {
+                            document.getElementById('edit-error-description').textContent = description.error;
+                        } else {
+                            document.getElementById('edit-error-description').textContent = '';
+                        }
+                    }
+                })
+
+            });
+
+
+        </script>
     </x-layout.wrapped-main-section>
 </x-app-layout>
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\GitHubLoginController;
 use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
 use Illuminate\Support\Facades\Route;
 
@@ -126,6 +127,15 @@ Route::middleware([
 
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');
+
+    Route::post('/katas/{slug}/create-resource', [ResourceController::class, 'store'])
+        ->name('katas.create-resource');
+
+    Route::get('/katas/{slug}/get-resource/{id}', [ResourceController::class, 'getResource'])
+        ->name('katas.resource-get');
+
+    Route::post('/katas/{slug}/resource/{resource}', [ResourceController::class, 'update'])
+        ->name('katas.edit-resource');
 
     Route::post('/katas/{slug}/verify-kata', [ChallengeController::class, 'verifyKata'])
         ->name('katas.verify');

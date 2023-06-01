@@ -56,4 +56,27 @@
 
     <x-layout.dropdown-separator />
 
+    <div>
+
+        @if (auth()->user()->profile->following->count())
+        <div class="text-lg text-700 dark:text-slate-100 pb-3">
+            {{__('Following')}}
+        </div>
+        @foreach (auth()->user()->profile->following as $followee )
+            <x-jet-dropdown-link href="{{ $followee->url }}" class="text-md items-center">
+                <div>
+                    <img class="h-10 w-10 hover:scale-105 rounded-full" src="{{ $followee->user->profile_photo_url }}" alt="">
+                </div>
+                <div class="px-3">
+                    {{ __($followee->user->name) }}
+                </div>
+
+            </x-jet-dropdown-link>
+
+        @endforeach
+        @endif
+
+
+    </div>
+
 </div>
