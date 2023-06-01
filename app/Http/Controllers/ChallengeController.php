@@ -10,6 +10,7 @@ use App\Models\Challenge;
 use App\Models\Kata;
 use App\Models\Mode;
 use App\Models\Profile;
+use App\Models\Resource;
 use App\Models\Score;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -230,6 +231,8 @@ class ChallengeController extends Controller
 
         $circular = CircularCollection::make($challenges);
 
+        $resources = Resource::allLikesCount()->where('kata_id', $challenge->katas->first()->id);
+
         return view('katas.main-page', [
             'challenge' => $challenge,
             'owner' => $challenge->katas()->first()->owner->user,
@@ -237,6 +240,7 @@ class ChallengeController extends Controller
             'score' => Score::where('denomination', 'training')->first()->points,
             'previous' => $circular->previous($challenge)->id,
             'next' => $circular->next($challenge)->id,
+            'resources' => $resources,
         ]);
     }
 
@@ -337,6 +341,11 @@ class ChallengeController extends Controller
                     $profile->exp = Score::where('denomination', 'training')
                         ->first()->points;
                     $profile->save();
+
+                    $owner = $kata->owner;
+                    $owner->honor += Score::where('denomination', 'passed kata to owner')
+                        ->first()->points;
+                    $owner->save();
                 }
 
 

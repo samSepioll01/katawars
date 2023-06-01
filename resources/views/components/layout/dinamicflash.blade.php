@@ -16,12 +16,15 @@
     id="{{ $name }}"
     x-data="{ show: false }"
     @flash.window="
+        $el.style.display = 'visible';
         time = $event.detail.type === 'error' || $event.detail.type === 'warning' ? 10000 : 5000;
         $flash.removeStyles($refs.flashmessage);
         $flash.addStyles($refs.flashmessage, $flash.status[$event.detail.type]);
         $refs.flashmessage.textContent = $event.detail.message;
         show = true;
-        setTimeout(() => show = false, time);
+        setTimeout(() => {
+            show = false;
+        }, time);
     "
     class="w-1/3 h-32 fixed bottom-0 flex justify-end items-center p-6 right-0"
 >
