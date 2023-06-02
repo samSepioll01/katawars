@@ -12,6 +12,7 @@ use App\Models\Mode;
 use App\Models\Profile;
 use App\Models\Resource;
 use App\Models\Score;
+use App\Models\Solution;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -233,6 +234,14 @@ class ChallengeController extends Controller
 
         $resources = Resource::allLikesCount()->where('kata_id', $challenge->katas->first()->id);
 
+        $solutions = Solution::allLikesCount()->where('kata_id', $challenge->katas->first()->id);
+
+        $isPassedKata = Auth::user()->profile->passedKatas
+            ->contains($challenge->katas->first()->id);
+
+        $isSkippedKata = Auth::user()->profile->skippedKatas
+            ->contains($challenge->katas->first()->id);
+
         return view('katas.main-page', [
             'challenge' => $challenge,
             'owner' => $challenge->katas()->first()->owner->user,
@@ -241,6 +250,9 @@ class ChallengeController extends Controller
             'previous' => $circular->previous($challenge)->id,
             'next' => $circular->next($challenge)->id,
             'resources' => $resources,
+            'solutions' => $solutions,
+            'isPassedKata' => $isPassedKata,
+            'isSkippedKata' => $isSkippedKata,
         ]);
     }
 
@@ -330,9 +342,12 @@ class ChallengeController extends Controller
 
                 $profile = Auth::user()->profile;
 
+                $isPassedKata = $profile->passedKatas()->get()->contains($kata->id);
+                $isSkippedKata = $profile->skippedKatas()->get()->contains($kata->id);
+
                 // If the user not passed the kata previously sum exp
                 // and save the solution.
-                if (!$profile->passedKatas()->get()->contains($kata->id)) {
+                if (!$isPassedKata && !$isSkippedKata) {
 
                     $profile->passedKatas()->attach($kata->id, [
                         'code' => $code,
@@ -347,7 +362,6 @@ class ChallengeController extends Controller
                         ->first()->points;
                     $owner->save();
                 }
-
 
                 $returnHTML = view('includes.katapanel', [
                     'passed' => true,
@@ -370,7 +384,7 @@ class ChallengeController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $returnHTML,
-                'flash' => 'Exists some logic errors in your code!'
+                'flash' => 'Exists some logic errors in your code!',
             ]);
         }
     }

@@ -10,7 +10,7 @@
             </form>
         </div>
         <main
-            x-data="{instructions: {{ session('tabinstructions') ?? 'true' }}, code: false, resources: {{ session('tabresources') ?? 'false' }}, solutions: false}"
+            x-data="{instructions: {{ session('tabinstructions') ?? 'false' }}, code: false, resources: {{ session('tabresources') ?? 'false' }}, solutions: {{ session('tabsolutions') ?? 'true' }}}"
             class="sm:mt-8 grid grid-flow-row sm:card-panel"
         >
             <nav class="grid grid-flow-col grid-cols-12 shadow-xl relative overflow-hidden dark:text-slate-200">
@@ -222,8 +222,82 @@
                             </div>
                         </div>
                     </section>
+
+                    @vite(['resources/css/prism.css', 'resources/js/prism.js'])
+
                     <section x-show="solutions" style="display: none;">
-                        Solutions
+
+                        @if ($isPassedKata || $isSkippedKata)
+
+                            @if ($challenge->katas->first()->video()->exists())
+                                <div class="w-full flex justify-center">
+                                    {!! $challenge->katas->first()->video->youtube_code !!}
+                                </div>
+                            @endif
+
+                            @if ($solutions->count())
+                                <div class="w-full flex flex-col items-center gap-8 pt-5 justify-center">
+                                    @foreach ($solutions as $solution)
+
+
+
+                                        <div class="w-full md:w-3/4 xl:w-1/2 relative">
+                                            <a href="{{ $solution->profile->url }}">
+                                                <div class="flex flex-row items-center">
+                                                    <div class="py-2 px-3">
+                                                        <img class="h-10 w-10 rounded-full" src="{{ $solution->profile->user->profile_photo_url }}" alt="">
+                                                    </div>
+                                                    <div class="text-slate-700 dark:text-slate-100 text-sm flex flex-col items-center">
+                                                        <div>
+                                                            {{ $solution->profile->user->name }}
+                                                        </div>
+                                                        <div class="text-[11px]">
+                                                            {{ $solution->created_at->diffForHumans(now()) }}
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </a>
+
+                                            <div class="overflow-hidden rounded-lg">
+                                                <pre class="rounded-md"><code class="language-javascript">{{ trim($solution->code) }}</code></pre>
+                                            </div>
+                                            <div class="w-full flex flex-row justify-between">
+                                                <div class=" w-full flex flex-row justify-end gap-8 item-center">
+                                                    @livewire('like-button', ['model' => $solution])
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+
+                        @else
+
+                                <div class="w-full py-40">
+                                    <div class="flex flex-col items-center justify-center">
+
+                                        <div class="flex flex-row justify-center text-xl text-violet-600 dark:text-tomato">
+                                            <span class="px-1">
+                                                Click
+                                            </span>
+                                            <form action="{{ route('katas.unlock-solutions', ['slug' => $challenge->slug]) }}" method="get" class="px-1 hover:underline cursor-pointer transition-all duration-300 active:scale-95">
+                                                <button type="submit">HERE</button>
+                                            </form>
+                                            <span class="px-1">
+                                                to unlock Challenge.
+                                            </span>
+                                        </div>
+                                        <div x-ref="unlockmessage" class="text-lg text-slate-700 dark:text-slate-100">
+                                            Cuation! If you not complete this challenge you can't win EXP points.
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                        @endif
+
                     </section>
                 </div>
             </div>
@@ -242,9 +316,9 @@
                 </x-slot>
 
                 <x-slot name="body">
-                    @if (auth()->user()->profile->passedKatas->contains($challenge->katas->first()->id))
+                    @if ($isPassedKata || $isSkippedKata)
                         <div class="w-full p-10 text-center text-slate-900">
-                            <span class="text-2xl dark:text-slate-100">You passed this Challenge Previously.</span>
+                            <span class="text-2xl dark:text-slate-100">You passed o skipped this Challenge Previously.</span>
                         </div>
                     @else
                         <div class="w-full p-10 text-center text-slate-900">
@@ -465,7 +539,7 @@
                     });
 
 
-                document.getElementById('send-resource').addEventListener('click', (eClick) => {
+                document.getElementById('publish-resource').addEventListener('click', (eClick) => {
 
                     let titleValue =  document.getElementById('title').value;
                     let urlValue =  document.getElementById('url').value;
@@ -535,7 +609,7 @@
                     });
 
 
-                document.getElementById('send-resource').addEventListener('click', (eClick) => {
+                document.getElementById('update-resource').addEventListener('click', (eClick) => {
 
                     let titleValue =  document.getElementById('edit-title').value;
                     let urlValue =  document.getElementById('edit-url').value;

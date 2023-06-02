@@ -16,15 +16,27 @@ class VideoSolutionSeeder extends Seeder
     public function run()
     {
         VideoSolution::create([
-            'title' => 'VideoSolution 1',
-            'youtube_code' => "<iframe width='560' height='315' src='https://www.youtube.com/embed/BRI8wqUMdao' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
-            'kata_id' => 1,
+            'title' => 'FizzBuzz Video Solution',
+            'youtube_code' => '<iframe width="340" height="220" src="https://www.youtube.com/embed/hVlRSdIL2P8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
+            'kata_id' => 8,
         ]);
 
         VideoSolution::create([
-            'title' => 'VideoSolution 2',
-            'youtube_code' => "<iframe width='560' height='315' src='https://www.youtube.com/embed/fk6uS1Bq8mg' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
-            'kata_id' => 2,
+            'title' => 'Recursive Factorial Video Solution',
+            'youtube_code' => '<iframe width="340" height="220" src="https://www.youtube.com/embed/_CybtB6iRbE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
+            'kata_id' => 22,
+        ]);
+
+        VideoSolution::create([
+            'title' => 'Fibonnacci Video Solution',
+            'youtube_code' => '<iframe width="340" height="220" src="https://www.youtube.com/embed/2WOJWN695wU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
+            'kata_id' => 25,
+        ]);
+
+        VideoSolution::create([
+            'title' => 'Palindrome String Video Solution',
+            'youtube_code' => '<iframe width="340" height="220" src="https://www.youtube.com/embed/ozryDqb4UAU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
+            'kata_id' => 14,
         ]);
     }
 }

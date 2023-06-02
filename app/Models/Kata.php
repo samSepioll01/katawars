@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Kata extends Model
 {
@@ -63,9 +64,9 @@ class Kata extends Model
     /**
      * This determines which video solution was assigned to the kata.
      */
-    public function video(): BelongsTo
+    public function video(): HasOne
     {
-        return $this->belongsTo(VideoSolution::class);
+        return $this->hasOne(VideoSolution::class);
     }
 
     /**

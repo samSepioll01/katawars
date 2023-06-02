@@ -83,6 +83,7 @@ trait Likeable
     {
         return self::withCount('likes')
             ->orderBy('likes_count', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 

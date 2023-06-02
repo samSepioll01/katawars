@@ -7,6 +7,7 @@ use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
+use App\Http\Controllers\SolutionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -136,6 +137,9 @@ Route::middleware([
 
     Route::post('/katas/{slug}/resource/{resource}', [ResourceController::class, 'update'])
         ->name('katas.edit-resource');
+
+    Route::get('/katas/{slug}/solutions', [SolutionController::class, 'index'])
+        ->name('katas.unlock-solutions');
 
     Route::post('/katas/{slug}/verify-kata', [ChallengeController::class, 'verifyKata'])
         ->name('katas.verify');

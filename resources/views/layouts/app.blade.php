@@ -20,13 +20,15 @@
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
         <link rel="shortcut icon" type="image/png" href="{{ env('AWS_APP_URL') }}/logo/logo7.png"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism.css" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/thememode.js'])
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
 
         <!-- Import method throught Vite port without type module attribute -->
         <script src="{{ env('APP_VITE_URL') }}/resources/js/hubsidebar.js" async></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+
         <!-- Styles -->
         @livewireStyles
     </head>

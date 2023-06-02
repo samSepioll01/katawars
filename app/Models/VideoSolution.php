@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VideoSolution extends Model
 {
@@ -24,8 +24,8 @@ class VideoSolution extends Model
     /**
      * This determines which kata was assigned to the video salution.
      */
-    public function kata(): HasOne
+    public function kata(): BelongsTo
     {
-        return $this->hasOne(Kata::class);
+        return $this->belongsTo(Kata::class);
     }
 }

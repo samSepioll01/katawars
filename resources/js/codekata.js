@@ -1,3 +1,4 @@
+import { trim } from "lodash";
 
 const checkBTN = document.getElementById('check');
 
