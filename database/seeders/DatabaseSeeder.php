@@ -24,11 +24,11 @@ class DatabaseSeeder extends Seeder
             HelpSeeder::class,
             CategorySeeder::class,
             ChallengeSeeder::class,
-            //VideoSolutionSeeder::class,
             //KatawaySeeder::class,
             ScoreSeeder::class,
             UserSeeder::class,
             ResourceSeeder::class,
+            VideoSolutionSeeder::class,
         ]);
     }
 }

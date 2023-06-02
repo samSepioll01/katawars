@@ -60,7 +60,10 @@ class ResourceController extends Controller
         $profile->honor += Score::where('denomination', 'create resource')->first()->points;
         $profile->save();
 
-        return redirect()->back();
+        return redirect()->back()->with([
+            'tabinstructions' => 'false',
+            'tabresources' => 'true',
+        ]);
     }
 
     /**
@@ -102,7 +105,10 @@ class ResourceController extends Controller
         session()->flash('syncStatus', 'success');
         session()->flash('syncMessage', 'Resource Updated Succesful!');
 
-        return redirect()->back();
+        return redirect()->back()->with([
+            'tabinstructions' => 'false',
+            'tabresources' => 'true',
+        ]);
     }
 
     public function getResource(Request $request)

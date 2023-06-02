@@ -154,7 +154,7 @@ class ChallengeSeeder extends Seeder
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
             'uri_test' => '/katas/php/I0fL7dZCeykHK1If4vKiUrsnPrPUhQnXwmLvptrU.txt',
-            'signature' => 'function prime_factors() {',
+            'signature' => 'function prime_factors($number) {',
             'testClassName' => 'PrimeFactors',
         ]);
 
@@ -204,7 +204,7 @@ class ChallengeSeeder extends Seeder
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
             'uri_test' => '/katas/php/zHxM8zRS2Ec1DDEbmuowvoSKALnVCgwZQSsg6FPR.txt',
-            'signature' => 'function generate() {',
+            'signature' => 'function generate($number) {',
             'testClassName' => 'RomanNumerals',
         ]);
 
@@ -876,7 +876,7 @@ class ChallengeSeeder extends Seeder
             'language_id' => $phpID,
             'mode_id' => $trainingModeID,
             'uri_test' => '/katas/php/ih6Oc5lEzTS2j30MugMVcIXCHkPkB4K8YU2xWk1f.txt',
-            'signature' => 'function filtered($arr) {',
+            'signature' => 'function filtered($arr, $num) {',
             'testClassName' => 'ArrayFiltered',
         ]);
 

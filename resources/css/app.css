@@ -433,7 +433,7 @@
         @apply scale-x-100;
     }
 
-    code {
+    .code {
         @apply border border-slate-400 dark:border-cyan-600 px-1 text-center rounded-md bg-slate-200
                dark:bg-slate-900 dark:text-slate-100;
     }

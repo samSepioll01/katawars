@@ -113,7 +113,15 @@ window.$refresh = {
                 detail: followees,
             })
         );
-    }
+    },
+
+    solutions() {
+        window.dispatchEvent(
+            new CustomEvent('refreshsolutions', {
+                detail: true,
+            })
+        );
+    },
 }
 
 window.$aux = {
