@@ -369,10 +369,16 @@ class ChallengeController extends Controller
                     'asserts' => $testResult[count($testResult) - 1],
                 ])->render();
 
+                $solutions = view('includes.solution', [
+                    'solutions' => Solution::allLikesCount()->where('kata_id', $kata->id),
+                    'challenge' => $kata->challenge,
+                ])->render();
+
                 return response()->json([
                     'success' => true,
                     'message' => $returnHTML,
                     'progressbar' => $profile->getProfileProgress() . '%',
+                    'solutions' => $solutions,
                 ]);
             }
 

@@ -142,7 +142,7 @@ Route::middleware([
     Route::post('/katas/{slug}/resource/{resource}', [ResourceController::class, 'update'])
         ->name('katas.edit-resource');
 
-    Route::get('/katas/{slug}/solutions', [SolutionController::class, 'index'])
+    Route::get('/katas/{slug}/unlock-solutions', [SolutionController::class, 'unlockSolutions'])
         ->name('katas.unlock-solutions');
 
     Route::post('/katas/{slug}/verify-kata', [ChallengeController::class, 'verifyKata'])

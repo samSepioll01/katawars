@@ -10,7 +10,7 @@
             </form>
         </div>
         <main
-            x-data="{instructions: {{ session('tabinstructions') ?? 'false' }}, code: false, resources: {{ session('tabresources') ?? 'false' }}, solutions: {{ session('tabsolutions') ?? 'true' }}}"
+            x-data="{instructions: {{ session('tabinstructions') ?? 'true' }}, code: false, resources: {{ session('tabresources') ?? 'false' }}, solutions: {{ session('tabsolutions') ?? 'false' }}}"
             class="sm:mt-8 grid grid-flow-row sm:card-panel"
         >
             <nav class="grid grid-flow-col grid-cols-12 shadow-xl relative overflow-hidden dark:text-slate-200">
@@ -225,7 +225,7 @@
 
                     @vite(['resources/css/prism.css', 'resources/js/prism.js'])
 
-                    <section x-show="solutions" style="display: none;">
+                    <section id="cont-solutions" x-show="solutions" style="display: none;">
 
                         @if ($isPassedKata || $isSkippedKata)
 
@@ -235,12 +235,9 @@
                                 </div>
                             @endif
 
-                            @if ($solutions->count())
-                                <div class="w-full flex flex-col items-center gap-8 pt-5 justify-center">
+                            <div class="w-full flex flex-col items-center gap-8 pt-5 justify-center">
+                                @if ($solutions->count())
                                     @foreach ($solutions as $solution)
-
-
-
                                         <div class="w-full md:w-3/4 xl:w-1/2 relative">
                                             <a href="{{ $solution->profile->url }}">
                                                 <div class="flex flex-row items-center">
@@ -270,8 +267,11 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                </div>
-                            @endif
+                                @else
+                                    <h1 class="text-slate-700/70 dark:text-slate-100 font-bold text-xl">Anybody completed this kata yet.</h1>
+                                @endif
+                            </div>
+
 
                         @else
 

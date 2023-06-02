@@ -14,24 +14,24 @@ class SolutionController extends Controller
      *
      * @param Request $request
      */
-    public function index(Request $request)
+    public function unlockSolutions(Request $request)
     {
         $request->validate([
             'slug' => $request->slug,
         ]);
 
-        $kata_id = Challenge::where('slug', $request->slug)->firstOrFail()->id;
+        $kata = Challenge::where('slug', $request->slug)->firstOrFail();
 
         $profileSkipped = Auth::user()->profile->skippedKatas();
+        $profilePassed = Auth::user()->profile->passedKatas()->get()->contains($kata->id);
 
-        if (!$profileSkipped->get()->contains($kata_id)) {
-            $profileSkipped->attach($kata_id);
+        if (!$profilePassed && !$profileSkipped->get()->contains($kata->id)) {
+            $profileSkipped->attach($kata->id);
         }
-
 
         return redirect()->back()->with([
             'tabsolutions' => 'true',
-            'tabintroductions' => 'false',
+            'tabinstructions' => 'false',
             'tabresources' => 'false',
         ]);
     }
