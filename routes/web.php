@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\GitHubLoginController;
 use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
 use App\Http\Controllers\SolutionController;
@@ -99,6 +100,9 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
+
+    Route::get('/messenger', [MessengerController::class, 'index'])
+        ->name('messenger.index');
 
     Route::get('/training', [ChallengeController::class, 'showChallenges'])
         ->name('challenges.training');
