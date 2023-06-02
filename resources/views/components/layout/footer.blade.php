@@ -1,12 +1,4 @@
-@php
-    $messenger = Request::routeIs('chatify')
-        ? 'bg-slate-100 dark:bg-[#121212]'
-        : '';
-
-    $p = $messenger ? 'pt-0' : '';
-@endphp
-
-<footer class="@if(Auth::check()) pt-5 @else py-5 @endif w-full dark:bg-slate-900/70 {{ $messenger }} {{ $p }}">
+<footer class="@if(Auth::check()) pt-5 @else py-5 @endif w-full dark:bg-slate-900/70">
 
     @guest
         <div class="flex flex-row justify-center">
@@ -19,7 +11,7 @@
     @endguest
 
 
-    <div class="py-5 md:pb-2 flex flex-col md:flex-row justify-evenly items-center text-slate-700 dark:text-slate-400 {{ $messenger }}">
+    <div class="py-5 md:pb-2 flex flex-col md:flex-row justify-evenly items-center text-slate-700 dark:text-slate-400">
         <a href="{{ route('help') }}" class="py-2 dark:hover:text-slate-100 hover:text-violet-700 transition-colors duration-300">Help</a>
         <a href="{{ route('privacy-policy') }}" class="py-2 dark:hover:text-slate-100 hover:text-violet-700 transition-colors duration-300">Privacy Policy</a>
         <a href="{{ route('terms-service') }}" class="py-2 dark:hover:text-slate-100 hover:text-violet-700 transition-colors duration-300">Term of Service</a>

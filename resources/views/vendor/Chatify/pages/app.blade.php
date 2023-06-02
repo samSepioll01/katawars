@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-layout.messenger>
 
     @include('Chatify::layouts.headLinks')
     <div class="messenger">
@@ -113,4 +113,4 @@
     @include('Chatify::layouts.modals')
     @include('Chatify::layouts.footerLinks')
 
-</x-app-layout>
+</x-layout.messenger>
