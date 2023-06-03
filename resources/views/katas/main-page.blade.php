@@ -111,7 +111,7 @@
                                 Comments
                             </header>
 
-                            <form action="/katas/{{$challenge->slug}}/comments" method="post" class="border border-slate-200 dark:border-slate-800/70 dark:bg-slate-800/30 p-5 rounded-lg ">
+                            <form action="{{ route('katas.comment.store', $challenge) }}" method="post" class="border border-slate-200 dark:border-slate-800/70 dark:bg-slate-800/30 p-5 rounded-lg ">
                                 @csrf
 
                                 <header class="flex flex-row items-center">
@@ -134,7 +134,7 @@
                             </form>
 
                             @foreach ($comments as $comment)
-                                <x-layout.challenge-comment :comment="$comment" />
+                                <x-layout.challenge-comment :comment="$comment" :challenge="$challenge"/>
                             @endforeach
                         </section>
                     </section>
@@ -224,7 +224,7 @@
                                                     <x-jet-button x-on:click="
                                                         axios({
                                                             method: 'get',
-                                                            url: location.origin + '/katas/{{$challenge->slug}}/get-resource/' + {{$resource->id}},
+                                                            url: '{{ route('katas.resource.edit', ['slug' => $challenge->slug, 'id' => $resource->id]) }}',
                                                             responseType: 'json',
                                                         })
                                                         .then(response => {
@@ -232,7 +232,7 @@
                                                                 document.getElementById('edit-title').value = response.data.title;
                                                                 document.getElementById('edit-url').value = response.data.url;
                                                                 document.getElementById('edit-description').textContent = response.data.description;
-                                                                document.getElementById('edit-form').action = response.data.action;
+                                                                document.getElementById('edit-resource-form').action = response.data.action;
                                                             }
                                                         })
                                                         .catch(errors => console.log(erros));
@@ -387,7 +387,7 @@
 
                 <x-slot name="body">
 
-                    <form action="{{ route('katas.create-resource', $challenge->slug) }}" method="post" class="flex flex-col justify-between items-center">
+                    <form action="{{ route('katas.resource.store', $challenge->slug) }}" method="post" class="flex flex-col justify-between items-center">
                         @csrf
                         <div class="w-3/4 py-5">
                             <x-jet-label for="title" value="{{ __('Title') }}" />
@@ -445,8 +445,9 @@
                 </x-slot>
 
                 <x-slot name="body">
-                    <form id="edit-form" x-ref="edit-form" action="" method="post" class="flex flex-col justify-between items-center">
+                    <form id="edit-resource-form" x-ref="edit-resource-form" action="" method="post" class="flex flex-col justify-between items-center">
                         @csrf
+                        @method('PATCH')
                         <div class="w-3/4 py-5">
                             <x-jet-label for="title" value="{{ __('Title') }}" />
                             <x-jet-input id="edit-title" x-ref="edit-title" type="text" name="title" class="mt-1 block w-full text-slate-700/70" value="{{ old('title', '' ) }}"/>
@@ -478,7 +479,7 @@
 
                         <div class="w-full flex justify-end items-center py-5 pr-5">
                             <x-jet-button id="update-resource">
-                                Edit
+                                UPDATE
                             </x-jet-button>
                         </div>
 

@@ -31,7 +31,7 @@ class CommentController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     * @param \App\Models\Challenge $challenge
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -63,34 +63,68 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  App\Models\Challenge $challenge
+     * @param App\Models\Comment $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Challenge $challenge, Comment $comment)
     {
-        //
+        return response()->json([
+            'success' => true,
+            'body' => $comment->body,
+            'action' => "/katas/$challenge->slug/comments/$comment->id",
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
+     * @param  \App\Models\Challenge  $challenge
+     * @param  \App\Models\Comment  $comment
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Challenge $challenge, Comment $comment, Request $request)
     {
-        //
+        $request->validate([
+            'editcommentbody' => ['required'],
+        ]);
+
+        $comment = Comment::where('id', $comment->id)->firstOrFail();
+        $comment->body = $request->editcommentbody;
+        $comment->save();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Comment updated succesfull!');
+
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Challenge  $challenge
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Challenge $challenge, Request $request)
     {
-        //
+        $request->validate([
+            'id' => ['integer'],
+        ]);
+
+        $comment = $challenge->comments()
+            ->where('id', $request->comment)
+            ->firstOrFail();
+
+        $this->authorize('delete', $comment);
+
+        $comment->delete();
+
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Comment deleted sucessful!');
+
+        return redirect()->back();
     }
 }

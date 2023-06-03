@@ -102,6 +102,18 @@ Route::middleware([
     'verified'
 ])->group(function () {
 
+    Route::post('/katas/{challenge:slug}/comments', [CommentController::class, 'store'])
+        ->name('katas.comment.store');
+
+    Route::delete('/katas/{challenge:slug}/comments/{comment:id}', [CommentController::class, 'destroy'])
+        ->name('katas.comment.destroy');
+
+    Route::get('/katas/{challenge:slug}/comments/{comment:id}/edit', [CommentController::class, 'edit'])
+        ->name('katas.comment.edit');
+
+    Route::patch('/katas/{challenge:slug}/comments/{comment:id}', [CommentController::class, 'update'])
+        ->name('katas.comment.update');
+
     Route::get('/messenger', [MessengerController::class, 'index'])
         ->name('messenger.index');
 
@@ -137,17 +149,19 @@ Route::middleware([
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');
 
-    Route::post('/katas/{challenge:slug}/comments', [CommentController::class, 'store'])
-        ->name('katas.store-comment');
 
-    Route::post('/katas/{slug}/create-resource', [ResourceController::class, 'store'])
-        ->name('katas.create-resource');
+    Route::post('/katas/{slug}/resource', [ResourceController::class, 'store'])
+        ->name('katas.resource.store');
 
-    Route::get('/katas/{slug}/get-resource/{id}', [ResourceController::class, 'getResource'])
-        ->name('katas.resource-get');
+    Route::get('/katas/{slug}/get-resource/{id}/edit', [ResourceController::class, 'edit'])
+        ->name('katas.resource.edit');
 
-    Route::post('/katas/{slug}/resource/{resource}', [ResourceController::class, 'update'])
-        ->name('katas.edit-resource');
+    Route::patch('/katas/{slug}/resource/{resource}', [ResourceController::class, 'update'])
+        ->name('katas.resource.update');
+
+
+
+
 
     Route::get('/katas/{slug}/unlock-solutions', [SolutionController::class, 'unlockSolutions'])
         ->name('katas.unlock-solutions');

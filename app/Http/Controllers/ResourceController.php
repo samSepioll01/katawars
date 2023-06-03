@@ -77,15 +77,16 @@ class ResourceController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Resource  $resource
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Resource $resource)
+    public function edit(Request $request)
     {
-        //
+        $resource = Resource::find($request->id);
+        return response()->json([
+            'success' => true,
+            'title' => $resource->title,
+            'description' => $resource->description,
+            'url' => $resource->url,
+            'action' => "/katas/$request->slug/resource/$resource->id",
+        ]);
     }
 
     /**
@@ -108,18 +109,6 @@ class ResourceController extends Controller
         return redirect()->back()->with([
             'tabinstructions' => 'false',
             'tabresources' => 'true',
-        ]);
-    }
-
-    public function getResource(Request $request)
-    {
-        $resource = Resource::find($request->id);
-        return response()->json([
-            'success' => true,
-            'title' => $resource->title,
-            'description' => $resource->description,
-            'url' => $resource->url,
-            'action' => "/katas/$request->slug/resource/$resource->id",
         ]);
     }
 
