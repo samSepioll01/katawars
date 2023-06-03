@@ -52,7 +52,7 @@
                 </div>
 
             </nav>
-            <div class="min-h-screen grid grid-flow-row">
+            <div class="h-[100%] grid grid-flow-row">
                 <div class="py-5">
                     <section x-show="instructions" style="display: none;">
                         <div class="dark:text-slate-100 p-10">
@@ -106,7 +106,39 @@
                                 {!! $challenge->notes !!}
                             </div>
                         </div>
+                        <section class="w-full space-y-6 border-t border-t-slate-300/70 py-10 text-slate-700 dark:text-slate-100 flex flex-col justify-center items-center">
+                            <header class="text-2xl text-bold pb-5">
+                                Comments
+                            </header>
+
+                            <form action="/katas/{{$challenge->slug}}/comments" method="post" class="border border-slate-200 dark:border-slate-800/70 dark:bg-slate-800/30 p-5 rounded-lg ">
+                                @csrf
+
+                                <header class="flex flex-row items-center">
+                                    <img src="{{ auth()->user()->profile_photo_url }}" class="w-8 h-8 rounded-lg" alt="">
+                                    <span class="pl-2">{{ auth()->user()->name }}</span>
+                                </header>
+                                <div>
+                                    <textarea name="body" id="body" type="body" cols="55" rows="7" maxlength="1000" placeholder="Think something to comment!"
+                                      class="w-full block mt-1 rounded-md transition border border-gray-300 text-slate-700/70 dark:dark-placeholder
+                                            dark:bg-[rgb(255,255,255)]/20 dark:text-slate-100 text-sm
+                                            focus:outline-none focus:ring-1 focus:saturate-150 focus:ring-violet-600
+                                            dark:focus:shadow-outter-lg dark:focus:ring-transparent
+                                            dark:focus:border-cyan-300 dark:focus:shadow-cyan-700 dark:focus:bg-[rgb(255,255,255)]/30"
+                                    >{{ old('description', '') }}</textarea>
+                                </div>
+                                <div class="py-2 flex justify-end">
+                                    <x-jet-button>Comment</x-jet-button>
+                                </div>
+
+                            </form>
+
+                            @foreach ($comments as $comment)
+                                <x-layout.challenge-comment :comment="$comment" />
+                            @endforeach
+                        </section>
                     </section>
+
                     <section x-show="code" style="display: none;">
                         <div
                             class="grid grid-cols-12 gap-8 md:px-20 py-10 opacity-0 transition-all duration-300"

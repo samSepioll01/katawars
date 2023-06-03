@@ -59,6 +59,11 @@ class Challenge extends Model
         return $this->hasMany(Kata::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     /**
      * This determines which categories have been assigned to the challenge.
      */

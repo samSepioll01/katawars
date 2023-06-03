@@ -7,6 +7,7 @@ use App\CustomClasses\SecurityFilter;
 use App\Http\Requests\StoreChallengeRequest;
 use App\Http\Requests\UpdateChallengeRequest;
 use App\Models\Challenge;
+use App\Models\Comment;
 use App\Models\Kata;
 use App\Models\Mode;
 use App\Models\Profile;
@@ -232,15 +233,20 @@ class ChallengeController extends Controller
 
         $circular = CircularCollection::make($challenges);
 
-        $resources = Resource::allLikesCount()->where('kata_id', $challenge->katas->first()->id);
+        $resources = Resource::allLikesCount()
+            ->where('kata_id', $challenge->katas->first()->id);
 
-        $solutions = Solution::allLikesCount()->where('kata_id', $challenge->katas->first()->id);
+        $solutions = Solution::allLikesCount()
+            ->where('kata_id', $challenge->katas->first()->id);
 
         $isPassedKata = Auth::user()->profile->passedKatas
             ->contains($challenge->katas->first()->id);
 
         $isSkippedKata = Auth::user()->profile->skippedKatas
             ->contains($challenge->katas->first()->id);
+
+        $comments = Comment::allLikesCount()
+            ->where('challenge_id', $challenge->id);
 
         return view('katas.main-page', [
             'challenge' => $challenge,
@@ -253,6 +259,7 @@ class ChallengeController extends Controller
             'solutions' => $solutions,
             'isPassedKata' => $isPassedKata,
             'isSkippedKata' => $isSkippedKata,
+            'comments' => $comments,
         ]);
     }
 

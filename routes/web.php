@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
 use App\Http\Controllers\ChallengeController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\MessengerController;
@@ -135,6 +136,9 @@ Route::middleware([
 
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');
+
+    Route::post('/katas/{challenge:slug}/comments', [CommentController::class, 'store'])
+        ->name('katas.store-comment');
 
     Route::post('/katas/{slug}/create-resource', [ResourceController::class, 'store'])
         ->name('katas.create-resource');

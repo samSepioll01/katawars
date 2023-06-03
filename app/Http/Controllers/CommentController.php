@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\SendReport;
+use App\Models\Challenge;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
-class MessengerController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,22 +16,7 @@ class MessengerController extends Controller
      */
     public function index()
     {
-        return redirect('/chatify');
-    }
-
-    public function sendReports(Request $request)
-    {
-        $request->validate([
-            'subject' => ['required', 'string', 'max:255'],
-            'message' => ['required', 'string', 'max:255'],
-        ]);
-
-        Mail::send(new SendReport($request->subject, $request->message, Auth::user()->name, Auth::user()->email));
-
-        session()->flash('syncStatus', 'success');
-        session()->flash('syncMessage', 'Report sended succesfull! Early as possible receive a message. Thanks!');
-
-        return redirect()->back();
+        //
     }
 
     /**
@@ -50,9 +35,18 @@ class MessengerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Challenge $challenge, Request $request)
     {
-        //
+        $request->validate([
+            'body' => ['required', 'string', 'max:1000'],
+        ]);
+
+        $challenge->comments()->create([
+            'profile_id' => Auth::user()->profile->id,
+            'body' => $request->body,
+        ]);
+
+        return redirect()->back();
     }
 
     /**
