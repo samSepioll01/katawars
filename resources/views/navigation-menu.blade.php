@@ -160,7 +160,7 @@
                                         {{ __('Help') }}
                                     </x-jet-dropdown-link>
 
-                                    <x-jet-dropdown-link href="{{ route('dashboard') }}">
+                                    <x-jet-dropdown-link :button="true" x-on:click="$modals.show('send-report-modal')" class="cursor-pointer">
                                         <x-layout.dropdown-icon srcPath="send-reports" />
                                         {{ __('Send Reports') }}
                                     </x-jet-dropdown-link>

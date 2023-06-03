@@ -282,8 +282,11 @@ class ChallengeController extends Controller
     {
         $profile = Auth::user()->profile;
         $passedKatas = $profile->passedKatas()->get();
+        $skippedKatas = $profile->skippedKatas()->get();
+
         $trainingKatas = Mode::where('denomination', 'training')->first()->katas;
-        $katasAvailables = $trainingKatas->diff($passedKatas);
+        $skippedPassedKatas = $passedKatas->merge($skippedKatas);
+        $katasAvailables = $trainingKatas->diff($skippedPassedKatas);
 
         if ($katasAvailables->count()) {
             $nextChallenge = $katasAvailables->random()->challenge;

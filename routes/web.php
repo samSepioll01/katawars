@@ -104,6 +104,9 @@ Route::middleware([
     Route::get('/messenger', [MessengerController::class, 'index'])
         ->name('messenger.index');
 
+    Route::get('/send-reports', [MessengerController::class, 'sendReports'])
+        ->name('messenger.send-reports');
+
     Route::get('/training', [ChallengeController::class, 'showChallenges'])
         ->name('challenges.training');
 
