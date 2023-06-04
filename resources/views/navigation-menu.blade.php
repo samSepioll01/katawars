@@ -120,9 +120,9 @@
                                         {{ __('Statistics') }}
                                     </x-jet-dropdown-link>
 
-                                    <x-jet-dropdown-link href="{{ route('dashboard') }}">
+                                    <x-jet-dropdown-link href="{{ route('messenger.index') }}">
                                         <x-layout.dropdown-icon srcPath="messages" />
-                                        {{ __('Messages') }}
+                                        {{ __('Messenger') }}
                                     </x-jet-dropdown-link>
 
                                     <x-jet-dropdown-link href="{{ route('dashboard') }}">
@@ -160,7 +160,7 @@
                                         {{ __('Help') }}
                                     </x-jet-dropdown-link>
 
-                                    <x-jet-dropdown-link href="{{ route('dashboard') }}">
+                                    <x-jet-dropdown-link :button="true" x-on:click="$modals.show('send-report-modal')" class="cursor-pointer">
                                         <x-layout.dropdown-icon srcPath="send-reports" />
                                         {{ __('Send Reports') }}
                                     </x-jet-dropdown-link>
@@ -264,8 +264,8 @@
                         {{ __('Statistics') }}
                     </x-jet-responsive-nav-link>
 
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
-                        {{ __('Messages') }}
+                    <x-jet-responsive-nav-link href="{{ route('messenger.index') }}">
+                        {{ __('Messenger') }}
                     </x-jet-responsive-nav-link>
 
                     <x-jet-responsive-nav-link href="{{ route('dashboard') }}">

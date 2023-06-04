@@ -3,8 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
 use App\Http\Controllers\ChallengeController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
 use App\Http\Controllers\SolutionController;
@@ -100,6 +102,24 @@ Route::middleware([
     'verified'
 ])->group(function () {
 
+    Route::post('/katas/{challenge:slug}/comments', [CommentController::class, 'store'])
+        ->name('katas.comment.store');
+
+    Route::delete('/katas/{challenge:slug}/comments/{comment:id}', [CommentController::class, 'destroy'])
+        ->name('katas.comment.destroy');
+
+    Route::get('/katas/{challenge:slug}/comments/{comment:id}/edit', [CommentController::class, 'edit'])
+        ->name('katas.comment.edit');
+
+    Route::patch('/katas/{challenge:slug}/comments/{comment:id}', [CommentController::class, 'update'])
+        ->name('katas.comment.update');
+
+    Route::get('/messenger', [MessengerController::class, 'index'])
+        ->name('messenger.index');
+
+    Route::get('/send-reports', [MessengerController::class, 'sendReports'])
+        ->name('messenger.send-reports');
+
     Route::get('/training', [ChallengeController::class, 'showChallenges'])
         ->name('challenges.training');
 
@@ -129,16 +149,21 @@ Route::middleware([
     Route::get('/katas/{slug}', [ChallengeController::class, 'showKataMainPage'])
         ->name('katas.main-page');
 
-    Route::post('/katas/{slug}/create-resource', [ResourceController::class, 'store'])
-        ->name('katas.create-resource');
 
-    Route::get('/katas/{slug}/get-resource/{id}', [ResourceController::class, 'getResource'])
-        ->name('katas.resource-get');
+    Route::post('/katas/{slug}/resource', [ResourceController::class, 'store'])
+        ->name('katas.resource.store');
 
-    Route::post('/katas/{slug}/resource/{resource}', [ResourceController::class, 'update'])
-        ->name('katas.edit-resource');
+    Route::get('/katas/{slug}/get-resource/{id}/edit', [ResourceController::class, 'edit'])
+        ->name('katas.resource.edit');
 
-    Route::get('/katas/{slug}/solutions', [SolutionController::class, 'index'])
+    Route::patch('/katas/{slug}/resource/{resource}', [ResourceController::class, 'update'])
+        ->name('katas.resource.update');
+
+
+
+
+
+    Route::get('/katas/{slug}/unlock-solutions', [SolutionController::class, 'unlockSolutions'])
         ->name('katas.unlock-solutions');
 
     Route::post('/katas/{slug}/verify-kata', [ChallengeController::class, 'verifyKata'])

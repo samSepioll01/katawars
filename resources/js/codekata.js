@@ -81,6 +81,8 @@ function checkCode()
             $modals.show('passedkata-modal');
             errorPanel.innerHTML = response.data.message;
             $progressbar.update(response.data.$progressbar);
+            document.getElementById('cont-solutions').innerHTML = response.data.solutions;
+            Prism.highlightAll();
 
         } else {
             $flash.show('verifycode', 'error', response.data.flash);

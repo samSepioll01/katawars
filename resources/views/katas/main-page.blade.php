@@ -10,7 +10,7 @@
             </form>
         </div>
         <main
-            x-data="{instructions: {{ session('tabinstructions') ?? 'false' }}, code: false, resources: {{ session('tabresources') ?? 'false' }}, solutions: {{ session('tabsolutions') ?? 'true' }}}"
+            x-data="{instructions: {{ session('tabinstructions') ?? 'true' }}, code: false, resources: {{ session('tabresources') ?? 'false' }}, solutions: {{ session('tabsolutions') ?? 'false' }}}"
             class="sm:mt-8 grid grid-flow-row sm:card-panel"
         >
             <nav class="grid grid-flow-col grid-cols-12 shadow-xl relative overflow-hidden dark:text-slate-200">
@@ -52,7 +52,7 @@
                 </div>
 
             </nav>
-            <div class="min-h-screen grid grid-flow-row">
+            <div class="h-[100%] grid grid-flow-row">
                 <div class="py-5">
                     <section x-show="instructions" style="display: none;">
                         <div class="dark:text-slate-100 p-10">
@@ -106,7 +106,60 @@
                                 {!! $challenge->notes !!}
                             </div>
                         </div>
+                        <section class="w-full space-y-6 border-t border-t-slate-300/70 py-10 text-slate-700 dark:text-slate-100 flex flex-col justify-center items-center">
+                            <header class="text-2xl text-bold pb-5">
+                                Comments
+                            </header>
+
+                            <form action="{{ route('katas.comment.store', $challenge) }}" method="post" class="border border-slate-200 dark:border-slate-800/70 dark:bg-slate-800/30 p-5 rounded-lg ">
+                                @csrf
+
+                                <header class="flex flex-row items-center">
+                                    <img src="{{ auth()->user()->profile_photo_url }}" class="w-8 h-8 rounded-lg" alt="">
+                                    <span class="pl-2">{{ auth()->user()->name }}</span>
+                                </header>
+                                <div>
+                                    <textarea name="body" id="body" type="body" cols="55" rows="7" maxlength="1000" placeholder="Think something to comment!"
+                                      class="w-full block mt-1 rounded-md transition border border-gray-300 text-slate-700/70 dark:dark-placeholder
+                                            dark:bg-[rgb(255,255,255)]/20 dark:text-slate-100 text-sm
+                                            focus:outline-none focus:ring-1 focus:saturate-150 focus:ring-violet-600
+                                            dark:focus:shadow-outter-lg dark:focus:ring-transparent
+                                            dark:focus:border-cyan-300 dark:focus:shadow-cyan-700 dark:focus:bg-[rgb(255,255,255)]/30"
+                                    >{{ old('description', '') }}</textarea>
+                                </div>
+                                <div class="py-2 flex justify-end">
+                                    <x-jet-button>Comment</x-jet-button>
+                                </div>
+
+                            </form>
+
+                            @foreach ($comments as $comment)
+                                <div class="w-full flex flex-col items-center gap-4 justify-center" x-data="{open: false}">
+                                    <x-layout.challenge-comment :comment="$comment" :challenge="$challenge"/>
+
+                                    @if ($comment->replies->count())
+                                        <div class="">
+                                            <p class="text-sm hover:text-violet-600 cursor-pointer"
+                                               @click="open = !open"
+                                            >
+                                                Replies({{ $comment->replies->count() }})
+                                            </p>
+                                        </div>
+                                    @endif
+
+                                    <div class="w-full max-h-0 flex flex-col items-center gap-3 justify-center overflow-hidden transition-all duration-200"
+                                         :style=" open ? 'max-height: ' + ($el.scrollHeight * 2) + 'px;' : '' "
+                                    >
+                                        @foreach ($comment->replies as $reply)
+                                            <x-layout.challenge-comment :comment="$reply" :challenge="$challenge" :reply="true" />
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                            @endforeach
+                        </section>
                     </section>
+
                     <section x-show="code" style="display: none;">
                         <div
                             class="grid grid-cols-12 gap-8 md:px-20 py-10 opacity-0 transition-all duration-300"
@@ -192,7 +245,7 @@
                                                     <x-jet-button x-on:click="
                                                         axios({
                                                             method: 'get',
-                                                            url: location.origin + '/katas/{{$challenge->slug}}/get-resource/' + {{$resource->id}},
+                                                            url: '{{ route('katas.resource.edit', ['slug' => $challenge->slug, 'id' => $resource->id]) }}',
                                                             responseType: 'json',
                                                         })
                                                         .then(response => {
@@ -200,7 +253,7 @@
                                                                 document.getElementById('edit-title').value = response.data.title;
                                                                 document.getElementById('edit-url').value = response.data.url;
                                                                 document.getElementById('edit-description').textContent = response.data.description;
-                                                                document.getElementById('edit-form').action = response.data.action;
+                                                                document.getElementById('edit-resource-form').action = response.data.action;
                                                             }
                                                         })
                                                         .catch(errors => console.log(erros));
@@ -225,7 +278,7 @@
 
                     @vite(['resources/css/prism.css', 'resources/js/prism.js'])
 
-                    <section x-show="solutions" style="display: none;">
+                    <section id="cont-solutions" x-show="solutions" style="display: none;">
 
                         @if ($isPassedKata || $isSkippedKata)
 
@@ -235,12 +288,9 @@
                                 </div>
                             @endif
 
-                            @if ($solutions->count())
-                                <div class="w-full flex flex-col items-center gap-8 pt-5 justify-center">
+                            <div class="w-full flex flex-col items-center gap-8 pt-5 justify-center">
+                                @if ($solutions->count())
                                     @foreach ($solutions as $solution)
-
-
-
                                         <div class="w-full md:w-3/4 xl:w-1/2 relative">
                                             <a href="{{ $solution->profile->url }}">
                                                 <div class="flex flex-row items-center">
@@ -270,8 +320,11 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                </div>
-                            @endif
+                                @else
+                                    <h1 class="text-slate-700/70 dark:text-slate-100 font-bold text-xl">Anybody completed this kata yet.</h1>
+                                @endif
+                            </div>
+
 
                         @else
 
@@ -355,7 +408,7 @@
 
                 <x-slot name="body">
 
-                    <form action="{{ route('katas.create-resource', $challenge->slug) }}" method="post" class="flex flex-col justify-between items-center">
+                    <form action="{{ route('katas.resource.store', $challenge->slug) }}" method="post" class="flex flex-col justify-between items-center">
                         @csrf
                         <div class="w-3/4 py-5">
                             <x-jet-label for="title" value="{{ __('Title') }}" />
@@ -413,8 +466,9 @@
                 </x-slot>
 
                 <x-slot name="body">
-                    <form id="edit-form" x-ref="edit-form" action="" method="post" class="flex flex-col justify-between items-center">
+                    <form id="edit-resource-form" x-ref="edit-resource-form" action="" method="post" class="flex flex-col justify-between items-center">
                         @csrf
+                        @method('PATCH')
                         <div class="w-3/4 py-5">
                             <x-jet-label for="title" value="{{ __('Title') }}" />
                             <x-jet-input id="edit-title" x-ref="edit-title" type="text" name="title" class="mt-1 block w-full text-slate-700/70" value="{{ old('title', '' ) }}"/>
@@ -446,7 +500,7 @@
 
                         <div class="w-full flex justify-end items-center py-5 pr-5">
                             <x-jet-button id="update-resource">
-                                Edit
+                                UPDATE
                             </x-jet-button>
                         </div>
 

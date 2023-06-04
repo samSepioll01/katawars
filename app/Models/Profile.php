@@ -60,6 +60,11 @@ class Profile extends Model
         return $this->hasMany(Resource::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     /**
      * This determines all the likes that the profile has given.
      */

@@ -1,4 +1,4 @@
-@props(['name', 'maxWidth', 'display' => ''])
+@props(['name', 'maxWidth', 'display' => '', 'heigth' => ''])
 
 @php
     $maxWidth = [
@@ -67,7 +67,7 @@
     </div>
 
     <div
-        class="bg-white/90 dark:bg-gray-900/90 shadow-md p-4 scrollbar-inner-menu xl:max-h-[500px] 2xl:max-h-[700px] overflow-y-auto m-auto rounded-md fixed inset-0 z-10 {{ $maxWidth }}"
+        class="bg-white/90 dark:bg-gray-900/90 shadow-md p-4 {{ $heigth }} scrollbar-inner-menu xl:max-h-[500px] 2xl:max-h-[700px] overflow-y-auto m-auto rounded-md fixed inset-0 z-10 {{ $maxWidth }}"
         x-transition:enter="ease-out duration-300"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"

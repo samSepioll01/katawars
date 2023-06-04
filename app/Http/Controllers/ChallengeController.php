@@ -7,6 +7,7 @@ use App\CustomClasses\SecurityFilter;
 use App\Http\Requests\StoreChallengeRequest;
 use App\Http\Requests\UpdateChallengeRequest;
 use App\Models\Challenge;
+use App\Models\Comment;
 use App\Models\Kata;
 use App\Models\Mode;
 use App\Models\Profile;
@@ -232,15 +233,21 @@ class ChallengeController extends Controller
 
         $circular = CircularCollection::make($challenges);
 
-        $resources = Resource::allLikesCount()->where('kata_id', $challenge->katas->first()->id);
+        $resources = Resource::allLikesCount()
+            ->where('kata_id', $challenge->katas->first()->id);
 
-        $solutions = Solution::allLikesCount()->where('kata_id', $challenge->katas->first()->id);
+        $solutions = Solution::allLikesCount()
+            ->where('kata_id', $challenge->katas->first()->id);
 
         $isPassedKata = Auth::user()->profile->passedKatas
             ->contains($challenge->katas->first()->id);
 
         $isSkippedKata = Auth::user()->profile->skippedKatas
             ->contains($challenge->katas->first()->id);
+
+        $comments = Comment::allLikesCount()
+            ->where('challenge_id', $challenge->id)
+            ->whereNull('parent_id');
 
         return view('katas.main-page', [
             'challenge' => $challenge,
@@ -253,6 +260,7 @@ class ChallengeController extends Controller
             'solutions' => $solutions,
             'isPassedKata' => $isPassedKata,
             'isSkippedKata' => $isSkippedKata,
+            'comments' => $comments,
         ]);
     }
 
@@ -282,8 +290,11 @@ class ChallengeController extends Controller
     {
         $profile = Auth::user()->profile;
         $passedKatas = $profile->passedKatas()->get();
+        $skippedKatas = $profile->skippedKatas()->get();
+
         $trainingKatas = Mode::where('denomination', 'training')->first()->katas;
-        $katasAvailables = $trainingKatas->diff($passedKatas);
+        $skippedPassedKatas = $passedKatas->merge($skippedKatas);
+        $katasAvailables = $trainingKatas->diff($skippedPassedKatas);
 
         if ($katasAvailables->count()) {
             $nextChallenge = $katasAvailables->random()->challenge;
@@ -369,10 +380,16 @@ class ChallengeController extends Controller
                     'asserts' => $testResult[count($testResult) - 1],
                 ])->render();
 
+                $solutions = view('includes.solution', [
+                    'solutions' => Solution::allLikesCount()->where('kata_id', $kata->id),
+                    'challenge' => $kata->challenge,
+                ])->render();
+
                 return response()->json([
                     'success' => true,
                     'message' => $returnHTML,
                     'progressbar' => $profile->getProfileProgress() . '%',
+                    'solutions' => $solutions,
                 ]);
             }
 

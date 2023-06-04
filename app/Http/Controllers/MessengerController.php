@@ -2,38 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Challenge;
-use App\Models\Solution;
+use App\Mail\SendReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
-class SolutionController extends Controller
+class MessengerController extends Controller
 {
     /**
-     * Refresh the solutions for the challenge.
+     * Display a listing of the resource.
      *
-     * @param Request $request
+     * @return \Illuminate\Http\Response
      */
-    public function unlockSolutions(Request $request)
+    public function index()
+    {
+        return redirect('/chatify');
+    }
+
+    public function sendReports(Request $request)
     {
         $request->validate([
-            'slug' => $request->slug,
+            'subject' => ['required', 'string', 'max:255'],
+            'message' => ['required', 'string', 'max:255'],
         ]);
 
-        $kata = Challenge::where('slug', $request->slug)->firstOrFail();
+        Mail::send(new SendReport($request->subject, $request->message, Auth::user()->name, Auth::user()->email));
 
-        $profileSkipped = Auth::user()->profile->skippedKatas();
-        $profilePassed = Auth::user()->profile->passedKatas()->get()->contains($kata->id);
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Report sended succesfull! Early as possible receive a message. Thanks!');
 
-        if (!$profilePassed && !$profileSkipped->get()->contains($kata->id)) {
-            $profileSkipped->attach($kata->id);
-        }
-
-        return redirect()->back()->with([
-            'tabsolutions' => 'true',
-            'tabinstructions' => 'false',
-            'tabresources' => 'false',
-        ]);
+        return redirect()->back();
     }
 
     /**
