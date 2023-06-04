@@ -6,6 +6,7 @@ use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\KataController;
 use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
@@ -101,6 +102,9 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
+
+    Route::get('/my-katas', [KataController::class, 'index'])
+        ->name('mykatas.index');
 
     Route::post('/katas/{challenge:slug}/comments', [CommentController::class, 'store'])
         ->name('katas.comment.store');

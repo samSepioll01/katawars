@@ -25,6 +25,7 @@
                         .then(response => {
                             if (response.data.success) {
                                 $refs.list.innerHTML = response.data.html;
+                                console.log(response.data.html);
                             }
                         })
                         .catch(errors => console.log(errors));

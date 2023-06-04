@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Kata;
+use App\Models\Rank;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -28,7 +29,7 @@ class KataPolicy
      * @param  \App\Models\Kata  $kata
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Kata $kata)
+    public function view(User $user)
     {
         //
     }

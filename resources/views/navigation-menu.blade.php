@@ -240,7 +240,7 @@
 
                     <x-layout.dropdown-separator />
 
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
+                    <x-jet-responsive-nav-link href="{{ route('mykatas.index') }}">
                         {{ __('My Katas') }}
                     </x-jet-responsive-nav-link>
 
