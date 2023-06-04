@@ -54,7 +54,8 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-        return $comment->author->user->id === Auth::user()->id;
+        return $comment->author->user->id === Auth::user()->id
+            || Auth::user()->hasRole(['admin', 'superadmin']);
     }
 
     /**
@@ -66,7 +67,8 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        return $comment->author->user->id === Auth::user()->id;
+        return $comment->author->user->id === Auth::user()->id
+            || Auth::user()->hasRole(['admin', 'superadmin']);
     }
 
     /**

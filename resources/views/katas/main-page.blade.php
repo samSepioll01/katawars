@@ -134,7 +134,28 @@
                             </form>
 
                             @foreach ($comments as $comment)
-                                <x-layout.challenge-comment :comment="$comment" :challenge="$challenge"/>
+                                <div class="w-full flex flex-col items-center gap-4 justify-center" x-data="{open: false}">
+                                    <x-layout.challenge-comment :comment="$comment" :challenge="$challenge"/>
+
+                                    @if ($comment->replies->count())
+                                        <div class="">
+                                            <p class="text-sm hover:text-violet-600 cursor-pointer"
+                                               @click="open = !open"
+                                            >
+                                                Replies({{ $comment->replies->count() }})
+                                            </p>
+                                        </div>
+                                    @endif
+
+                                    <div class="w-full max-h-0 flex flex-col items-center gap-3 justify-center overflow-hidden transition-all duration-200"
+                                         :style=" open ? 'max-height: ' + ($el.scrollHeight * 2) + 'px;' : '' "
+                                    >
+                                        @foreach ($comment->replies as $reply)
+                                            <x-layout.challenge-comment :comment="$reply" :challenge="$challenge" :reply="true" />
+                                        @endforeach
+                                    </div>
+                                </div>
+
                             @endforeach
                         </section>
                     </section>

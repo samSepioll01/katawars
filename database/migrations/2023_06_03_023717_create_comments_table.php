@@ -20,6 +20,8 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->foreignId('profile_id')->constrained()
                 ->cascadeOnDelete();
+            $table->foreignId('parent_id')->nullable()->constrained('comments', 'id')
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }

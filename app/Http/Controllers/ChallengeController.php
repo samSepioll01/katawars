@@ -246,7 +246,8 @@ class ChallengeController extends Controller
             ->contains($challenge->katas->first()->id);
 
         $comments = Comment::allLikesCount()
-            ->where('challenge_id', $challenge->id);
+            ->where('challenge_id', $challenge->id)
+            ->whereNull('parent_id');
 
         return view('katas.main-page', [
             'challenge' => $challenge,

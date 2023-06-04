@@ -39,12 +39,19 @@ class CommentController extends Controller
     {
         $request->validate([
             'body' => ['required', 'string', 'max:1000'],
+            'parent_id' => ['nullable', 'integer'],
         ]);
 
-        $challenge->comments()->create([
-            'profile_id' => Auth::user()->profile->id,
-            'body' => $request->body,
-        ]);
+        $comment = new Comment();
+        $comment->challenge_id = $challenge->id;
+        $comment->profile_id = Auth::user()->profile->id;
+        $comment->body = $request->body;
+
+        if (isset($request->parent_id)) {
+            $comment->parent_id = $request->parent_id;
+        }
+
+        $comment->save();
 
         return redirect()->back();
     }
