@@ -31,7 +31,7 @@ class StoreKataRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'examples' => ['required', 'string'],
-            'notes' => ['nullable', 'string'],
+            'notes' => ['required', 'string'],
             'signature' => ['required', 'string', 'max:255'],
             'testclassname' => ['required', 'string', 'max:50'],
             'code' => ['required', 'string'],

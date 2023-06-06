@@ -483,6 +483,14 @@
                             document.getElementById('error-testclassname').textContent = '';
                         }
 
+                        if (error.response.data.errors?.code) {
+                            document.getElementById('error-testcode').textContent = error.response.data.errors.code[0];
+                        }
+
+                        if (error.response.data.errors?.solution) {
+                            document.getElementById('error-solution').textContent = error.response.data.errors.solution[0];
+                        }
+
                         if (error.response.data.errors?.videoname) {
                             document.getElementById('error-videoname').textContent = error.response.data.errors.videoname[0];
                         } else {

@@ -10,6 +10,7 @@ use App\Models\Challenge;
 use App\Models\Kata;
 use App\Models\Language;
 use App\Models\Rank;
+use App\Models\Score;
 use App\Models\Solution;
 use App\Models\VideoSolution;
 use Illuminate\Http\Request;
@@ -167,6 +168,7 @@ function yourFunctionSignature()
 
         if ($request->ajax()) {
 
+            // Filter categories and only take 3 max.
             $categories = $request->input('categories');
             $categories = count($categories) > 3
                 ? array_slice($categories, 0, 3)
@@ -212,8 +214,8 @@ function yourFunctionSignature()
                 ? $solution
                 : "<?php $solution";
 
+            // Test the syntax and suspicious constructions.
             $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-
             try {
                 $parser->parse($solution);
 
@@ -248,6 +250,7 @@ function yourFunctionSignature()
                 Language::where('name', 'PHP')->first()->name
             );
 
+            // Upload test to S3
             Storage::disk('s3')->put($S3uri_test, $request->input('code'));
 
             $slug = Str::slug($request->input('title'));
@@ -284,6 +287,7 @@ function yourFunctionSignature()
                 'code' => $request->input('solution'),
             ]);
 
+            // Create video tutorial if exists.
             if ($request->input('videocode')) {
 
                 $videoName = $request->input('videoname')
@@ -295,6 +299,12 @@ function yourFunctionSignature()
                     'kata_id' => $kata->id,
                 ]);
             }
+
+            // Add points for create a Challenge.
+            $points = Score::where('denomination', 'create kata')->first()->points;
+            $profile = Auth::user()->profile;
+            $profile->honor += $points;
+            $profile->save();
 
             session()->flash('syncStatus', 'success');
             session()->flash('syncMessage', 'Challenge created succesful!');
