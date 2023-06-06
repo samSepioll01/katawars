@@ -403,6 +403,22 @@ function yourFunctionSignature()
      */
     public function destroy(Kata $kata)
     {
-        //
+        $challenge = $kata->challenge;
+        $isOwner = $kata->owner_id === Auth::user()->profile->id;
+
+        if ( $isOwner || Auth::user()->hasRole(['admin', 'superadmin'])) {
+            $wasKataDeleted = $kata->delete();
+            $wasChallengeDeleted = $challenge->delete();
+        }
+
+        if ($wasKataDeleted && $wasChallengeDeleted) {
+            session()->flash('syncStatus', 'success');
+            session()->flash('syncMessage', 'Challenge deleted succesful!!');
+        } else {
+            session()->flash('syncStatus', 'error');
+            session()->flash('syncMessage', "Can't be possible delete the challenge. Sorry, please try later.");
+        }
+
+        return redirect()->back();
     }
 }

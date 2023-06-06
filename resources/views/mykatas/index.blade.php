@@ -92,11 +92,16 @@
                                                 </div>
                                             </a>
                                         </div>
-                                        <div id="{{ $challenge->id }}" class="cross-savedkata">
-                                            <div class="cross">
-                                                &times;
-                                            </div>
-                                        </div>
+                                        <form action="{{ route('mykatas.destroy', $challenge->katas->first()) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" id="{{ $challenge->id }}" class="cross-savedkata">
+                                                <div class="cross">
+                                                    &times;
+                                                </div>
+                                            </button>
+                                        </form>
+
                                     </div>
                                 </div>
                             @endforeach

@@ -109,6 +109,9 @@ Route::middleware([
     Route::get('/my-katas/create', [KataController::class, 'create'])
         ->name('mykatas.create');
 
+    Route::delete('/my-katas/{kata}', [KataController::class, 'destroy'])
+        ->name('mykatas.destroy');
+
     Route::post('my-katas/store', [KataController::class, 'store'])
         ->name('mykatas.store');
 
