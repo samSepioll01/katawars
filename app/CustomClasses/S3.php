@@ -5,6 +5,7 @@ namespace App\CustomClasses;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class S3 extends Facade
 {
@@ -76,5 +77,16 @@ class S3 extends Facade
         return filter_var($url, FILTER_VALIDATE_URL)
             ? str_replace(self::getBaseUrl(), '', $url)
             : $url;
+    }
+
+    /**
+     * Generate the path for the resources to store in S3.
+     *
+     * @param string $language
+     * @return string
+     */
+    public static function generateUploadPath(string $language): string
+    {
+        return '/katas/' . strtolower($language) . '/' . Str::random(40) . '.txt';
     }
 }

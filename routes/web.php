@@ -106,6 +106,12 @@ Route::middleware([
     Route::get('/my-katas', [KataController::class, 'index'])
         ->name('mykatas.index');
 
+    Route::get('/my-katas/create', [KataController::class, 'create'])
+        ->name('mykatas.create');
+
+    Route::post('my-katas/store', [KataController::class, 'store'])
+        ->name('mykatas.store');
+
     Route::post('/katas/{challenge:slug}/comments', [CommentController::class, 'store'])
         ->name('katas.comment.store');
 

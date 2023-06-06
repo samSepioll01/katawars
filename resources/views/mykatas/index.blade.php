@@ -41,9 +41,9 @@
 
                 <div class="col-span-12 lg:col-span-8 py-2" x-ref="challenges">
                     <div class="flex justify-end">
-                        <x-jet-button href="">
+                        <x-layout.button-link :button="false" href="{{ route('mykatas.create') }}">
                             {{ __('Create') }}
-                        </x-jet-button>
+                        </x-layout.button-link>
                     </div>
                     @if ($totalKatas)
                         <x-layout.order-button-sync route="{{ route('mykatas.index') }}" />

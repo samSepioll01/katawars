@@ -167,15 +167,15 @@
                         >
                             <div class="h-96 col-span-12 lg:col-span-8 relative">
                                 <div
-                                    id="editor"
+                                    id="code-editor"
                                     class="editorkata"
                                     @changetheme.window="
                                         if ($event.detail === 'light') {
-                                            ace.edit('editor').setTheme('ace/theme/solarized_light');
+                                            ace.edit('code-editor').setTheme('ace/theme/solarized_light');
                                         }
 
                                         if ($event.detail === 'dark') {
-                                            ace.edit('editor').setTheme('ace/theme/monokai');
+                                            ace.edit('code-editor').setTheme('ace/theme/monokai');
                                         }
                                     "
                                 >&lt;?php&#10;{!!$signature!!}&#10;&#9;return '';&#10;}</div>

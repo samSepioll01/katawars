@@ -254,7 +254,7 @@ class GitHubLoginController extends Controller
         $slug = Str::slug($user->name);
 
         $profile->slug = $slug;
-        $profile->url = url("/users/$slug");
+        $profile->url = url("/user/$slug");
         $profile->save();
     }
 

@@ -316,13 +316,13 @@ class UserSeeder extends Seeder
             'email' => 'mei@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
-            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/12/sS8BNaMQtrV4dJfKY3XfCSU08PyzYPpOB0hajfbT.jpg',
+            'profile_photo_path' => 'https://s3.eu-south-2.amazonaws.com/katawars.es/profile-photos/12/nwiUNiCBx8nW86OIhPpNRYIACMoK19cn2tUA9nm3.jpg',
         ]);
 
         Profile::create([
             'url' => url('/user') . '/' . Str::slug($user->name),
             'slug' => Str::slug($user->name),
-            'exp' => 0,
+            'exp' => 90,
             'honor' => 0,
             'is_darkmode' => true,
             'is_deleted' => false,
