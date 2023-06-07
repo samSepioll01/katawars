@@ -81,7 +81,7 @@
                                         </div>
 
                                         <div class="py-2">
-                                            <a href="{{ $challenge->url }}" class="">
+                                            <a href="{{ route('mykatas.edit', $challenge->katas->first()) }}" class="">
                                                 <div class="text-center text-ellipsis-1 text-xl text-violet-600 dark:text-tomato">
                                                     {{ $challenge->title }}
                                                 </div>

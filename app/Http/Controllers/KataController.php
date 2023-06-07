@@ -372,17 +372,6 @@ function yourFunctionSignature()
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Kata  $kata
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Kata $kata)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Kata  $kata
@@ -390,7 +379,21 @@ function yourFunctionSignature()
      */
     public function edit(Kata $kata)
     {
-        //
+
+        $testCode = Storage::disk('s3')->get($kata->uri_test);
+        $solutionCode = $kata->solutions
+            ->where('profile_id', Auth::user()->profile->id)
+            ->first()
+            ->code;
+        $video = VideoSolution::where('kata_id', $kata->id)->first();
+
+        return view('mykatas.edit', [
+            'kata' => $kata,
+            'testCode' => $testCode,
+            'solutionCode' => $solutionCode,
+            'videoname' => $video ? $video->name : '',
+            'videocode' => $video ? $video->youtube_code : '',
+        ]);
     }
 
     /**
@@ -402,7 +405,133 @@ function yourFunctionSignature()
      */
     public function update(UpdateKataRequest $request, Kata $kata)
     {
-        //
+        // Filter categories and only take 3 max.
+        $categories = $request->input('categories');
+        $categories = count($categories) > 3
+            ? array_slice($categories, 0, 3)
+            : $categories;
+
+        if (!Str::of($request->input('code'))->contains($request->input('testclassname'))) {
+            return response()->json([
+                'success' => false,
+                'flash' => 'The Test Class Name field must concordate with class name of your test!',
+            ]);
+        }
+
+        // Filter and syntax parse the test code.
+        $test = trim($request->input('code'));
+
+        $test = str_starts_with($test, '<?php')
+            ? $test
+            : "<?php $test";
+
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+
+        try {
+            $parser->parse($test);
+
+        } catch (Error $error) {
+
+            return response()->json([
+                'success' => false,
+                'flash' => "Exists some syntax errors in your test code!",
+            ]);
+        }
+
+        $test = trim(str_replace('<?php', '', $test));
+
+        // Test de Security Risk of the test passed.
+        SecurityFilter::parser($test);
+
+
+        // Filter and ssyntax parse the solution code.
+        $solution = trim($request->input('solution'));
+
+        $solution = str_starts_with($solution, '<?php')
+            ? $solution
+            : "<?php $solution";
+
+        // Test the syntax and suspicious constructions.
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        try {
+            $parser->parse($solution);
+
+        } catch (Error $error) {
+
+            return response()->json([
+                'success' => false,
+                'message' => "{$error->getMessage()}\n",
+                'flash' => "Exists some syntax errors in your solution code!",
+            ]);
+        }
+
+        $solution = trim(str_replace('<?php', '', $solution));
+
+        // Test de Security Risk of the solution passed.
+        SecurityFilter::parser($solution);
+
+        $testResult = $this->executeTest(
+            $request->input('code'),
+            $solution,
+            $request->input('testclassname')
+        );
+
+        if (!$this->checkTestResult($testResult)) {
+            return response()->json([
+                'success' => false,
+                'flash' => 'Exists some logic errors in your codes!',
+            ]);
+        }
+
+        $challenge = $kata->challenge;
+        $slug = Str::slug($request->input('title'));
+
+        if (Challenge::where('slug', $slug)->exists()) {
+            $slug = Str::slug($request->input('title'));
+        }
+
+        $challenge->slug = $slug;
+        $challenge->url = url("/mykatas/$slug");
+        $challenge->title = $request->input('title');
+        $challenge->description = $request->input('description');
+        $challenge->examples = $request->input('examples');
+        $challenge->notes = $request->input('notes');
+        $challenge->rank_id = (int) $request->input('rank');
+        $challenge->save();
+
+        $challenge->categories()->sync($categories);
+
+        Storage::disk('s3')->put($kata->uri_test, $request->input('code'));
+
+        $kata->signature = $request->input('signature');
+        $kata->testClassName = $request->input('testclassname');
+        $kata->mode_id = (int) $request->input('mode');
+        $kata->save();
+
+        $solution = Solution::where('profile_id', Auth::user()->profile->id)
+            ->where('kata_id', $kata->id)
+            ->first();
+
+        $solution->code = $request->input('solution');
+        $solution->save();
+
+        if ($request->input('videocode')) {
+
+            $video = VideoSolution::where('kata_id', $kata->id)->first();
+            $video->name = $request->input('videoname')
+                ?: 'Video Solution ' . $challenge->title . Str::random(5);
+            $video->youtube_code = $request->input('videocode');
+            $video->save();
+
+        } else {
+            $video = VideoSolution::where('kata_id', $kata->id)->first();
+            $video?->delete();
+        }
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Challenge updated successful!');
+
+        return response()->json(['success' => true]);
     }
 
     /**
