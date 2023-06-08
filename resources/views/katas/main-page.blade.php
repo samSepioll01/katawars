@@ -167,15 +167,15 @@
                         >
                             <div class="h-96 col-span-12 lg:col-span-8 relative">
                                 <div
-                                    id="editor"
+                                    id="code-editor"
                                     class="editorkata"
                                     @changetheme.window="
                                         if ($event.detail === 'light') {
-                                            ace.edit('editor').setTheme('ace/theme/solarized_light');
+                                            ace.edit('code-editor').setTheme('ace/theme/solarized_light');
                                         }
 
                                         if ($event.detail === 'dark') {
-                                            ace.edit('editor').setTheme('ace/theme/monokai');
+                                            ace.edit('code-editor').setTheme('ace/theme/monokai');
                                         }
                                     "
                                 >&lt;?php&#10;{!!$signature!!}&#10;&#9;return '';&#10;}</div>
@@ -205,21 +205,25 @@
                             </div>
 
                         </div>
-                        <div class="w-full px-10 py-5 flex justify-center">
+                        <div class="w-full md:px-10 py-5 flex justify-center">
 
-                            <div class="w-3/4">
+                            <div class="w-full md:w-3/4">
 
                                 @if ($resources->count())
                                     @foreach ($resources as $resource)
                                         <div class="card-challenge relative">
 
-                                            <div class="w-full flex flex-row justify-between">
-
-                                                <div class=" w-full flex flex-row justify-end gap-8 item-center">
-                                                    @livewire('like-button', ['model' => $resource])
-                                                </div>
-
-                                            </div>
+                                            @can ('delete', $resource)
+                                                <form action="{{ route('katas.resource.destroy', ['challenge' => $challenge, 'resource' => $resource]) }}" method="post" class="">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <div id="{{ $resource->id }}" class="cross-savedkata top-1 right-2 opacity-100">
+                                                        <button type="submit" class="cross">
+                                                            &times;
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            @endcan
 
                                             <div class="py-2">
                                                 <a href="{{ $resource->url }}" target="_blank" class="">
@@ -229,13 +233,19 @@
                                                     <div class="text-sm text-center">
                                                         {{ $resource->url }}
                                                     </div>
-                                                    <div class="text-ellipsis-3 py-1">
+                                                    <div class="text-ellipsis-2 py-1 text-sm w-11/12">
                                                         <span>
                                                             {!! $resource->description !!}
                                                         </span>
                                                     </div>
                                                     <div class="absolute left-3 top-1 text-xs">
-                                                        Published <span> {{ $resource->created_at->diffForHumans(now()) }} </span>
+                                                        <a href="{{ $resource->profile->url }}">
+                                                            <div class="flex flex-row items-center">
+                                                                <img src="{{ $resource->profile->user->profile_photo_url }}" class="w-8 h-8 rounded-lg" alt="">
+                                                                <span class="pl-2">{{ $resource->profile->user->name }}</span>
+                                                            </div>
+                                                            <span class="py-1 block">Published {{ $resource->created_at->diffForHumans(now()) }} </span>
+                                                        </a>
                                                     </div>
                                                 </a>
                                             </div>
@@ -261,6 +271,13 @@
                                                     ">Edit</x-jet-button>
                                                 </div>
                                             @endif
+                                            <div class="w-full flex flex-row justify-between">
+
+                                                <div class=" w-full flex flex-row justify-start gap-8 item-center">
+                                                    @livewire('like-button', ['model' => $resource])
+                                                </div>
+
+                                            </div>
 
                                         </div>
                                     @endforeach
@@ -280,7 +297,7 @@
 
                     <section id="cont-solutions" x-show="solutions" style="display: none;">
 
-                        @if ($isPassedKata || $isSkippedKata)
+                        @if ($isPassedKata || $isSkippedKata || auth()->user()->hasRole(['admin', 'superadmin']))
 
                             @if ($challenge->katas->first()->video()->exists())
                                 <div class="w-full flex justify-center">
@@ -304,6 +321,17 @@
                                                         <div class="text-[11px]">
                                                             {{ $solution->created_at->diffForHumans(now()) }}
                                                         </div>
+                                                        @can ('delete', $solution)
+                                                            <form action="{{ route('katas.solution.destroy', ['challenge' => $challenge, 'solution' => $solution]) }}" method="post" class="">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <div id="{{ $solution->id }}" class="cross-savedkata top-1 right-2 opacity-100">
+                                                                    <button type="submit" class="cross">
+                                                                        &times;
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        @endcan
 
                                                     </div>
 

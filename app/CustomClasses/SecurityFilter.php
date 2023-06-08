@@ -285,13 +285,6 @@ class SecurityFilter
             'eval',
             'call_user_funct',
             'file_get_upload',
-            'preg_match',
-            'preg_replace',
-            'preg_split',
-            'preg_grep',
-            'preg_filter',
-            'preg_quote',
-            'preg_last_error',
             'system',
             'md5',
             'json_encode',
@@ -310,7 +303,6 @@ class SecurityFilter
     protected static function getForbiddenSymbols(): array
     {
         return [
-            '@',
             '^',
             '#',
             '~',

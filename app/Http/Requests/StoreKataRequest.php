@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Rank;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreKataRequest extends FormRequest
 {
@@ -13,7 +15,9 @@ class StoreKataRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Auth::user()->hasRole(['admin', 'superadmin'])
+            || Auth::user()->profile->rank_id === Rank::where('name', 'black')
+                ->first()->id;
     }
 
     /**
@@ -24,7 +28,18 @@ class StoreKataRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'examples' => ['required', 'string'],
+            'notes' => ['required', 'string'],
+            'signature' => ['required', 'string', 'max:255'],
+            'testclassname' => ['required', 'string', 'max:50'],
+            'code' => ['required', 'string'],
+            'solution' => ['required', 'string'],
+            'mode' => ['required', 'integer'],
+            'rank' => ['required', 'integer'],
+            'videoname' => ['nullable', 'string', 'max:255'],
+            'videocode' => ['nullable', 'string'],
         ];
     }
 }

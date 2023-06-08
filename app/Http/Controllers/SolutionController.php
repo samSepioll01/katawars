@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Challenge;
+use App\Models\Score;
 use App\Models\Solution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -97,8 +98,23 @@ class SolutionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Challenge $challenge, Request $request)
     {
-        //
+        $request->validate([
+            'id' => ['integer'],
+        ]);
+
+        $solution = Solution::where('id', $request->solution)->first();
+        $solution->profile->skippedKatas()->attach($challenge->katas->first()->id);
+        $solution->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Solution was deleted successful!');
+
+        return redirect()->back()->with([
+            'tabinstructions' => 'false',
+            'tabresources' => 'false',
+            'tabsolutions' => 'true',
+        ]);
     }
 }

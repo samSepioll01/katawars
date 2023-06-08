@@ -241,7 +241,7 @@
         0 0 60px #5da6ff;
     }
 
-    #editor {
+    #code-editor, #solution-editor {
         font-family: 'Fira Code', monospace;
     }
 

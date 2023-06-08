@@ -115,11 +115,35 @@ class ResourceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Resource  $resource
+     * @param App\Models\Challenge $challenge
+     * @param Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Resource $resource)
+    public function destroy(Challenge $challenge, Request $request)
     {
-        //
+        $request->validate([
+            'id' => ['integer'],
+        ]);
+
+        $resource = $challenge->katas->first()->resources()
+            ->where('id', $request->resource)
+            ->firstOrFail();
+
+        $this->authorize('delete', $resource);
+        $resource->delete();
+
+        $profile = $resource->profile;
+        $profile->honor -= Score::where('denomination', 'create resource')->first()->points;
+        $profile->save();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Resource deleted successful!');
+
+        return redirect()->back()->with([
+            'tabresources' => 'true',
+            'tabinstructions' => 'false',
+            'tabsolutions' => 'false',
+        ]);
     }
 }

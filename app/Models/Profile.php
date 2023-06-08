@@ -132,19 +132,31 @@ class Profile extends Model
      */
     public function setExpAttribute(int $exp): void
     {
+        $ranks = [
+            'yellow' => 'level-up'
+        ];
+
+
         if (array_key_exists('exp', $this->attributes)) {
 
             $this->attributes['exp'] += $exp;
+            $lastRank = Rank::all()->count();
 
-            $current_rank = $this->rank;
+            if ($this->rank->id < $lastRank) {
 
-            $next_rank = Rank::where('id', '>', $current_rank->id)
-                ->orderBy('id')->first();
+                $current_rank = $this->rank;
 
-            if ($next_rank && $this->exp >= $current_rank->level_up) {
-                $this->attributes['rank_id'] = $next_rank->id;
-                $this->attributes['honor'] += Score::where('denomination', 'level_up ' . $this->rank->name);
+                $next_rank = Rank::where('id', '>', $current_rank->id)
+                    ->orderBy('id')->first();
+
+                if ($next_rank && $this->exp >= $current_rank->level_up) {
+                    $this->attributes['rank_id'] = $next_rank->id;
+                    $levelUpScore = Score::where('denomination', 'level-up ' . $next_rank->name)->first()->points;
+                    $this->attributes['honor'] += $levelUpScore;
+                }
             }
+
+
         } else {
             $this->attributes['exp'] = $exp;
         }

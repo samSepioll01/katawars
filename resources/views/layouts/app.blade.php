@@ -28,7 +28,8 @@
         <!-- Import method throught Vite port without type module attribute -->
         <script src="{{ env('APP_VITE_URL') }}/resources/js/hubsidebar.js" async></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/ext-language_tools.js"></script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/classic/ckeditor.js"></script>
         <!-- Styles -->
         @livewireStyles
     </head>

@@ -6,6 +6,7 @@ use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\KataController;
 use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
@@ -102,6 +103,24 @@ Route::middleware([
     'verified'
 ])->group(function () {
 
+    Route::get('/my-katas', [KataController::class, 'index'])
+        ->name('mykatas.index');
+
+    Route::get('/my-katas/create', [KataController::class, 'create'])
+        ->name('mykatas.create');
+
+    Route::delete('/my-katas/{kata}', [KataController::class, 'destroy'])
+        ->name('mykatas.destroy');
+
+    Route::get('/my-katas/{kata}/edit', [KataController::class, 'edit'])
+        ->name('mykatas.edit');
+
+    Route::put('/my-katas/{kata}', [KataController::class, 'update'])
+        ->name('mykatas.update');
+
+    Route::post('my-katas/store', [KataController::class, 'store'])
+        ->name('mykatas.store');
+
     Route::post('/katas/{challenge:slug}/comments', [CommentController::class, 'store'])
         ->name('katas.comment.store');
 
@@ -159,12 +178,14 @@ Route::middleware([
     Route::patch('/katas/{slug}/resource/{resource}', [ResourceController::class, 'update'])
         ->name('katas.resource.update');
 
-
-
-
+    Route::delete('/katas/{challenge:slug}/resource/{resource:id}', [ResourceController::class, 'destroy'])
+        ->name('katas.resource.destroy');
 
     Route::get('/katas/{slug}/unlock-solutions', [SolutionController::class, 'unlockSolutions'])
         ->name('katas.unlock-solutions');
+
+    Route::delete('katas/{challenge:slug}/solution/{solution:id}', [SolutionController::class, 'destroy'])
+        ->name('katas.solution.destroy');
 
     Route::post('/katas/{slug}/verify-kata', [ChallengeController::class, 'verifyKata'])
         ->name('katas.verify');

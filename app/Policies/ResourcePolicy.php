@@ -65,7 +65,8 @@ class ResourcePolicy
      */
     public function delete(User $user, Resource $resource)
     {
-        //
+        return $resource->profile_id === $user->id
+            || $user->hasRole(['admin', 'superadmin']);
     }
 
     /**

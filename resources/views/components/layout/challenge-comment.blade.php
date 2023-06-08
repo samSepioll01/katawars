@@ -83,7 +83,7 @@
                 &times;
             </button>
         </form>
-    @endif
+    @endcan
 </div>
 
 {{-- Modals Page --}}

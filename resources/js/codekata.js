@@ -5,7 +5,7 @@ const checkBTN = document.getElementById('check');
 document.addEventListener('DOMContentLoaded', eDCL => {
 
     // Ace Editor Config
-    const editor = ace.edit("editor");
+    const editor = ace.edit("code-editor");
     editor.setTheme("ace/theme/solarized_light"); // Theme: monokai | solarized_light
     editor.session.setMode("ace/mode/php"); // Set language parser
     //editor.setKeyboardHandler("ace"); // Keybinding: Ace
@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', eDCL => {
 
     // Select editor theme depending of the select layout theme.
     if (document.documentElement.classList.contains('dark')) {
-        ace.edit('editor').setTheme('ace/theme/monokai');
+        ace.edit('code-editor').setTheme('ace/theme/monokai');
     } else {
-        ace.edit('editor').setTheme('ace/theme/solarized_light');
+        ace.edit('code-editor').setTheme('ace/theme/solarized_light');
     }
 
     // ShortHand for parser code with Cntrl + Spacebar.
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', eDCL => {
 function checkCode()
 {
     const errorPanel = document.getElementById('error-panel');
-    let code = ace.edit('editor').getValue();
+    let code = ace.edit('code-editor').getValue();
 
     axios({
         method: 'post',

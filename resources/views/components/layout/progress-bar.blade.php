@@ -10,7 +10,7 @@
     $id = $sidebar ? 'sidebar_progress-bar' : '';
     $bgColor = $sidebar ? 'dark:bg-gray-700/40' : 'dark:bg-gray-900/40';
     $textSize = $sidebar ? 'text-sm' : 'text-md';
-    $progress = $progress ?: auth()->user()->profile->getProfileProgress();
+    //$progress = $progress ?: auth()->user()->profile->getProfileProgress();
 
     if ($sidebar && !$progress) {
 
