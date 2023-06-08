@@ -528,10 +528,22 @@ function yourFunctionSignature()
         if ($request->input('videocode')) {
 
             $video = VideoSolution::where('kata_id', $kata->id)->first();
-            $video->title = $request->input('videoname')
-                ?: 'Video Solution ' . $challenge->title . Str::random(5);
-            $video->youtube_code = $request->input('videocode');
-            $video->save();
+            $videoname = $request->input('videoname')
+            ?: 'Video Solution ' . $challenge->title . Str::random(5);
+
+            if ($video) {
+                $video->title = $videoname;
+                $video->youtube_code = $request->input('videocode');
+                $video->save();
+            } else {
+                VideoSolution::create([
+                    'title' => $videoname,
+                    'youtube_code' => $request->input('videocode'),
+                    'kata_id' => $kata->id,
+                ]);
+            }
+
+
 
         } else {
             $video = VideoSolution::where('kata_id', $kata->id)->first();
