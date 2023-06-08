@@ -239,7 +239,13 @@
                                                         </span>
                                                     </div>
                                                     <div class="absolute left-3 top-1 text-xs">
-                                                        Published <span> {{ $resource->created_at->diffForHumans(now()) }} </span>
+                                                        <a href="{{ $resource->profile->url }}">
+                                                            <div class="flex flex-row items-center">
+                                                                <img src="{{ $resource->profile->user->profile_photo_url }}" class="w-8 h-8 rounded-lg" alt="">
+                                                                <span class="pl-2">{{ $resource->profile->user->name }}</span>
+                                                            </div>
+                                                            <span class="py-1 block">Published {{ $resource->created_at->diffForHumans(now()) }} </span>
+                                                        </a>
                                                     </div>
                                                 </a>
                                             </div>
