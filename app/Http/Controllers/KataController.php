@@ -16,6 +16,7 @@ use App\Models\VideoSolution;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Cursor;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use PHPParser\Error;
@@ -391,7 +392,7 @@ function yourFunctionSignature()
             'kata' => $kata,
             'testCode' => $testCode,
             'solutionCode' => $solutionCode,
-            'videoname' => $video ? $video->name : '',
+            'videoname' => $video ? $video->title : '',
             'videocode' => $video ? $video->youtube_code : '',
         ]);
     }
@@ -483,15 +484,24 @@ function yourFunctionSignature()
             ]);
         }
 
+
+
         $challenge = $kata->challenge;
+
         $slug = Str::slug($request->input('title'));
 
-        if (Challenge::where('slug', $slug)->exists()) {
-            $slug = Str::slug($request->input('title'));
+        $existingChallenge = Challenge::where('slug', $slug);
+
+        if ($existingChallenge->exists()) {
+            if ($existingChallenge->first()->id === $challenge->id) {
+                $slug = Str::slug($request->input('title'));
+            } else {
+                $slug .= Str::random(5);
+            }
         }
 
         $challenge->slug = $slug;
-        $challenge->url = url("/mykatas/$slug");
+        $challenge->url = url("/katas/$slug");
         $challenge->title = $request->input('title');
         $challenge->description = $request->input('description');
         $challenge->examples = $request->input('examples');
@@ -518,7 +528,7 @@ function yourFunctionSignature()
         if ($request->input('videocode')) {
 
             $video = VideoSolution::where('kata_id', $kata->id)->first();
-            $video->name = $request->input('videoname')
+            $video->title = $request->input('videoname')
                 ?: 'Video Solution ' . $challenge->title . Str::random(5);
             $video->youtube_code = $request->input('videocode');
             $video->save();
@@ -551,9 +561,15 @@ function yourFunctionSignature()
         }
 
         if ($wasKataDeleted && $wasChallengeDeleted) {
+
+            $profile = Auth::user()->profile;
+            $profile->honor -= Score::where('denomination', 'create kata')->first()->points;
+            $profile->save();
+
             session()->flash('syncStatus', 'success');
             session()->flash('syncMessage', 'Challenge deleted succesful!!');
         } else {
+
             session()->flash('syncStatus', 'error');
             session()->flash('syncMessage', "Can't be possible delete the challenge. Sorry, please try later.");
         }

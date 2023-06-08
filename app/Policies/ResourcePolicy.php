@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Resource;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
 class ResourcePolicy
 {
@@ -65,7 +66,8 @@ class ResourcePolicy
      */
     public function delete(User $user, Resource $resource)
     {
-        //
+        return $resource->profile_id === $user->id
+            || $user->hasRole(['admin', 'superadmin']);
     }
 
     /**

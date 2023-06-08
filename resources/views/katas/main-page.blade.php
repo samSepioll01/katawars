@@ -205,21 +205,25 @@
                             </div>
 
                         </div>
-                        <div class="w-full px-10 py-5 flex justify-center">
+                        <div class="w-full md:px-10 py-5 flex justify-center">
 
-                            <div class="w-3/4">
+                            <div class="w-full md:w-3/4">
 
                                 @if ($resources->count())
                                     @foreach ($resources as $resource)
                                         <div class="card-challenge relative">
 
-                                            <div class="w-full flex flex-row justify-between">
-
-                                                <div class=" w-full flex flex-row justify-end gap-8 item-center">
-                                                    @livewire('like-button', ['model' => $resource])
-                                                </div>
-
-                                            </div>
+                                            @can ('delete', $resource)
+                                                <form action="{{ route('katas.resource.destroy', ['challenge' => $challenge, 'resource' => $resource]) }}" method="post" class="">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <div id="{{ $resource->id }}" class="cross-savedkata top-1 right-2 opacity-100">
+                                                        <button type="submit" class="cross">
+                                                            &times;
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            @endcan
 
                                             <div class="py-2">
                                                 <a href="{{ $resource->url }}" target="_blank" class="">
@@ -229,7 +233,7 @@
                                                     <div class="text-sm text-center">
                                                         {{ $resource->url }}
                                                     </div>
-                                                    <div class="text-ellipsis-3 py-1">
+                                                    <div class="text-ellipsis-2 py-1 text-sm w-11/12">
                                                         <span>
                                                             {!! $resource->description !!}
                                                         </span>
@@ -261,6 +265,13 @@
                                                     ">Edit</x-jet-button>
                                                 </div>
                                             @endif
+                                            <div class="w-full flex flex-row justify-between">
+
+                                                <div class=" w-full flex flex-row justify-start gap-8 item-center">
+                                                    @livewire('like-button', ['model' => $resource])
+                                                </div>
+
+                                            </div>
 
                                         </div>
                                     @endforeach

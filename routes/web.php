@@ -178,9 +178,8 @@ Route::middleware([
     Route::patch('/katas/{slug}/resource/{resource}', [ResourceController::class, 'update'])
         ->name('katas.resource.update');
 
-
-
-
+    Route::delete('/katas/{challenge:slug}/resource/{resource:id}', [ResourceController::class, 'destroy'])
+        ->name('katas.resource.destroy');
 
     Route::get('/katas/{slug}/unlock-solutions', [SolutionController::class, 'unlockSolutions'])
         ->name('katas.unlock-solutions');

@@ -125,11 +125,6 @@
                                         {{ __('Messenger') }}
                                     </x-jet-dropdown-link>
 
-                                    <x-jet-dropdown-link href="{{ route('dashboard') }}">
-                                        <x-layout.dropdown-icon srcPath="orders" />
-                                        {{ __('Orders') }}
-                                    </x-jet-dropdown-link>
-
                                     <x-layout.dropdown-separator />
 
                                     <x-jet-dropdown-link href="{{ route('profile.show') }}">
@@ -266,10 +261,6 @@
 
                     <x-jet-responsive-nav-link href="{{ route('messenger.index') }}">
                         {{ __('Messenger') }}
-                    </x-jet-responsive-nav-link>
-
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
-                        {{ __('Orders') }}
                     </x-jet-responsive-nav-link>
 
                     <x-layout.dropdown-separator />

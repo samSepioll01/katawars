@@ -449,6 +449,10 @@
 
                     })
                     .catch(error => {
+                        if (error.response.data.exception === 'ParseError') {
+                            $flash.show('createcodea', 'error', 'Opps! Some was wrong! Sorry, try later.');
+                        }
+
                         if (error.response.data.errors?.title) {
                             document.getElementById('error-title').textContent = error.response.data.errors.title[0];
                         }
