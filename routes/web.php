@@ -184,6 +184,9 @@ Route::middleware([
     Route::get('/katas/{slug}/unlock-solutions', [SolutionController::class, 'unlockSolutions'])
         ->name('katas.unlock-solutions');
 
+    Route::delete('katas/{challenge:slug}/solution/{solution:id}', [SolutionController::class, 'destroy'])
+        ->name('katas.solution.destroy');
+
     Route::post('/katas/{slug}/verify-kata', [ChallengeController::class, 'verifyKata'])
         ->name('katas.verify');
 

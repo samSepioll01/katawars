@@ -291,7 +291,7 @@
 
                     <section id="cont-solutions" x-show="solutions" style="display: none;">
 
-                        @if ($isPassedKata || $isSkippedKata)
+                        @if ($isPassedKata || $isSkippedKata || auth()->user()->hasRole(['admin', 'superadmin']))
 
                             @if ($challenge->katas->first()->video()->exists())
                                 <div class="w-full flex justify-center">
@@ -315,6 +315,17 @@
                                                         <div class="text-[11px]">
                                                             {{ $solution->created_at->diffForHumans(now()) }}
                                                         </div>
+                                                        @can ('delete', $solution)
+                                                            <form action="{{ route('katas.solution.destroy', ['challenge' => $challenge, 'solution' => $solution]) }}" method="post" class="">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <div id="{{ $solution->id }}" class="cross-savedkata top-1 right-2 opacity-100">
+                                                                    <button type="submit" class="cross">
+                                                                        &times;
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        @endcan
 
                                                     </div>
 
