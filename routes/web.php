@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
 use App\Http\Controllers\ChallengeController;
@@ -88,12 +91,24 @@ Route::prefix('admin')->middleware([
 ])->group(function () {
 
     Route::get('/', function() {
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('admin.panel');
     });
 
-    Route::get('/dashboard', function() {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/panel', function() {
+        return view('admin.admin-panel');
+    })->name('admin.panel');
+
+    Route::resource('users', UserController::class)
+        ->middleware('role:superadmin');
+
+    Route::get('/users/change/{id}', [UserController::class, 'changeUser'])
+        ->name('users.change')
+        ->middleware('role:superadmin');
+
+    Route::resource('roles', RoleController::class)
+        ->middleware('role:superadmin');
+
+
 });
 
 

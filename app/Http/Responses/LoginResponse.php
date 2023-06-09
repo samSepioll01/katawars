@@ -14,7 +14,7 @@ class LoginResponse implements LoginResponseContract
     public function toResponse($request)
     {
         $home = Auth::user()->hasRole(['superadmin', 'admin'])
-            ? '/admin/dashboard'
+            ? '/admin/panel'
             : '/user/dashboard';
 
         Auth::login(Auth::user());
