@@ -11,6 +11,8 @@ use App\Models\Profile;
 use App\Models\Rank;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
@@ -197,6 +199,25 @@ class UserController extends Controller
         session()->flash('syncMessage', 'User Info updated successful!');
 
         return redirect()->back();
+    }
+
+
+    public function toBan(User $user)
+    {
+        $profile = $user->profile;
+        $profile->is_banned = true;
+        $profile->save();
+
+        $user->sessions->first()
+            ? Session::invalidate($user->sessions->first()->id)
+            : null;
+
+        $user->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'User banned successful!');
+
+        return redirect()->route('users.index');
     }
 
     /**

@@ -44,12 +44,10 @@
                         <x-jet-button id="" class="w-32 flex justify-center">Edit</x-jet-button>
                     </form>
 
-                    <form action="" method="get" class="px-5 py-2">
-                        <x-jet-button id="" class="w-32 flex justify-center">To Ban</x-jet-button>
-                    </form>
-
-                    <form action="" method="get" class="px-5 py-2">
-                        <x-jet-danger-button type="submit" id="" class="w-32 flex justify-center">Delete</x-jet-danger-button>
+                    <form action="{{ route('users.toban', $user) }}" method="post" class="px-5 py-2">
+                        @csrf
+                        @method('DELETE')
+                        <x-jet-danger-button type="submit" id="" class="w-32 flex justify-center">To Ban</x-jet-danger-button>
                     </form>
 
                 </div>

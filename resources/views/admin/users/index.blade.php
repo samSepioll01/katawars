@@ -56,11 +56,6 @@
 
                                         <th
                                             class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Is Banned
-                                        </th>
-
-                                        <th
-                                            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Status
                                         </th>
                                     </tr>
@@ -118,16 +113,7 @@
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <span>{{ (new \Carbon\Carbon($user->profile->last_activity))->diffForHumans(now()) }}</span>
                                             </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <span class="rounded-full px-5 py-1 font-semibold
-                                                    @if ($user->deleted_at)
-                                                        bg-rose-400/70 text-rose-900
-                                                    @else
-                                                        bg-green-200/70 text-green-900
-                                                    @endif
-                                                "
-                                                >{{ $user->deleted_at ? 'Banned' : 'No' }}</span>
-                                            </td>
+
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <span
                                                     class="relative inline-block px-3 py-1 font-semibold leading-tight">

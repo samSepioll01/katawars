@@ -101,6 +101,10 @@ Route::prefix('admin')->middleware([
     Route::resource('users', UserController::class)
         ->middleware('role:superadmin');
 
+    Route::delete('/users/{user}', [UserController::class, 'toBan'])
+        ->name('users.toban')
+        ->middleware('role:superadmin');
+
     Route::post('/users/{user}/edit/delete-photos/{index}', [UserController::class, 'deletePhoto'])
         ->name('users.delete.photo')
         ->middleware('role:superadmin');
