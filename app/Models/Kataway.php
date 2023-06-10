@@ -34,6 +34,14 @@ class Kataway extends Model
     }
 
     /**
+     * This determines the owner of the kataway.
+     */
+    public function createdByProfile()
+    {
+        return $this->belongsTo(Profile::class, 'owner_id', 'id');
+    }
+
+    /**
      * This determines which profiles were started the kataway.
      */
     public function startedByProfiles(): BelongsToMany

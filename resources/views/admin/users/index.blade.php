@@ -56,6 +56,11 @@
 
                                         <th
                                             class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Is Banned
+                                        </th>
+
+                                        <th
+                                            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Status
                                         </th>
                                     </tr>
@@ -67,9 +72,6 @@
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <a href="{{ route('users.show', $user) }}">
                                                     <div class="flex flex-row items-center">
-                                                        <div class="px-2">
-                                                            <input type="checkbox">
-                                                        </div>
                                                         <div class="flex items-center">
                                                             <div class="flex-shrink-0 w-10 h-10">
                                                                 <img class="w-full h-full rounded-full"
@@ -117,6 +119,16 @@
                                                 <span>{{ (new \Carbon\Carbon($user->profile->last_activity))->diffForHumans(now()) }}</span>
                                             </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <span class="rounded-full px-5 py-1 font-semibold
+                                                    @if ($user->deleted_at)
+                                                        bg-rose-400/70 text-rose-900
+                                                    @else
+                                                        bg-green-200/70 text-green-900
+                                                    @endif
+                                                "
+                                                >{{ $user->deleted_at ? 'Banned' : 'No' }}</span>
+                                            </td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <span
                                                     class="relative inline-block px-3 py-1 font-semibold leading-tight">
                                                     <span
@@ -144,29 +156,11 @@
                                             </td>
                                         </tr>
                                     @endforeach
-
-
-
-
                                 </tbody>
                             </table>
 
-                            <div
-                                class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-                                <span class="text-xs xs:text-sm text-gray-900">
-                                    Showing 1 to 4 of 50 Entries
-                                </span>
-                                <div class="inline-flex mt-2 xs:mt-0">
-                                    <button
-                                        class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
-                                        Prev
-                                    </button>
-                                    &nbsp; &nbsp;
-                                    <button
-                                        class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
-                                        Next
-                                    </button>
-                                </div>
+                            <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+                                {{ $users->links() }}
                             </div>
 
                         </div>

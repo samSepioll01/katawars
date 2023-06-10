@@ -401,6 +401,14 @@ class Profile extends Model
     }
 
     /**
+     * This determiens the Kataways created by profile.
+     */
+    public function createdKataways(): HasMany
+    {
+        return $this->hasMany(Kataway::class, 'owner_id', 'id');
+    }
+
+    /**
      * This dertermines which kataways was started by the profile.
      */
     public function startedKataways(): BelongsToMany
