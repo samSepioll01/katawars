@@ -49,7 +49,7 @@
                     </form>
 
                     <form action="" method="get" class="px-5 py-2">
-                        <x-jet-button id="" class="w-32 flex justify-center">Delete</x-jet-button>
+                        <x-jet-danger-button type="submit" id="" class="w-32 flex justify-center">Delete</x-jet-danger-button>
                     </form>
 
                 </div>

@@ -7,9 +7,14 @@ use App\CustomClasses\S3;
 use App\Http\Controllers\Controller;
 use App\Models\Challenge;
 use App\Models\Kata;
+use App\Models\Profile;
+use App\Models\Rank;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -147,13 +152,51 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
+     * @param User $user
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(User $user, Request $request)
     {
-        //
+        if ($request->name !== $user->name) {
+            Profile::validateUrlProfile($request->name);
+        }
+
+        $request->validate([
+            'rank' => ['required', 'string'],
+            'role' => ['required', 'string'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'string', 'max:255'],
+            'bio' => ['nullable', 'string'],
+            'honor' => ['required', 'integer'],
+        ]);
+
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->bio = $request->bio;
+        $user->save();
+
+        if ($request->email !== $user->email) {
+            $user->sendEmailVerificationNotification();
+        }
+
+        $user->syncRoles([Role::findByName($request->role, 'web')->name]);
+
+        $profile = $user->profile;
+        $rank = Rank::where('name', $request->rank)->first();
+
+        $slug = Str::slug($request->name);
+        $profile->slug = $slug;
+        $profile->url = url("/user/$slug");
+        $profile->rank_id = $rank->id;
+        $profile->honor = $request->honor;
+        $profile->save();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'User Info updated successful!');
+
+        return redirect()->back();
     }
 
     /**
