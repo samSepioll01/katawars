@@ -229,8 +229,11 @@ class ChallengeController extends Controller
 
         $challenges = $katas->map(fn($kata) => $kata->challenge);
 
-        $challenge = $challenges->where('slug', $request->slug)
-            ->firstOrFail();
+        $challenge = $challenges->where('slug', $request->slug)->first();
+
+        if (!$challenge) {
+            abort(404);
+        }
 
         $circular = CircularCollection::make($challenges);
 
