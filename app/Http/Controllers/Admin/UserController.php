@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\CustomClasses\CircularCollection;
 use App\Http\Controllers\Controller;
+use App\Models\Challenge;
+use App\Models\Kata;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -57,6 +60,25 @@ class UserController extends Controller
             'user' => $user,
             'previous' => $circular->previous($user),
             'next' => $circular->next($user),
+        ]);
+    }
+
+    public function showCreatedChallenges(User $user)
+    {
+        return view('admin.users.challenges.index', [
+            'user' => $user,
+            'katas' => $user->profile->ownerKatas()->paginate(20),
+        ]);
+    }
+
+    public function showCreatedChallenge(User $user, $id)
+    {
+        $challenge = Challenge::findOrFail($id);
+
+        return view('admin.users.challenges.show', [
+            'user' => $user,
+            'challenge' => $challenge,
+            'test_code' => Storage::disk('s3')->get($challenge->katas->first()->uri_test),
         ]);
     }
 

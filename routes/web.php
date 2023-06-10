@@ -105,6 +105,24 @@ Route::prefix('admin')->middleware([
         ->name('users.change')
         ->middleware('role:superadmin');
 
+    Route::get('/users/{user}/challenges', [UserController::class, 'showCreatedChallenges'])
+        ->name('users.challenges')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/challenges/{chalenge:id}', [UserController::class, 'showCreatedChallenge'])
+        ->name('users.challenges.show')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user}/challenges/delete-multiple', [ChallengeController::class, 'deleteMultiple'])
+        ->name('users.challenges.delete-multiple')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user}/challenges/{challenge:id}', [ChallengeController::class, 'destroy'])
+        ->name('users.challenges.destroy')
+        ->middleware('role:superadmin');
+
+
+
     Route::resource('roles', RoleController::class)
         ->middleware('role:superadmin');
 

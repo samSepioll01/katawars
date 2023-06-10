@@ -14,6 +14,7 @@ use App\Models\Profile;
 use App\Models\Resource;
 use App\Models\Score;
 use App\Models\Solution;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -590,14 +591,30 @@ class ChallengeController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Challenge  $challenge
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Challenge $challenge)
+    public function destroy(User $user, $id)
     {
-        //
+        return response()->json(['success' => true]);
+        $challenge = Challenge::findOrFail($id);
+        $challenge->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Challenge deleted successful!');
+
+        return redirect()->route('users.challenges', [
+            'user' => $user,
+        ]);
+    }
+
+    public function deleteMultiple(User $user, Request $request)
+    {
+        $ids = $request->input('ids');
+        Challenge::destroy($ids);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Challenges deleted successful!');
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }
