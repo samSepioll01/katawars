@@ -19,6 +19,16 @@
         @endsuperadmin
 
         <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
+            {{ __('Challenges') }}
+        </x-jet-dropdown-link>
+
+        <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
+            {{ __('Kataways') }}
+        </x-jet-dropdown-link>
+
+        <x-layout.dropdown-separator />
+
+        <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
             {{ __('Categories') }}
         </x-jet-dropdown-link>
 

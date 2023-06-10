@@ -188,7 +188,7 @@ class UpdateProfileInformationForm extends Component
         $user = Auth::user();
         $user->deleteProfilePhoto('s3');
 
-        $photos = S3::getProfilePhotos(true)->sortByDesc('lastModified');
+        $photos = S3::getProfilePhotos($user, true)->sortByDesc('lastModified');
 
         count($photos)
             ? $user->profile_photo_path = $photos->first()['path']
@@ -235,7 +235,7 @@ class UpdateProfileInformationForm extends Component
      */
     public function render()
     {
-        $photos = S3::getProfilePhotos(true);
+        $photos = S3::getProfilePhotos(Auth::user(), true);
         return view('livewire.update-profile-information-form', [
             'profilePhotos' => $photos->sortByDesc('lastModified'),
         ]);

@@ -48,10 +48,11 @@ class S3 extends Facade
      * @param bool $withDate
      * @return array|Collection
      */
-    public static function getProfilePhotos(bool $withDate = false)
+    public static function getProfilePhotos($user = null, bool $withDate = false)
     {
+        $user = $user ?? Auth::user();
         $photos = Storage::disk('s3')->files(
-            'profile-photos/' . Auth::user()->id
+            'profile-photos/' . $user->id
         );
 
         if ($withDate) {

@@ -40,7 +40,7 @@
 
                 <div class="flex flex-row justify-end lg:w-1/2 py-5">
 
-                    <form action="" method="get" class="px-5 py-2">
+                    <form action="{{ route('users.edit', $user) }}" method="get" class="px-5 py-2">
                         <x-jet-button id="" class="w-32 flex justify-center">Edit</x-jet-button>
                     </form>
 

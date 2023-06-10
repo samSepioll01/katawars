@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\CustomClasses\CircularCollection;
+use App\CustomClasses\S3;
 use App\Http\Controllers\Controller;
 use App\Models\Challenge;
 use App\Models\Kata;
@@ -65,7 +66,7 @@ class UserController extends Controller
 
     public function showCreatedChallenges(User $user)
     {
-        return view('admin.users.challenges.index', [
+        return view('admin.challenges.index', [
             'user' => $user,
             'katas' => $user->profile->ownerKatas()->paginate(20),
         ]);
@@ -75,7 +76,7 @@ class UserController extends Controller
     {
         $challenge = Challenge::findOrFail($id);
 
-        return view('admin.users.challenges.show', [
+        return view('admin.challenges.show', [
             'user' => $user,
             'challenge' => $challenge,
             'test_code' => Storage::disk('s3')->get($challenge->katas->first()->uri_test),
@@ -109,7 +110,38 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        $profilePhotos = S3::getProfilePhotos($user, false);
+
+        $profilePhotos = collect($profilePhotos)
+            ->map(fn($photoPath) => env('AWS_PROFILE_URL') . '/' .$photoPath);
+
+        return view('admin.users.edit', [
+            'user' => $user,
+            'profilePhotos' => $profilePhotos,
+        ]);
+    }
+
+    public function deletePhoto(User $user, Request $request)
+    {
+        $request->validate([
+            'index' => ['integer'],
+        ]);
+
+        $photos = S3::getProfilePhotos($user);
+
+        if ($request->index < 0 || $request->index > count($photos) - 1) {
+            abort(404);
+        }
+
+        $current = S3::filterPath($photos[$request->index]);
+
+        Storage::disk('s3')->delete($current);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Profile Photo deleted successful!');
+
+        return redirect()->back();
     }
 
     /**

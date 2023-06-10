@@ -101,6 +101,10 @@ Route::prefix('admin')->middleware([
     Route::resource('users', UserController::class)
         ->middleware('role:superadmin');
 
+    Route::post('/users/{user}/edit/delete-photos/{index}', [UserController::class, 'deletePhoto'])
+        ->name('users.delete.photo')
+        ->middleware('role:superadmin');
+
     Route::get('/users/change/{id}', [UserController::class, 'changeUser'])
         ->name('users.change')
         ->middleware('role:superadmin');
@@ -120,6 +124,8 @@ Route::prefix('admin')->middleware([
     Route::delete('/users/{user}/challenges/{challenge:id}', [ChallengeController::class, 'destroy'])
         ->name('users.challenges.destroy')
         ->middleware('role:superadmin');
+
+
 
 
 
