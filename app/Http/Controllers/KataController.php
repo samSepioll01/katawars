@@ -385,7 +385,11 @@ function yourFunctionSignature()
         $solutionCode = $kata->solutions
             ->where('profile_id', Auth::user()->profile->id)
             ->first()
-            ->code;
+            ?->code;
+
+        if (!$solutionCode) {
+            $solutionCode = "<?php\n" . $kata->signature . "\n\treturn '';\n}";
+        }
         $video = VideoSolution::where('kata_id', $kata->id)->first();
 
         return view('mykatas.edit', [
