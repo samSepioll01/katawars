@@ -4,7 +4,18 @@
             <div>
                 <h3 class="text-gray-800 dark:text-slate-100 text-2xl font-semibold">Users</h3>
             </div>
-            <div class=" flex items-center justify-end pb-6">
+
+            <div class=" flex items-center justify-between pb-6">
+
+                <div>
+                    @if (request()->routeIs('users.banned'))
+                        <div class="flex flex-row justify-start py-5">
+                            <form action="{{ route('users.index') }}" method="get" class="">
+                                <x-jet-button id="" class="w-32 flex justify-center">Back</x-jet-button>
+                            </form>
+                        </div>
+                    @endif
+                </div>
 
                 <div class="flex items-center justify-between">
                     <div class="flex bg-gray-50 items-center p-2 rounded-md">
@@ -15,10 +26,20 @@
                                 clip-rule="evenodd" />
                         </svg>
                         <input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder="Search...">
-                  </div>
-                        <div class="lg:ml-40 ml-10 space-x-8">
-                            <button class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">New Report</button>
-                            <button class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Create</button>
+                    </div>
+
+                        <div class="lg:ml-40 ml-10 space-x-8 flex flex-row">
+
+                            @if (request()->routeIs('users.index'))
+                                <form action="{{ route('users.banned') }}" method="get">
+                                    <x-jet-button>Banned Users</x-jet-button>
+                                </form>
+
+                                <form action="" method="">
+                                    <x-jet-button>Create</x-jet-button>
+                                </form>
+                            @endif
+
                         </div>
                     </div>
                 </div>

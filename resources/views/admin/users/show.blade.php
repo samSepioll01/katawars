@@ -2,7 +2,7 @@
     <x-layout.wrapped-admin-sections>
 
         <div class="flex flex-row justify-start w-1/2 py-2">
-            <form action="{{ route('users.index') }}" method="get" class="px-5">
+            <form action="{{ $user->deleted_at ? route('users.banned') : route('users.index') }}" method="get" class="px-5">
                 <x-jet-button id="" class="w-32 flex justify-center">Back</x-jet-button>
             </form>
         </div>
@@ -44,11 +44,19 @@
                         <x-jet-button id="" class="w-32 flex justify-center">Edit</x-jet-button>
                     </form>
 
-                    <form action="{{ route('users.toban', $user) }}" method="post" class="px-5 py-2">
+                    @if ($user->deleted_at)
+                    <form action="{{ route('users.recovery', $user) }}" method="post" class="px-5 py-2">
                         @csrf
-                        @method('DELETE')
-                        <x-jet-danger-button type="submit" id="" class="w-32 flex justify-center">To Ban</x-jet-danger-button>
+                        <x-jet-button>Recovery</x-jet-button>
                     </form>
+                    @else
+                        <form action="{{ route('users.toban', $user) }}" method="post" class="px-5 py-2">
+                            @csrf
+                            @method('DELETE')
+                            <x-jet-danger-button type="submit" id="" class="w-32 flex justify-center">To Ban</x-jet-danger-button>
+                        </form>
+                    @endif
+
 
                 </div>
 

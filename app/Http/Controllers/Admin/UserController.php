@@ -5,13 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\CustomClasses\CircularCollection;
 use App\CustomClasses\S3;
 use App\Http\Controllers\Controller;
+use App\Jobs\BannedJob;
+use App\Jobs\RecoveryBannedJob;
 use App\Models\Challenge;
 use App\Models\Kata;
 use App\Models\Profile;
 use App\Models\Rank;
+use App\Models\Session as ModelsSession;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -62,7 +66,7 @@ class UserController extends Controller
     public function show($id)
     {
         $circular = CircularCollection::make(User::all());
-        $user = User::findOrFail($id);
+        $user = User::withTrashed()->find($id);
 
         return view('admin.users.show', [
             'user' => $user,
@@ -71,6 +75,22 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Show all the users that are banned for the admin.
+     * @return \Illuminate\Http\Response
+     */
+    public function showBanned()
+    {
+        return view('admin.users.index', [
+            'users' => User::onlyTrashed()->paginate(10),
+        ]);
+    }
+
+    /**
+     * Show all the challenges created by the user.
+     * @param \App\Models\User $user
+     * @return \Illuminate\Http\Response
+     */
     public function showCreatedChallenges(User $user)
     {
         return view('admin.challenges.index', [
@@ -79,6 +99,13 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Show specific created challenge by the user.
+     *
+     * @param \App\Models\User $user
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function showCreatedChallenge(User $user, $id)
     {
         $challenge = Challenge::findOrFail($id);
@@ -94,6 +121,7 @@ class UserController extends Controller
      * Show the previous|next user throught id of the showed actually user.
      *
      * @param Request $request
+     * @return \Illuminate\Http\Response
      */
     public function changeUser(Request $request)
     {
@@ -129,6 +157,13 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Admin ability for delete user profile photo.
+     *
+     * @param \App\Models\User $user
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function deletePhoto(User $user, Request $request)
     {
         $request->validate([
@@ -202,20 +237,52 @@ class UserController extends Controller
     }
 
 
+    /**
+     * Set the ban for the user
+     * @param \App\Models\User $user
+     * @return \Illuminate\Http\Response
+     */
     public function toBan(User $user)
     {
+
+
+        if (User::isOnline($user)) {
+
+            DB::connection(config('session.connection'))->table(config('session.table', 'sessions'))
+            ->where('user_id', $user->getAuthIdentifier())
+            ->where('id', '!=', request()->session()->getId())
+            ->delete();
+        }
+
         $profile = $user->profile;
         $profile->is_banned = true;
         $profile->save();
 
-        $user->sessions->first()
-            ? Session::invalidate($user->sessions->first()->id)
-            : null;
-
         $user->delete();
+
+        BannedJob::dispatch($user)->onQueue('sendMailQueue');
 
         session()->flash('syncStatus', 'success');
         session()->flash('syncMessage', 'User banned successful!');
+
+        return redirect()->route('users.index');
+    }
+
+    /**
+     * Recovery the user for the ban.
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function recoveryBanned(int $id)
+    {
+        $user = User::withTrashed()->find($id);
+        $profile = $user->profile;
+        $profile->is_banned = false;
+        $profile->save();
+        $user->restore();
+        RecoveryBannedJob::dispatch($user)->onQueue('sendMailQueue');
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'User restored successful!');
 
         return redirect()->route('users.index');
     }

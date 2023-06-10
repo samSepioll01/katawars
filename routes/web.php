@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
 use App\Http\Controllers\ChallengeController;
@@ -101,9 +100,19 @@ Route::prefix('admin')->middleware([
     Route::resource('users', UserController::class)
         ->middleware('role:superadmin');
 
+    Route::get('/users/banned/index', [UserController::class, 'showBanned'])
+        ->name('users.banned')
+        ->middleware('role:superadmin');
+
+    Route::post('users/recovery/{user:id}', [UserController::class, 'recoveryBanned'])
+        ->name('users.recovery')
+        ->middleware('role:superadmin');
+
     Route::delete('/users/{user}', [UserController::class, 'toBan'])
         ->name('users.toban')
         ->middleware('role:superadmin');
+
+
 
     Route::post('/users/{user}/edit/delete-photos/{index}', [UserController::class, 'deletePhoto'])
         ->name('users.delete.photo')
