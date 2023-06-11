@@ -19,7 +19,7 @@
             <a href="{{ $user->profile->url }}">
                 <div class="flex flex-row items-center">
                     <div>
-                        <img src="{{ $user->profile_photo_url }}" alt="" class="rounded-full h-36 w-36">
+                        <img src="{{ $user->profile_photo_url }}" alt="" class="rounded-full h-32 w-32">
                     </div>
                     <div class="pl-5">
                         <h3 class="text-xl">{{ $user->name }}</h3>
@@ -59,7 +59,8 @@
 
                             <div class="flex flex-row justify-start">
                                 <div class="">
-                                    <select class="select" id="rank" name="rank">
+                                    <label for="rank" class="text-violet-600 text-sm pr-2">Rank</label>
+                                    <select class="admin-select" id="rank" name="rank">
                                         @foreach (\App\Models\Rank::all() as $rank)
                                             <option class="option" value="{{ $rank->name }}"
                                                 @if ($user->profile->rank->id === $rank->id)
@@ -73,7 +74,8 @@
                                 </div>
 
                                 <div class="pl-20">
-                                    <select class="select" id="role" name="role">
+                                    <label for="role" class="text-violet-600 text-sm pr-2">Role</label>
+                                    <select class="admin-select" id="role" name="role">
                                         @foreach (\Spatie\Permission\Models\Role::all() as $role)
                                             <option class="option" value="{{ $role->name }}"
                                                 @if ($user->roles->first()->id === $role->id)

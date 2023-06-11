@@ -35,7 +35,7 @@
                                     <x-jet-button>Banned Users</x-jet-button>
                                 </form>
 
-                                <form action="" method="">
+                                <form action="{{ route('users.create') }}" method="">
                                     <x-jet-button>Create</x-jet-button>
                                 </form>
                             @endif

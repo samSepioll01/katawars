@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\CustomClasses\CircularCollection;
 use App\CustomClasses\S3;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
 use App\Jobs\BannedJob;
 use App\Jobs\RecoveryBannedJob;
 use App\Models\Challenge;
@@ -16,6 +17,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -43,18 +45,58 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Request\StoreUserRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        Profile::validateUrlProfile($request->name);
+
+        $exp = $request->exp ?: Rank::where('name', $request->rank)->first()->level_up;
+        $email_verified = (bool) $request->verified;
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'bio' => $request->bio ?? '',
+            'email_verified_at' => $email_verified ? now() : null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        if ($email_verified) {
+            $user->sendEmailVerificationNotification();
+        }
+
+        $user->assignRole(Role::findByName($request->role, 'web')->name);
+
+        $slug = Str::slug($request->name);
+
+        Profile::create([
+            'slug' => $slug,
+            'url' => url("/users/$slug"),
+            'exp' => $exp,
+            'honor' => $request->honor ?: 0,
+            'is_darkmode' => true,
+            'is_deleted' => false,
+            'is_banned' => false,
+            'rank_id' => Rank::where('name', $request->rank)->first()->id,
+            'last_activity' => (int) now()->valueOf(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'User created successful!');
+
+        return redirect()->route('users.index');
     }
 
     /**
