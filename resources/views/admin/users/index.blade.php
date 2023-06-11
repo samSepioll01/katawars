@@ -17,32 +17,31 @@
                     @endif
                 </div>
 
-                <div class="flex items-center justify-between">
-                    <div class="flex bg-gray-50 items-center p-2 rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder="Search...">
+                <div class="w-full grid grid-cols-12">
+                    <div class="col-span-12 lg:col-span-8 py-5">
+                        <x-layout.searcher-sync route="{{ route('users.index') }}" />
                     </div>
 
-                        <div class="lg:ml-40 ml-10 space-x-8 flex flex-row">
+                    <div class="col-span-12 lg:col-span-4 py-5">
 
-                            @if (request()->routeIs('users.index'))
-                                <form action="{{ route('users.banned') }}" method="get">
-                                    <x-jet-button>Banned Users</x-jet-button>
-                                </form>
+                            <div class="flex flex-row items-center justify-end gap-4">
 
-                                <form action="{{ route('users.create') }}" method="">
-                                    <x-jet-button>Create</x-jet-button>
-                                </form>
-                            @endif
+                                @if (request()->routeIs('users.index'))
+                                    <form action="{{ route('users.banned') }}" method="get">
+                                        <x-jet-button>Banned Users</x-jet-button>
+                                    </form>
 
+                                    <form action="{{ route('users.create') }}" method="">
+                                        <x-jet-button>Create</x-jet-button>
+                                    </form>
+                                @endif
+
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
                 <div>
                     <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                         <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">

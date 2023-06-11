@@ -34,10 +34,16 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $users = User::orderBy('id');
+
+        if ($request->search) {
+            $users = User::search($request->search);
+        }
+
         return view('admin.users.index', [
-            'users' => User::paginate(10)->withQueryString(),
+            'users' => $users->paginate(10)->withQueryString(),
         ]);
     }
 
