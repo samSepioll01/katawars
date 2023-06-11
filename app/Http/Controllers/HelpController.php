@@ -74,7 +74,9 @@ class HelpController extends Controller
      */
     public function show(Help $help)
     {
-        //
+        return view('admin.helps.show', [
+            'help' => $help,
+        ]);
     }
 
     /**
@@ -85,7 +87,9 @@ class HelpController extends Controller
      */
     public function edit(Help $help)
     {
-        //
+        return view('admin.helps.edit', [
+            'help' => $help,
+        ]);
     }
 
     /**
@@ -97,7 +101,17 @@ class HelpController extends Controller
      */
     public function update(UpdateHelpRequest $request, Help $help)
     {
-        //
+        $help->title = $request->title;
+        $help->description = $request->description;
+        $help->section = $request->section;
+        $help->save();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Help updated successful!');
+
+        return redirect()->route('admin.helps.show', [
+            'help' => $help,
+        ]);
     }
 
     /**
@@ -108,6 +122,11 @@ class HelpController extends Controller
      */
     public function destroy(Help $help)
     {
-        //
+        $help->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Help deleted successful!');
+
+        return redirect()->route('admin.helps.index');
     }
 }

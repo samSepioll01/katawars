@@ -184,6 +184,19 @@ Route::prefix('admin')->middleware([
     Route::post('/helps', [HelpController::class, 'store'])
         ->name('admin.helps.store');
 
+    Route::get('/helps/{help}', [HelpController::class, 'show'])
+        ->name('admin.helps.show');
+
+    Route::get('/helps/{help}/edit', [HelpController::class, 'edit'])
+        ->name('admin.helps.edit');
+
+    Route::put('/help/{help}', [HelpController::class, 'update'])
+        ->name('admin.helps.update');
+
+    Route::delete('/help/{help}', [HelpController::class, 'destroy'])
+        ->name('admin.helps.destroy');
+
+
 
 });
 

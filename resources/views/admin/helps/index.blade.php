@@ -63,10 +63,10 @@
                                 </thead>
 
                                 <tbody>
-                                    @foreach ($helps as $help )
+                                    @foreach ($helps as $help)
                                         <tr>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <a href="">
+                                                <a href="{{ route('admin.helps.show', $help) }}">
                                                     <p class="text-gray-900 whitespace-no-wrap">
                                                         {{ $help->title }}
                                                     </p>
