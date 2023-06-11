@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreHelpRequest;
 use App\Http\Requests\UpdateHelpRequest;
 use App\Models\Help;
+use Illuminate\Http\Request;
 
 class HelpController extends Controller
 {
@@ -22,6 +23,19 @@ class HelpController extends Controller
         ])->render();
     }
 
+    public function showHelps(Request $request)
+    {
+        $helps = Help::orderBy('id');
+
+        if ($request->search) {
+            $helps = Help::search($request->search);
+        }
+
+        return view('admin.helps.index', [
+            'helps' => $helps->paginate(10)->withQueryString(),
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -29,7 +43,7 @@ class HelpController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.helps.create');
     }
 
     /**
@@ -40,7 +54,16 @@ class HelpController extends Controller
      */
     public function store(StoreHelpRequest $request)
     {
-        //
+        Help::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'section' => $request->section,
+        ]);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Help created successful!');
+
+        return redirect()->route('admin.helps.index');
     }
 
     /**

@@ -175,11 +175,14 @@ Route::prefix('admin')->middleware([
         ->middleware('role:superadmin');
 
 
+    Route::get('/helps/', [HelpController::class, 'showHelps'])
+        ->name('admin.helps.index');
 
+    Route::get('/help/create', [HelpController::class, 'create'])
+        ->name('admin.helps.create');
 
-
-    Route::resource('roles', RoleController::class)
-        ->middleware('role:superadmin');
+    Route::post('/helps', [HelpController::class, 'store'])
+        ->name('admin.helps.store');
 
 
 });

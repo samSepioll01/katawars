@@ -11,33 +11,11 @@
                 {{ __('Users') }}
             </x-jet-dropdown-link>
 
-            <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
-                {{ __('Roles') }}
-            </x-jet-dropdown-link>
-
             <x-layout.dropdown-separator />
         @endsuperadmin
 
         <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
-            {{ __('Challenges') }}
-        </x-jet-dropdown-link>
-
-        <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
-            {{ __('Kataways') }}
-        </x-jet-dropdown-link>
-
-        <x-layout.dropdown-separator />
-
-        <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
             {{ __('Categories') }}
-        </x-jet-dropdown-link>
-
-        <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
-            {{ __('Languages') }}
-        </x-jet-dropdown-link>
-
-        <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
-            {{ __('Modes') }}
         </x-jet-dropdown-link>
 
         <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
@@ -50,7 +28,7 @@
 
         <x-layout.dropdown-separator />
 
-        <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
+        <x-jet-dropdown-link href="{{ route('admin.helps.index') }}" class="text-center text-lg py-3 2xl:items-center">
             {{ __('Helps') }}
         </x-jet-dropdown-link>
 
