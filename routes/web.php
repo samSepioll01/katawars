@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoritesController;
@@ -196,7 +197,26 @@ Route::prefix('admin')->middleware([
     Route::delete('/help/{help}', [HelpController::class, 'destroy'])
         ->name('admin.helps.destroy');
 
+    Route::get('/categories/', [CategoryController::class, 'index'])
+        ->name('admin.categories.index');
 
+    Route::get('/catgories/{category}', [CategoryController::class, 'show'])
+        ->name('admin.categories.show');
+
+    Route::get('/categories/create', [CategoryController::class, 'create'])
+        ->name('admin.categories.create');
+
+    Route::post('/categories', [CategoryController::class, 'store'])
+        ->name('admin.categories.store');
+
+    Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])
+        ->name('admin.categories.edit');
+
+    Route::put('/categories/{category}', [CategoryController::class, 'update'])
+        ->name('admin.categories.update');
+
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])
+        ->name('admin.categories.destroy');
 
 });
 

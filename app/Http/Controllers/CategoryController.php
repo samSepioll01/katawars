@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -13,9 +14,17 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $categories = Category::orderBy('id');
+
+        if ($request->search) {
+            $categories = Category::search($request->search);
+        }
+
+        return view('admin.categories.index', [
+            'categories' => $categories->paginate(10)->withQueryString(),
+        ]);
     }
 
     /**
@@ -25,7 +34,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
@@ -36,7 +45,15 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        Category::create([
+            'name' => $request->name,
+            'bg_color' => $request->bgcolor ?? '',
+        ]);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Category created successful!');
+
+        return redirect()->route('admin.categories.index');
     }
 
     /**
@@ -47,7 +64,9 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return view('admin.categories.show', [
+            'category' => $category,
+        ]);
     }
 
     /**
@@ -58,7 +77,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('admin.categories.edit', [
+            'category' => $category,
+        ]);
     }
 
     /**
@@ -70,7 +91,16 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $category->name = $request->name;
+        $category->bg_color = $request->bgcolor;
+        $category->save();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Category updated successful!');
+
+        return redirect()->route('admin.categories.show', [
+            'category' => $category,
+        ]);
     }
 
     /**
@@ -81,6 +111,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Category deleted successful!');
+
+        return redirect()->route('admin.categories.index');
     }
 }

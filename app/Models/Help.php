@@ -28,6 +28,7 @@ class Help extends Model
             'title' => $this->title,
             'description' => $this->description,
             'section' => $this->section,
+            'created_at' => $this->created_at,
         ];
     }
 }

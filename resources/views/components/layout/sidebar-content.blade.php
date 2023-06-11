@@ -14,7 +14,7 @@
             <x-layout.dropdown-separator />
         @endsuperadmin
 
-        <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
+        <x-jet-dropdown-link href="{{ route('admin.categories.index') }}" class="text-center text-lg py-3 2xl:items-center">
             {{ __('Categories') }}
         </x-jet-dropdown-link>
 
