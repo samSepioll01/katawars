@@ -33,6 +33,10 @@
                     <h1 class="text-gray-800 text-2xl font-semibold">Created Challenges</h1>
                 </div>
 
+                <div class="col-span-12 lg:col-span-8 py-5">
+                    <x-layout.searcher-sync route="{{ route('users.challenges', $user) }}" />
+                </div>
+
                 <div class="py-5 w-full flex justify-end">
 
                     <x-jet-button id="deleteBTN" class="w-32 flex justify-center" x-ref="deletebtn" x-show="showDeleteBTN" style="display: none;"
@@ -172,7 +176,7 @@
                             </tbody>
                         </table>
             <div class="relative flex flex-col justify-between p-5">
-                {{ $user->profile->ownerKatas()->paginate(20, ['*'], 'katas')->links() }}
+                {{ $katas->links() }}
             </div>
         </div>
     </x-layout.wrapped-admin-sections>

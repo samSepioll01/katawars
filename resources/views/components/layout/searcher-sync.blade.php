@@ -37,6 +37,6 @@
                 class="h-6 w-6" alt="">
         </button>
     </form>
-    <form action="{{ route('users.index') }}" method="get" x-ref="formcross" class="hidden"></form>
+    <form action="{{ $route }}" method="get" x-ref="formcross" class="hidden"></form>
 </div>
 

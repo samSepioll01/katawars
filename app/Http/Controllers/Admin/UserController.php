@@ -17,6 +17,7 @@ use App\Models\Rank;
 use App\Models\Session as ModelsSession;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -147,11 +148,26 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function showCreatedChallenges(User $user)
+    public function showCreatedChallenges(User $user, Request $request)
     {
+        $challenges = $user->profile->ownerKatas();
+
+        if ($request->search) {
+            $challenges = $challenges->get();
+            $search = Challenge::search($request->search)->get();
+            $challenges = $challenges->intersect($search);
+
+            $page = LengthAwarePaginator::resolveCurrentPage();
+            $perPage = 10;
+            $results = $challenges->slice(($page - 1) * $perPage, $perPage)->all();
+            $paginated = new LengthAwarePaginator($results, count($challenges), $perPage);
+        } else {
+            $paginated = $challenges->paginate(20);
+        }
+
         return view('admin.challenges.index', [
             'user' => $user,
-            'katas' => $user->profile->ownerKatas()->paginate(20),
+            'katas' => $paginated,
         ]);
     }
 
