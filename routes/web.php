@@ -146,6 +146,22 @@ Route::prefix('admin')->middleware([
         ->name('users.comments.destroy-multiple')
         ->middleware('role:superadmin');
 
+    Route::get('/users/{user}/resources', [ResourceController::class, 'showUserResources'])
+        ->name('users.resources')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/resources/{resource:id}', [ResourceController::class, 'showUserResource'])
+        ->name('users.resources.show')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user}/resources/{resource:id}', [ResourceController::class, 'deleteUserResource'])
+        ->name('users.resources.destroy')
+        ->middleware('role:superadmin');
+
+    Route::post('/users/{user}/comments/destroy-multiple', [ResourceController::class, 'destroyMultipleResources'])
+        ->name('users.resources.destroy-multiple')
+        ->middleware('role:superadmin');
+
     Route::get('/users/{user}/challenges/{challenge:id}', [UserController::class, 'showCreatedChallenge'])
         ->name('users.challenges.show')
         ->middleware('role:superadmin');

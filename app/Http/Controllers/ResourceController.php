@@ -8,6 +8,7 @@ use App\Models\Challenge;
 use App\Models\Profile;
 use App\Models\Resource;
 use App\Models\Score;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,6 +32,25 @@ class ResourceController extends Controller
     public function create()
     {
         //
+    }
+
+    public function showUserResources(User $user)
+    {
+        return view('admin.users.resources.index', [
+            'user' => $user,
+            'resources' => $user->profile->publishedResources()->paginate(20),
+        ]);
+    }
+
+    public function showUserResource(User $user, Request $request)
+    {
+
+        $resource = Resource::find($request->resource);
+
+        return view('admin.users.resources.show', [
+            'user' => $user,
+            'resource' => $resource,
+        ]);
     }
 
     /**
@@ -109,6 +129,35 @@ class ResourceController extends Controller
         return redirect()->back()->with([
             'tabinstructions' => 'false',
             'tabresources' => 'true',
+        ]);
+    }
+
+    public function deleteUserResource(User $user, Request $request)
+    {
+        $resource = $user->profile->publishedResources
+            ->where('id', $request->resource)
+            ->first();
+
+        $resource->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Resource deleted successful!');
+
+        return redirect()->route('users.resources', [
+            'user' => $user,
+        ]);
+    }
+
+    public function destroyMultipleResources(User $user, Request $request)
+    {
+        $ids = $request->input('ids');
+        Resource::destroy($ids);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Resources deleted successful!');
+
+        return response()->json([
+            'success' => true
         ]);
     }
 

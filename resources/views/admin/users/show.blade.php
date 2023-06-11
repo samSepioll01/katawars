@@ -227,7 +227,7 @@
                         <a href="{{ route('users.comments', $user) }}">Comments ({{ $user->profile->comments->count() }})</a>
                     </div>
                     <div>
-                        <a href="">Resources Published ({{ $user->profile->publishedResources->count() }})</a>
+                        <a href="{{ route('users.resources', $user) }}">Resources Published ({{ $user->profile->publishedResources->count() }})</a>
                     </div>
                 </div>
 
