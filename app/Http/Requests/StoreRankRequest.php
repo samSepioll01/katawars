@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreRankRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class StoreRankRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Auth::user()->hasRole(['admin', 'superadmin']);
     }
 
     /**
@@ -24,7 +25,8 @@ class StoreRankRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'string', 'unique:ranks', 'max:255'],
+            'levelup' => ['required', 'integer'],
         ];
     }
 }

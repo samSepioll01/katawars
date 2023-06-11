@@ -11,6 +11,7 @@ use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\KataController;
 use App\Http\Controllers\MessengerController;
+use App\Http\Controllers\RankController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
 use App\Http\Controllers\SolutionController;
@@ -217,6 +218,8 @@ Route::prefix('admin')->middleware([
 
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])
         ->name('admin.categories.destroy');
+
+    Route::resource('ranks', RankController::class);
 
 });
 
