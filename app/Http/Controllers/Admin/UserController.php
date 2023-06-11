@@ -7,7 +7,9 @@ use App\CustomClasses\S3;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Jobs\BannedJob;
+use App\Jobs\CreateAccountPassJob;
 use App\Jobs\RecoveryBannedJob;
+use App\Mail\GitHubLoginPasswordMail;
 use App\Models\Challenge;
 use App\Models\Kata;
 use App\Models\Profile;
@@ -18,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -59,21 +62,26 @@ class UserController extends Controller
         Profile::validateUrlProfile($request->name);
 
         $exp = $request->exp ?: Rank::where('name', $request->rank)->first()->level_up;
-        $email_verified = (bool) $request->verified;
+
+        $password = substr(
+            Hash::make(
+                $request->name
+                . $request->email
+                . now()
+            ),
+            7, 16,
+        );
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($password),
             'bio' => $request->bio ?? '',
-            'email_verified_at' => $email_verified ? now() : null,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        if ($email_verified) {
-            $user->sendEmailVerificationNotification();
-        }
+        CreateAccountPassJob::dispatch($user->name, $user->email, $password)->onQueue('sendMailQueue');
 
         $user->assignRole(Role::findByName($request->role, 'web')->name);
 

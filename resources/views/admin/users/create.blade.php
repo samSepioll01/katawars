@@ -27,12 +27,6 @@
                         </select>
                     </div>
 
-                    <div class="col-span-12 md:col-span-5 pb-10">
-                        <label class="text-violet-600 text-sm">Email Must Verified</label>
-                        <input id="verified_true" type="radio" name="verified" value="{{ old('verified', true) }}" class="mx-2" checked />Yes
-                        <input id="verified_false" type="radio" name="verified" value="{{ old('verified', false) }}" class="mx-2" />No
-                    </div>
-
                     <div class="grid grid-cols-12 gap-8">
                         <div class="col-span-12 md:col-span-5">
                             <label for="name" class="text-violet-600 text-sm">Name</label>
@@ -109,31 +103,7 @@
                         <x-jet-input-error for="rank" class="mt-2" />
                     </div>
 
-                    <div class="w-full flex flex-col lg:flex-row gap-8">
-                        <div class="w-full lg:w-1/3">
-                            <label for="password" class="text-violet-600 text-sm">Password</label>
-                            <input id="password" type="password" name="password" required autocomplete="new-password" class="w-full border border-gray-300 rounded-md transition
-                                dark:bg-[rgb(255,255,255)]/20 focus:outline-none focus:ring-1
-                                    focus:saturate-150 focus:ring-violet-600 dark:focus:shadow-outter-lg dark:focus:ring-transparent
-                                dark:focus:border-cyan-300 dark:focus:shadow-cyan-700 dark:focus:bg-[rgb(255,255,255)]/30'"
-                                value="{{ old('password') }}"
-                            >
-                            <x-jet-input-error for="password" class="mt-2" />
-                        </div>
-
-                        <div class="w-full lg:w-1/3">
-                            <label for="password-confirmation" class="text-violet-600 text-sm">Confirm Password</label>
-                            <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
-                                class="w-full border border-gray-300 rounded-md transition
-                                dark:bg-[rgb(255,255,255)]/20 focus:outline-none focus:ring-1
-                                    focus:saturate-150 focus:ring-violet-600 dark:focus:shadow-outter-lg dark:focus:ring-transparent
-                                dark:focus:border-cyan-300 dark:focus:shadow-cyan-700 dark:focus:bg-[rgb(255,255,255)]/30'"
-                            >
-                            <x-jet-input-error for="password-confirmation" class="mt-2" />
-                        </div>
-                    </div>
-
-                    <div class="py-20 flex justify-center w-full">
+                    <div class="py-10 flex justify-center w-full">
                         <x-jet-button>Create</x-jet-button>
                     </div>
                 </div>

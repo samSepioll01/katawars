@@ -34,7 +34,6 @@ class StoreUserRequest extends FormRequest
             'exp' => ['nullable', 'integer'],
             'honor' => ['nullable', 'integer'],
             'rank' => ['required', 'string'],
-            'password' => $this->passwordRules(),
         ];
     }
 }
