@@ -40,7 +40,7 @@ class Challenge extends Model
             'description' => $this->description,
             'examples' => $this->examples,
             'notes' => $this->notes,
-            'created_at',
+            'created_at' => $this->created_at,
         ];
     }
 

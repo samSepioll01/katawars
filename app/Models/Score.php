@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Score extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -20,10 +21,19 @@ class Score extends Model
     ];
 
     /**
-     * This determines all the punctuated records order by punctuation class.
+     * Get the indexable data array for the model.
+     *
+     * @return array
      */
-    public function scoredByClass()
+    public function toSearchableArray()
     {
-        return $this->hasMany(Punct::class);
+        return [
+            'id' => $this->id,
+            'denomination' => $this->denomination,
+            'type' => $this->type,
+            'points' => $this->points,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
     }
 }

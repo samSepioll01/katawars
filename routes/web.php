@@ -14,6 +14,7 @@ use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\RankController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
+use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SolutionController;
 use Illuminate\Support\Facades\Route;
 
@@ -220,6 +221,8 @@ Route::prefix('admin')->middleware([
         ->name('admin.categories.destroy');
 
     Route::resource('ranks', RankController::class);
+
+    Route::resource('scores', ScoreController::class);
 
 });
 

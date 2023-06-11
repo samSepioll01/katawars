@@ -22,7 +22,7 @@
             {{ __('Ranks') }}
         </x-jet-dropdown-link>
 
-        <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
+        <x-jet-dropdown-link href="{{ route('scores.index') }}" class="text-center text-lg py-3 2xl:items-center">
             {{ __('Scores') }}
         </x-jet-dropdown-link>
 

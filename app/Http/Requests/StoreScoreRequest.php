@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreScoreRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class StoreScoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Auth::user()->hasRole(['admin', 'superadmin']);
     }
 
     /**
@@ -24,7 +25,9 @@ class StoreScoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'denomination' => ['required', 'unique:scores', 'string', 'max:255'],
+            'type' => ['required', 'string', 'max:255'],
+            'points' => ['required', 'integer'],
         ];
     }
 }
