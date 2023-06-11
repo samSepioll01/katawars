@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentPolicy
@@ -92,6 +93,6 @@ class CommentPolicy
      */
     public function forceDelete(User $user, Comment $comment)
     {
-        //
+        return Auth::user()->hasRole(['admin', 'superadmin']);
     }
 }

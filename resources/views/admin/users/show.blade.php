@@ -224,7 +224,7 @@
                         <a href="">Created Kataways ({{ $user->profile->createdKataways->count() }})</a>
                     </div>
                     <div>
-                        <a href="">Comments ({{ $user->profile->comments->count() }})</a>
+                        <a href="{{ route('users.comments', $user) }}">Comments ({{ $user->profile->comments->count() }})</a>
                     </div>
                     <div>
                         <a href="">Resources Published ({{ $user->profile->publishedResources->count() }})</a>

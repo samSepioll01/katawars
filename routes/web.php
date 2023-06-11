@@ -130,7 +130,23 @@ Route::prefix('admin')->middleware([
         ->name('users.challenges')
         ->middleware('role:superadmin');
 
-    Route::get('/users/{user}/challenges/{chalenge:id}', [UserController::class, 'showCreatedChallenge'])
+    Route::get('/users/{user}/comments', [UserController::class, 'showComments'])
+        ->name('users.comments')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/comments/{comment:id}', [UserController::class, 'showComment'])
+        ->name('users.comments.show')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user}/comments/{comment:id}', [CommentController::class, 'deleteUserComment'])
+        ->name('users.comments.destroy')
+        ->middleware('role:superadmin');
+
+    Route::post('/users/{user}/comments/destroy-multiple', [CommentController::class, 'destroyMultipleComment'])
+        ->name('users.comments.destroy-multiple')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/challenges/{challenge:id}', [UserController::class, 'showCreatedChallenge'])
         ->name('users.challenges.show')
         ->middleware('role:superadmin');
 

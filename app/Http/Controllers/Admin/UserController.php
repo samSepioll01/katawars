@@ -11,6 +11,7 @@ use App\Jobs\CreateAccountPassJob;
 use App\Jobs\RecoveryBannedJob;
 use App\Mail\GitHubLoginPasswordMail;
 use App\Models\Challenge;
+use App\Models\Comment;
 use App\Models\Kata;
 use App\Models\Profile;
 use App\Models\Rank;
@@ -186,6 +187,25 @@ class UserController extends Controller
             'user' => $user,
             'challenge' => $challenge,
             'test_code' => Storage::disk('s3')->get($challenge->katas->first()->uri_test),
+        ]);
+    }
+
+    public function showComments(User $user)
+    {
+        return view('admin.users.comments.index', [
+            'user' => $user,
+            'comments' => $user->profile->comments()->paginate(10),
+        ]);
+    }
+
+    public function showComment(User $user, Request $request)
+    {
+
+        $comment = Comment::find($request->comment);
+
+        return view('admin.users.comments.show', [
+            'user' => $user,
+            'comment' => $comment,
         ]);
     }
 

@@ -7,7 +7,6 @@
             </form>
         </div>
 
-
         <div class="flex flex-col lg:flex-row w-full justify-start items-center px-5 py-5">
 
             <div class="w-full flex flex-row items-center justify-start">
@@ -30,26 +29,23 @@
         <div class="w-full" x-data="{showDeleteBTN: false}">
             <div class="py-3 flex flex-col">
                 <div>
-                    <h1 class="text-gray-800 text-2xl font-semibold">Created Challenges</h1>
-                </div>
-
-                <div class="col-span-12 lg:col-span-8 py-5">
-                    <x-layout.searcher-sync route="{{ route('users.challenges', $user) }}" />
+                    <h1 class="text-gray-800 text-2xl font-semibold">Comments Published</h1>
                 </div>
 
                 <div class="py-5 w-full flex justify-end">
 
                     <x-jet-button id="deleteBTN" class="w-32 flex justify-center" x-ref="deletebtn" x-show="showDeleteBTN" style="display: none;"
                         x-on:click="
-                            checkboxes = [...document.getElementsByName('katas[]')];
+                            checkboxes = [...document.getElementsByName('comments[]')];
                             selecteds = checkboxes.filter(checkbox => checkbox.checked);
                             ids = selecteds.map(selected => selected.id);
+
                             axios({
-                                method: 'delete',
-                                url: '{{ route('users.challenges.delete-multiple', ['user' => $user]) }}',
+                                method: 'post',
+                                url: '{{ route('users.comments.destroy-multiple', ['user' => $user]) }}',
                                 responseType: 'json',
                                 data: {
-                                    'ids': ids,
+                                    ids: ids,
                                 }
                             })
                             .then(response => {
@@ -57,7 +53,7 @@
                                     window.location.reload();
                                 }
                             })
-                            .catch(errors => console.log(errors.message));
+                            .catch(errors => console.log(errors));
                         "
                     >
                         Delete
@@ -76,7 +72,7 @@
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         <div class="flex flex-row items-center">
                                             <input type="checkbox" x-on:click="
-                                                checkboxes = [...document.getElementsByName('katas[]')];
+                                                checkboxes = [...document.getElementsByName('comments[]')];
 
                                                 if ($event.target.checked) {
                                                     showDeleteBTN = true;
@@ -86,30 +82,21 @@
                                                     checkboxes.forEach(checkbox => checkbox.checked = false);
                                                 }
                                             ">
-                                            <span class="pl-2">Title</span>
+                                            <span class="pl-2">Body</span>
                                         </div>
 
                                     </th>
                                     <th
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        URL
-                                    </th>
-                                    <th
-                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        Rank
-                                    </th>
-                                    <th
-                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        Language
-                                    </th>
-
-                                    <th
-                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        Mode
+                                        Challenge
                                     </th>
                                     <th
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Created at
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Updated at
                                     </th>
                                 </tr>
                             </thead>
@@ -119,7 +106,7 @@
                                     if ($event.target.checked) {
                                         showDeleteBTN = true;
                                     } else {
-                                        checkboxes = [...document.getElementsByName('katas[]')];
+                                        checkboxes = [...document.getElementsByName('comments[]')];
                                         if (checkboxes.every(checkbox => !checkbox.checked)) {
                                             showDeleteBTN = false;
                                         }
@@ -127,48 +114,35 @@
                                 }
                             "
                             >
-                                @if ($katas->count())
-                                    @foreach ($katas as $kata )
+                                @if ($comments->count())
+                                    @foreach ($comments as $comment )
                                         <tr>
 
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <a href="{{ route('users.challenges.show', ['user' => $user, 'challenge' => $kata->challenge]) }}" class="flex items-center">
-                                                    <input type="checkbox" name="katas[]" class="mr-2" id="{{ $kata->id }}">
-                                                    <span>{{ $kata->challenge->title }}</span>
+                                                <a href="{{ route('users.comments.show', ['user' => $user, 'comment' => $comment]) }}" class="flex items-center">
+                                                    <input type="checkbox" name="comments[]" class="mr-2" id="{{ $comment->id }}">
+                                                    <span>{{ $comment->body }}</span>
                                                 </a>
                                             </td>
 
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <a href="{{ $kata->challenge->url }}" class="">
-                                                    {{ $kata->challenge->url }}
+                                                <a href="{{ $comment->challenge->url }}" class="">
+                                                    {{ $comment->challenge->title }}
                                                 </a>
                                             </td>
 
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <div class="flex items-center">
-                                                    <x-utilities.rank :size="4" rank="{{ $kata->challenge->rank->name }}" />
-                                                    <span class="px-2 text-gray-900 whitespace-no-wrap">
-                                                        {{ ucwords($kata->challenge->rank->name) }}
-                                                    </span>
-                                                </div>
+                                                <span>{{ $comment->created_at }}</span>
                                             </td>
 
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <span>{{ ucwords($kata->language->name) }}</span>
-                                            </td>
-
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <span>{{ ucwords($kata->mode->denomination) }}</span>
-                                            </td>
-
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <span>{{ $kata->challenge->created_at }}</span>
+                                                <span>{{ $comment->updated_at }}</span>
                                             </td>
                                         </tr>
                                     @endforeach
                                 @else
                                 <tr>
-                                    <td colspan="6" class="py-4 text-xl font-semibold text-center">No Challenges founded.</td>
+                                    <td colspan="6" class="py-4 text-xl font-semibold text-center">No Comments founded.</td>
                                 </tr>
 
                                 @endif
@@ -176,7 +150,7 @@
                             </tbody>
                         </table>
             <div class="relative flex flex-col justify-between p-5">
-                {{ $katas->links() }}
+                {{ $comments->links() }}
             </div>
         </div>
     </x-layout.wrapped-admin-sections>
