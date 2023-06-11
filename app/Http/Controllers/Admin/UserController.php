@@ -345,6 +345,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::withTrashed()->find($id);
+        $user->forceDelete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'User deleted succesful!');
+
+        return redirect()->route('users.index');
     }
 }

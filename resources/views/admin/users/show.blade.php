@@ -53,10 +53,15 @@
                         <form action="{{ route('users.toban', $user) }}" method="post" class="px-5 py-2">
                             @csrf
                             @method('DELETE')
-                            <x-jet-danger-button type="submit" id="" class="w-32 flex justify-center">To Ban</x-jet-danger-button>
+                            <x-jet-danger-button type="submit" class="w-32 flex justify-center">To Ban</x-jet-danger-button>
                         </form>
                     @endif
 
+                    <form action="{{ route('users.destroy', $user) }}" method="post" class="px-5 py-2">
+                        @csrf
+                        @method('DELETE')
+                        <x-jet-danger-button type="submit">Delete</x-jet-danger-button>
+                    </form>
 
                 </div>
 

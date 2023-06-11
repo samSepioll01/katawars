@@ -100,6 +100,10 @@ Route::prefix('admin')->middleware([
     Route::resource('users', UserController::class)
         ->middleware('role:superadmin');
 
+    Route::delete('/users/{user:id}', [UserController::class, 'destroy'])
+        ->name('users.destroy')
+        ->middleware('role:superadmin');
+
     Route::get('/users/banned/index', [UserController::class, 'showBanned'])
         ->name('users.banned')
         ->middleware('role:superadmin');
@@ -108,7 +112,7 @@ Route::prefix('admin')->middleware([
         ->name('users.recovery')
         ->middleware('role:superadmin');
 
-    Route::delete('/users/{user}', [UserController::class, 'toBan'])
+    Route::delete('/users/banned/{user}', [UserController::class, 'toBan'])
         ->name('users.toban')
         ->middleware('role:superadmin');
 
