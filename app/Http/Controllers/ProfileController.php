@@ -71,6 +71,10 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * This determines the comments activity and allow his management.
+     * @param \Illuminate\Http\Request $request
+     */
     public function showProfileActivity(Request $request)
     {
         $comments = Comment::where('profile_id', Auth::user()->profile->id)
@@ -340,6 +344,12 @@ class ProfileController extends Controller
         $feedKatas = $user->profile->following
             ->map(fn($followee) => $followee->ownerKatas->where('mode_id', 1))
             ->flatten();
+
+        $feedKatas = $feedKatas->filter(
+            fn($kata) => $user->profile->solutions()
+                ->where('kata_id', $kata->id)
+                ->doesntExist()
+        );
 
         return [
             'id' => $user->id,

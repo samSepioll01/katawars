@@ -156,7 +156,19 @@
                                     <x-jet-dropdown-link :button="true" class="relative cursor-pointer">
                                         <div id="donate-button-container" class="absolute opacity-0">
                                             <div id="donate-button"></div>
-                                        </div>
+                                            <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+                                            <script>
+                                            PayPal.Donation.Button({
+                                            env:'production',
+                                            hosted_button_id:'PYNR793FU65ES',
+                                            image: {
+                                            src:'https://www.paypalobjects.com/en_US/ES/i/btn/btn_donateCC_LG.gif',
+                                            alt:'Donate with PayPal button',
+                                            title:'PayPal - The safer, easier way to pay online!',
+                                            }
+                                            }).render('#donate-button');
+                                            </script>
+                                            </div>
 
                                         <x-layout.dropdown-icon srcPath="donate" />
                                         {{ __('Paypal Donate') }}
