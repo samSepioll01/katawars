@@ -153,9 +153,25 @@
 
                                     <x-layout.dropdown-separator />
 
-                                    <x-jet-dropdown-link href="{{ route('dashboard') }}">
+                                    <x-jet-dropdown-link :button="true" class="relative cursor-pointer">
+                                        <div id="donate-button-container" class="absolute opacity-0">
+                                            <div id="donate-button"></div>
+                                            <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+                                            <script>
+                                            PayPal.Donation.Button({
+                                            env:'production',
+                                            hosted_button_id:'PYNR793FU65ES',
+                                            image: {
+                                            src:'https://www.paypalobjects.com/en_US/ES/i/btn/btn_donateCC_LG.gif',
+                                            alt:'Donate with PayPal button',
+                                            title:'PayPal - The safer, easier way to pay online!',
+                                            }
+                                            }).render('#donate-button');
+                                            </script>
+                                        </div>
+
                                         <x-layout.dropdown-icon srcPath="donate" />
-                                        {{ __('Donate') }}
+                                        {{ __('Paypal Donate') }}
                                     </x-jet-dropdown-link>
 
                                     <x-jet-dropdown-link href="{{ route('help') }}">
@@ -237,10 +253,6 @@
                         {{ __('Kata Ways') }}
                     </x-jet-responsive-nav-link>
 
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
-                        {{ __('Kumite') }}
-                    </x-jet-responsive-nav-link>
-
                     <x-layout.dropdown-separator />
 
                     <x-jet-responsive-nav-link href="{{ route('mykatas.index') }}">
@@ -277,28 +289,8 @@
                         {{ __('Settings') }}
                     </x-jet-responsive-nav-link>
 
-                    <x-jet-responsive-nav-link @click="idiom = !idiom" id="idioms" @click.away="idiom = false" @close.stop="idiom = false" class="cursor-pointer">
-                        {{ __('Idiom') }}
-                    </x-jet-responsive-nav-link>
-                    <div id="idiom-list" :class="{ 'block': idiom, 'hidden': !idiom  }" class="flex justify-end overflow-hidden">
-                        <div class="w-5/6 sm:w-2/3 p-1 flex flex-col">
-                            <a href="" class="dropdown-link__idiom">English</a>
-                            <a href="" class="dropdown-link__idiom">Spanish</a>
-                        </div>
-                    </div>
-
-                    <x-layout.dropdown-separator />
-
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
-                        {{ __('Donate') }}
-                    </x-jet-responsive-nav-link>
-
                     <x-jet-responsive-nav-link href="{{ route('help') }}">
                         {{ __('Help') }}
-                    </x-jet-responsive-nav-link>
-
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
-                        {{ __('Send Report') }}
                     </x-jet-responsive-nav-link>
 
                     <x-layout.dropdown-separator />

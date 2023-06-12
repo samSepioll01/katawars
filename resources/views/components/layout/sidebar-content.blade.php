@@ -68,11 +68,6 @@
             {{ __('Kata Ways') }}
         </x-jet-dropdown-link>
 
-        <x-jet-dropdown-link href="{{ route('dashboard') }}" class="text-md items-center">
-            <x-layout.dropdown-icon srcPath="kumite" class="mr-6" sidebar/>
-            {{ __('Kumite') }}
-        </x-jet-dropdown-link>
-
         <x-layout.dropdown-separator />
 
         <x-jet-dropdown-link href="{{ route('mykatas.index') }}" class="text-md items-center">
