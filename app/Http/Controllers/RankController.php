@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRankRequest;
 use App\Http\Requests\UpdateRankRequest;
+use App\Models\Profile;
 use App\Models\Rank;
 use Illuminate\Http\Request;
 
@@ -45,15 +46,31 @@ class RankController extends Controller
      */
     public function store(StoreRankRequest $request)
     {
-        Rank::create([
+        $rank = Rank::create([
             'name' => $request->name,
             'level_up' => $request->levelup,
         ]);
+
+        $this->updateProfilesRanks($rank);
 
         session()->flash('syncStatus', 'success');
         session()->flash('syncMessage', 'Rank created successful!');
 
         return redirect()->route('ranks.index');
+    }
+
+    public function updateProfilesRanks(Rank $rank)
+    {
+        $profiles = Profile::where('rank_id', $rank->id - 1)->get();
+
+        foreach ($profiles as $profile) {
+
+            if ($profile->exp >= $rank->level_up) {
+                $profile->rank_id = $rank->id;
+                $profile->save();
+            }
+
+        }
     }
 
     /**
