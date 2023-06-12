@@ -90,6 +90,7 @@ function checkCode()
         }
     })
     .catch(errors => {
+        console.log(errors);
         $flash.show('verifycode', 'error', 'Opps! Some was wrong! Sorry, try later.');
         checkBTN.disabled = false;
         checkBTN.classList.add('active:translate-y-1');

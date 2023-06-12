@@ -14,6 +14,8 @@ class KataWaySeeder extends Seeder
      */
     public function run()
     {
-        //
+
+
+        // Kataways Arrays
     }
 }

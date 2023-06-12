@@ -322,12 +322,12 @@ class UserSeeder extends Seeder
         Profile::create([
             'url' => url('/user') . '/' . Str::slug($user->name),
             'slug' => Str::slug($user->name),
-            'exp' => 90,
-            'honor' => 0,
+            'exp' => 590,
+            'honor' => 3300,
             'is_darkmode' => true,
             'is_deleted' => false,
             'is_banned' => false,
-            'rank_id' => 1,
+            'rank_id' => 6,
             'last_activity' => (int) now()->valueOf(),
         ]);
 
