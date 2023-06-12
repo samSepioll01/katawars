@@ -3,7 +3,7 @@
     @admin(request()->is('admin/*'))
 
         <div class="text-xl text-slate-700 dark:text-slate-100 text-center w-full py-2">
-            Admin Panel
+            <a href="{{ route('admin.panel') }}">Admin Panel</a>
         </div>
 
         @superadmin()
@@ -13,6 +13,10 @@
 
             <x-layout.dropdown-separator />
         @endsuperadmin
+
+        <x-jet-dropdown-link href="" class="text-center text-lg py-3 2xl:items-center">
+            {{ __('Challenges') }}
+        </x-jet-dropdown-link>
 
         <x-jet-dropdown-link href="{{ route('admin.categories.index') }}" class="text-center text-lg py-3 2xl:items-center">
             {{ __('Categories') }}
