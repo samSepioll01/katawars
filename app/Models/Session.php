@@ -12,7 +12,7 @@ class Session extends Model
     use HasFactory;
 
     /**
-     * Accesor method thats trigger where last_activity field change.
+     * Accesor method thats trigger where last_activity field is accessed.
      * Update the Profile's last_activity field to hold alive the record.
      * Because when the session expires or logout, the garbage collector
      * delete the register motivated user_id field will be null.

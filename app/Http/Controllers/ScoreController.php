@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreScoreRequest;
 use App\Http\Requests\UpdateScoreRequest;
 use App\Models\Score;
+use Illuminate\Http\Request;
 
 class ScoreController extends Controller
 {
@@ -13,9 +14,17 @@ class ScoreController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $scores = Score::orderBy('id');
+
+        if ($request->search) {
+            $scores = Score::search($request->search);
+        }
+
+        return view('admin.scores.index', [
+            'scores' => $scores->paginate(10)->withQueryString(),
+        ]);
     }
 
     /**
@@ -25,7 +34,7 @@ class ScoreController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.scores.create');
     }
 
     /**
@@ -36,7 +45,16 @@ class ScoreController extends Controller
      */
     public function store(StoreScoreRequest $request)
     {
-        //
+        Score::create([
+            'denomination' => $request->denomination,
+            'type' => $request->type,
+            'points' => $request->points,
+        ]);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Score created successful!');
+
+        return redirect()->route('scores.index');
     }
 
     /**
@@ -47,7 +65,9 @@ class ScoreController extends Controller
      */
     public function show(Score $score)
     {
-        //
+        return view('admin.scores.show', [
+            'score' => $score,
+        ]);
     }
 
     /**
@@ -58,7 +78,9 @@ class ScoreController extends Controller
      */
     public function edit(Score $score)
     {
-        //
+        return view('admin.scores.edit', [
+            'score' => $score,
+        ]);
     }
 
     /**
@@ -70,7 +92,15 @@ class ScoreController extends Controller
      */
     public function update(UpdateScoreRequest $request, Score $score)
     {
-        //
+        $score->denomination = $request->denomination;
+        $score->type = $request->type;
+        $score->points = (int) $request->points;
+        $score->save();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Score updated successful!');
+
+        return redirect()->route('scores.index');
     }
 
     /**
@@ -81,6 +111,11 @@ class ScoreController extends Controller
      */
     public function destroy(Score $score)
     {
-        //
+        $score->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Score deleted successful!');
+
+        return redirect()->route('scores.index');
     }
 }

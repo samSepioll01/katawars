@@ -14,6 +14,7 @@ use App\Models\Profile;
 use App\Models\Resource;
 use App\Models\Score;
 use App\Models\Solution;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -31,9 +32,17 @@ class ChallengeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $challenges = Challenge::orderBy('id');
+
+        if ($request->search) {
+            $challenges = Challenge::search($request->search);
+        }
+
+        return view('admin.challenges.challenges', [
+            'challenges' => $challenges->paginate(10)->withQueryString(),
+        ]);
     }
 
     /**
@@ -228,8 +237,11 @@ class ChallengeController extends Controller
 
         $challenges = $katas->map(fn($kata) => $kata->challenge);
 
-        $challenge = $challenges->where('slug', $request->slug)
-            ->firstOrFail();
+        $challenge = $challenges->where('slug', $request->slug)->first();
+
+        if (!$challenge) {
+            abort(404);
+        }
 
         $circular = CircularCollection::make($challenges);
 
@@ -564,7 +576,10 @@ class ChallengeController extends Controller
      */
     public function show(Challenge $challenge)
     {
-        //
+        return view('admin.challenges.challenges-show', [
+            'challenge' => $challenge,
+            'test_code' => Storage::disk('s3')->get($challenge->katas->first()->uri_test),
+        ]);
     }
 
     /**
@@ -590,14 +605,42 @@ class ChallengeController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Challenge  $challenge
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Challenge $challenge)
     {
-        //
+        $challenge->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Challenge deleted successful!');
+
+        return redirect()->route('challenges.index');
+    }
+
+    /**
+     * Delete specific resource for a user selected.
+     */
+    public function destroyUserChallenge(User $user, $id)
+    {
+        $challenge = Challenge::find($id);
+        $challenge->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Challenge deleted successful!');
+
+        return redirect()->route('users.challenges', [
+            'user' => $user,
+        ]);
+    }
+
+    public function deleteMultiple(User $user, Request $request)
+    {
+        $ids = $request->input('ids');
+        Challenge::destroy($ids);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Challenges deleted successful!');
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

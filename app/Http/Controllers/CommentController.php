@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Challenge;
 use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -105,6 +106,35 @@ class CommentController extends Controller
         session()->flash('syncMessage', 'Comment updated succesfull!');
 
         return redirect()->back();
+    }
+
+    public function deleteUserComment(User $user, Request $request)
+    {
+        $comment = $user->profile->comments
+            ->where('id', $request->comment)
+            ->first();
+
+        $comment->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Comment deleted successful!');
+
+        return redirect()->route('users.comments', [
+            'user' => $user,
+        ]);
+    }
+
+    public function destroyMultipleComment(User $user, Request $request)
+    {
+        $ids = $request->input('ids');
+        Comment::destroy($ids);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Comments deleted successful!');
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     /**

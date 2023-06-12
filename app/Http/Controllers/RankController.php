@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRankRequest;
 use App\Http\Requests\UpdateRankRequest;
 use App\Models\Rank;
+use Illuminate\Http\Request;
 
 class RankController extends Controller
 {
@@ -13,9 +14,17 @@ class RankController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $ranks = Rank::orderBy('id');
+
+        if ($request->search) {
+            $ranks = Rank::search($request->search);
+        }
+
+        return view('admin.ranks.index', [
+            'ranks' => $ranks->paginate(10)->withQueryString(),
+        ]);
     }
 
     /**
@@ -25,7 +34,7 @@ class RankController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.ranks.create');
     }
 
     /**
@@ -36,7 +45,15 @@ class RankController extends Controller
      */
     public function store(StoreRankRequest $request)
     {
-        //
+        Rank::create([
+            'name' => $request->name,
+            'level_up' => $request->levelup,
+        ]);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Rank created successful!');
+
+        return redirect()->route('ranks.index');
     }
 
     /**
@@ -47,7 +64,9 @@ class RankController extends Controller
      */
     public function show(Rank $rank)
     {
-        //
+        return view('admin.ranks.show', [
+            'rank' => $rank,
+        ]);
     }
 
     /**
@@ -58,7 +77,9 @@ class RankController extends Controller
      */
     public function edit(Rank $rank)
     {
-        //
+        return view('admin.ranks.edit', [
+            'rank' => $rank,
+        ]);
     }
 
     /**
@@ -70,7 +91,14 @@ class RankController extends Controller
      */
     public function update(UpdateRankRequest $request, Rank $rank)
     {
-        //
+        $rank->name = $request->name;
+        $rank->level_up = $request->levelup;
+        $rank->save();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Rank updated successful!');
+
+        return redirect()->route('ranks.index');
     }
 
     /**
@@ -81,6 +109,11 @@ class RankController extends Controller
      */
     public function destroy(Rank $rank)
     {
-        //
+        $rank->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Rank deleted successful!');
+
+        return redirect()->route('ranks.index');
     }
 }

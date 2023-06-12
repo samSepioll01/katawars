@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('kataways', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('owner_id')->constrained('profiles', 'id')
+                ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('url')->unique();
             $table->string('slug')->unique();
             $table->string('title');
             $table->text('description');
-            $table->string('uri_image')->unique();
             $table->timestamps();
         });
     }

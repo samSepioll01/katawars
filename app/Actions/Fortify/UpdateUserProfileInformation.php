@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Models\Profile;
 use App\CustomClasses\S3;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -37,7 +38,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
             $filePath = $user->profile_photo_path;
             $file = Storage::disk('public')->get($filePath);
-            $S3photos = S3::getProfilePhotos(true);
+            $S3photos = S3::getProfilePhotos(Auth::user(), true);
 
             if (count($S3photos) === 5) {
 

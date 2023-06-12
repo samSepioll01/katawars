@@ -243,7 +243,7 @@ class ProfileController extends Controller
 
         $profile = Profile::where('slug', $request->slug)->firstOrFail();
 
-        if ($profile->is_deleted) {
+        if ($profile->is_deleted || $profile->is_banned) {
             abort(404);
         }
 

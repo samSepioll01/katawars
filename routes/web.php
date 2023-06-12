@@ -1,15 +1,20 @@
 <?php
 
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\KataController;
 use App\Http\Controllers\MessengerController;
+use App\Http\Controllers\RankController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
+use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SolutionController;
 use Illuminate\Support\Facades\Route;
 
@@ -88,12 +93,139 @@ Route::prefix('admin')->middleware([
 ])->group(function () {
 
     Route::get('/', function() {
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('admin.panel');
     });
 
-    Route::get('/dashboard', function() {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/panel', function() {
+        return view('admin.admin-panel');
+    })->name('admin.panel');
+
+    Route::resource('users', UserController::class)
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user:id}', [UserController::class, 'destroy'])
+        ->name('users.destroy')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/banned/index', [UserController::class, 'showBanned'])
+        ->name('users.banned')
+        ->middleware('role:superadmin');
+
+    Route::post('users/recovery/{user:id}', [UserController::class, 'recoveryBanned'])
+        ->name('users.recovery')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/banned/{user}', [UserController::class, 'toBan'])
+        ->name('users.toban')
+        ->middleware('role:superadmin');
+
+
+
+    Route::post('/users/{user}/edit/delete-photos/{index}', [UserController::class, 'deletePhoto'])
+        ->name('users.delete.photo')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/change/{id}', [UserController::class, 'changeUser'])
+        ->name('users.change')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/challenges', [UserController::class, 'showCreatedChallenges'])
+        ->name('users.challenges')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/comments', [UserController::class, 'showComments'])
+        ->name('users.comments')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/comments/{comment:id}', [UserController::class, 'showComment'])
+        ->name('users.comments.show')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user}/comments/{comment:id}', [CommentController::class, 'deleteUserComment'])
+        ->name('users.comments.destroy')
+        ->middleware('role:superadmin');
+
+    Route::post('/users/{user}/comments/destroy-multiple', [CommentController::class, 'destroyMultipleComment'])
+        ->name('users.comments.destroy-multiple')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/resources', [ResourceController::class, 'showUserResources'])
+        ->name('users.resources')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/resources/{resource:id}', [ResourceController::class, 'showUserResource'])
+        ->name('users.resources.show')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user}/resources/{resource:id}', [ResourceController::class, 'deleteUserResource'])
+        ->name('users.resources.destroy')
+        ->middleware('role:superadmin');
+
+    Route::post('/users/{user}/comments/destroy-multiple', [ResourceController::class, 'destroyMultipleResources'])
+        ->name('users.resources.destroy-multiple')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/challenges/{challenge:id}', [UserController::class, 'showCreatedChallenge'])
+        ->name('users.challenges.show')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user}/challenges/delete-multiple', [ChallengeController::class, 'deleteMultiple'])
+        ->name('users.challenges.delete-multiple')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user}/challenges/{challenge:id}', [ChallengeController::class, 'destroy'])
+        ->name('users.challenges.destroy')
+        ->middleware('role:superadmin');
+
+
+    Route::get('/helps/', [HelpController::class, 'showHelps'])
+        ->name('admin.helps.index');
+
+    Route::get('/help/create', [HelpController::class, 'create'])
+        ->name('admin.helps.create');
+
+    Route::post('/helps', [HelpController::class, 'store'])
+        ->name('admin.helps.store');
+
+    Route::get('/helps/{help}', [HelpController::class, 'show'])
+        ->name('admin.helps.show');
+
+    Route::get('/helps/{help}/edit', [HelpController::class, 'edit'])
+        ->name('admin.helps.edit');
+
+    Route::put('/help/{help}', [HelpController::class, 'update'])
+        ->name('admin.helps.update');
+
+    Route::delete('/help/{help}', [HelpController::class, 'destroy'])
+        ->name('admin.helps.destroy');
+
+    Route::get('/categories/', [CategoryController::class, 'index'])
+        ->name('admin.categories.index');
+
+    Route::get('/catgories/{category}', [CategoryController::class, 'show'])
+        ->name('admin.categories.show');
+
+    Route::get('/categories/create', [CategoryController::class, 'create'])
+        ->name('admin.categories.create');
+
+    Route::post('/categories', [CategoryController::class, 'store'])
+        ->name('admin.categories.store');
+
+    Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])
+        ->name('admin.categories.edit');
+
+    Route::put('/categories/{category}', [CategoryController::class, 'update'])
+        ->name('admin.categories.update');
+
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])
+        ->name('admin.categories.destroy');
+
+    Route::resource('ranks', RankController::class);
+
+    Route::resource('scores', ScoreController::class);
+
+    Route::resource('challenges', ChallengeController::class);
+
 });
 
 

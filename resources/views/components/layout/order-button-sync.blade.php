@@ -17,7 +17,7 @@
                     {{ __('Ascending (from less to more)') }}
                 </x-jet-dropdown-link>
 
-                <x-jet-dropdown-link href="{{ $route }}?ord=desc&caetgory={{request()->query('category')}}" class="cursor-pointer">
+                <x-jet-dropdown-link href="{{ $route }}?ord=desc&category={{request()->query('category')}}" class="cursor-pointer">
                     {{ __('Descending (from more to less)') }}
                 </x-jet-dropdown-link>
             </div>

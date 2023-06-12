@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateHelpRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class UpdateHelpRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Auth::user()->hasRole(['admin', 'superadmin']);
     }
 
     /**
@@ -24,7 +25,9 @@ class UpdateHelpRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'section' => ['required', 'string', 'max:255'],
         ];
     }
 }

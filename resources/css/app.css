@@ -456,6 +456,12 @@
                rounded-full text-gray-600 h-10 pl-5 pr-10 hover:border-gray-400 mb-16;
     }
 
+    .admin-select {
+        @apply cursor-pointer border dark:focus:border-cyan-600 focus:border-violet-600 dark:focus:ring-0 bg-white
+               shadow-md border-gray-300
+               rounded-lg text-gray-600 h-10 pl-5 pr-10 hover:border-gray-400 mb-16;
+    }
+
     .option {
         @apply w-full py-1 cursor-pointer text-center hover:bg-slate-200 dark:hover:bg-slate-700 rounded-md
                dark:text-slate-100 text-slate-700;

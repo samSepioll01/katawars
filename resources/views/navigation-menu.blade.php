@@ -16,7 +16,7 @@
                 @endauth
 
                 @php
-                    $authRoute = auth()?->user()?->hasRole(['superadmin', 'admin']) ? 'admin.dashboard' : 'dashboard';
+                    $authRoute = auth()?->user()?->hasRole(['superadmin', 'admin']) ? 'admin.panel' : 'dashboard';
                 @endphp
 
                 <!-- Logo -->
@@ -35,6 +35,14 @@
                             </x-jet-nav-link>
                         </div>
                     @endif
+
+                    @admin(!request()->is('admin/*'))
+                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex z-10">
+                            <x-jet-nav-link href="{{ route('admin.panel') }}">
+                                {{ __('Admin') }}
+                            </x-jet-nav-link>
+                        </div>
+                    @endadmin
                 @endauth
             </div>
 
