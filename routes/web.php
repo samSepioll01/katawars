@@ -16,6 +16,7 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SolutionController;
+use App\Models\Profile;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,6 +60,9 @@ Route::prefix('user')->middleware([
     'verified'
 ])->group(function () {
 
+    Route::get('/activity', [ProfileController::class, 'showProfileActivity'])
+        ->name('profile.activity');
+
     Route::get('/dashboard', [ProfileController::class, 'authUserThemeConfig'])
         ->name('dashboard');
 
@@ -81,6 +85,8 @@ Route::prefix('user')->middleware([
 
     Route::get('/{slug}/following', [ProfileController::class, 'getFollowees'])
         ->name('user.following');
+
+
 });
 
 

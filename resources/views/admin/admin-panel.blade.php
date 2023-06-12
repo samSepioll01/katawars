@@ -1,5 +1,5 @@
 <x-app-layout>
-        <div class="flex justify-center mt-20">
+        <div class="flex justify-center pt-20">
             <h1 class="text-slate-800 dark:text-slate-100 font-semibold text-4xl">Admin Panel</h1>
         </div>
         <section class="xl:my-24 relative flex justify-center items-center">

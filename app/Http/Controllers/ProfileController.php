@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProfileRequest;
-use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Profile;
 use App\Events\ThemeModeUpdated;
 use App\Jobs\ReportNewFollower;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -36,15 +36,8 @@ class ProfileController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the public place to search a other users.
      */
-    public function index()
-    {
-        //
-    }
-
     public function showDojo(Request $request)
     {
         $this->validateRequest($request->query());
@@ -79,6 +72,37 @@ class ProfileController extends Controller
     }
 
     /**
+     * This determines the comments activity and allow his management.
+     * @param \Illuminate\Http\Request $request
+     */
+    public function showProfileActivity(Request $request)
+    {
+        $comments = Comment::where('profile_id', Auth::user()->profile->id)
+            ->orderBy('created_at', $request->ord ?? 'asc')
+            ->get();
+
+        $lastUpdated = Auth::user()->profile->ownerKatas()
+        ->orderBy('created_at', 'asc')
+        ?->first()
+        ?->created_at;
+
+        if ($lastUpdated) {
+            $lastUpdated = $lastUpdated->diffForHumans(now());
+            if ($lastUpdated === '1 day before') $lastUpdated = 'yesterday';
+
+            if (Str::of($lastUpdated)->contains(['hour','minute', 'second'])) {
+                $lastUpdated = 'today';
+            }
+        }
+
+        return view('profile.activity', [
+            'comments' => $comments,
+            'totalComments' => $comments->count(),
+            'lastUpdated' => $lastUpdated,
+        ]);
+    }
+
+    /**
      * Check if the incomming request validate his parameters.
      */
     protected function validateRequest($queryBag)
@@ -91,72 +115,6 @@ class ProfileController extends Controller
         if ($validator->fails()) {
             abort(404);
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreProfileRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreProfileRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Profile  $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Profile $profile)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Profile  $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Profile $profile)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateProfileRequest  $request
-     * @param  \App\Models\Profile  $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateProfileRequest $request, Profile $profile)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Profile  $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Profile $profile)
-    {
-        //
     }
 
     /**
@@ -383,6 +341,16 @@ class ProfileController extends Controller
      */
     private function getUserDashboardValues(User $user): array
     {
+        $feedKatas = $user->profile->following
+            ->map(fn($followee) => $followee->ownerKatas->where('mode_id', 1))
+            ->flatten();
+
+        $feedKatas = $feedKatas->filter(
+            fn($kata) => $user->profile->solutions()
+                ->where('kata_id', $kata->id)
+                ->doesntExist()
+        );
+
         return [
             'id' => $user->id,
             'nickname' => $user->name,
@@ -400,6 +368,10 @@ class ProfileController extends Controller
             'progress' => $user->profile->getProfileProgress(),
             'followers' => $user->profile->followers,
             'followees' => $user->profile->following,
+            'feedKatas' => $feedKatas,
+            'passedKatas' => $user->profile->passedKatas,
+            'kataways' => $user->profile->startedKataways,
+            'createdKatas' => $user->profile->ownerKatas,
         ];
     }
 }
