@@ -33,3 +33,14 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
      forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
      enabledTransports: ['ws', 'wss'],
  });
+
+
+ window.PayPal.Donation.Button({
+    env:'production',
+    hosted_button_id:'PYNR793FU65ES',
+    image: {
+        src:'https://www.paypalobjects.com/en_US/ES/i/btn/btn_donateCC_LG.gif',
+        alt:'Donate with PayPal button',
+        title:'PayPal - The safer, easier way to pay online!',
+    }
+}).render('#donate-button');

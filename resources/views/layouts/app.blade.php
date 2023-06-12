@@ -30,6 +30,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/ext-language_tools.js"></script>
         <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/classic/ckeditor.js"></script>
+        <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
         <!-- Styles -->
         @livewireStyles
     </head>
