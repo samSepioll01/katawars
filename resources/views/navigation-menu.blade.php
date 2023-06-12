@@ -123,7 +123,7 @@
                                         {{ __('Profile') }}
                                     </x-jet-dropdown-link>
 
-                                    <x-jet-dropdown-link href="{{ route('dashboard') }}">
+                                    <x-jet-dropdown-link href="{{ route('profile.activity') }}">
                                         <x-layout.dropdown-icon srcPath="statistics" />
                                         {{ __('Activity') }}
                                     </x-jet-dropdown-link>
@@ -263,7 +263,7 @@
                         {{ __('Profile') }}
                     </x-jet-responsive-nav-link>
 
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
+                    <x-jet-responsive-nav-link href="{{ route('profile.activity') }}">
                         {{ __('Activity') }}
                     </x-jet-responsive-nav-link>
 

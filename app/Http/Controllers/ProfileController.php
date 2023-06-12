@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Profile;
 use App\Events\ThemeModeUpdated;
 use App\Jobs\ReportNewFollower;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -66,6 +68,33 @@ class ProfileController extends Controller
 
         return view('dojo.index', [
             'users' => $users,
+        ]);
+    }
+
+    public function showProfileActivity(Request $request)
+    {
+        $comments = Comment::where('profile_id', Auth::user()->profile->id)
+            ->orderBy('created_at', $request->ord ?? 'asc')
+            ->get();
+
+        $lastUpdated = Auth::user()->profile->ownerKatas()
+        ->orderBy('created_at', 'asc')
+        ?->first()
+        ?->created_at;
+
+        if ($lastUpdated) {
+            $lastUpdated = $lastUpdated->diffForHumans(now());
+            if ($lastUpdated === '1 day before') $lastUpdated = 'yesterday';
+
+            if (Str::of($lastUpdated)->contains(['hour','minute', 'second'])) {
+                $lastUpdated = 'today';
+            }
+        }
+
+        return view('profile.activity', [
+            'comments' => $comments,
+            'totalComments' => $comments->count(),
+            'lastUpdated' => $lastUpdated,
         ]);
     }
 
