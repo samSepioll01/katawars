@@ -14,13 +14,6 @@
                 </form>
             </div>
 
-            <div class="py-5">
-                <form action="{{ route('ranks.destroy', $rank) }}" method="post" class="px-5 py-2">
-                    @csrf
-                    @method('DELETE')
-                    <x-jet-danger-button type="submit" class="w-32 flex justify-center">Delete</x-jet-danger-button>
-                </form>
-            </div>
         </div>
 
         <div class="pl-5 py-5 flex flex-col lg:flex-row w-full">

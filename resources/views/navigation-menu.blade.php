@@ -140,17 +140,6 @@
                                         {{ __('Settings') }}
                                     </x-jet-dropdown-link>
 
-                                    <x-jet-dropdown-link button="true" @click="idiom = !idiom" id="idioms" @click.away="idiom = false" @close.stop="idiom = false">
-                                        <x-layout.dropdown-icon srcPath="idioms" />
-                                        {{ __('Idiom') }}
-                                    </x-jet-dropdown-link>
-                                    <div id="idiom-list" :class="{ 'block': idiom, 'hidden': !idiom  }" class="flex justify-end overflow-hidden">
-                                        <div class="w-2/3 p-1 flex flex-col">
-                                            <a href="" class="dropdown-link__idiom">English</a>
-                                            <a href="" class="dropdown-link__idiom">Spanish</a>
-                                        </div>
-                                    </div>
-
                                     <x-layout.dropdown-separator />
 
                                     <x-jet-dropdown-link :button="true" class="relative cursor-pointer">
