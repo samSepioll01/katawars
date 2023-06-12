@@ -18,14 +18,16 @@
                 </a>
 
 
-                <a href="">
-                    <div class="card-info w-96 h-44">
-                        <h3 class="card-info-title">Challenges</h3>
-                        <p class="card-info-text">
-                            Management Challenges
-                        </p>
-                    </div>
-                </a>
+                @superadmin
+                    <a href="{{ route('challenges.index') }}">
+                        <div class="card-info w-96 h-44">
+                            <h3 class="card-info-title">Challenges</h3>
+                            <p class="card-info-text">
+                                Management Challenges
+                            </p>
+                        </div>
+                    </a>
+                @endsuperadmin
 
                 <a href="{{ route('admin.categories.index') }}">
                     <div class="card-info w-96 h-44">

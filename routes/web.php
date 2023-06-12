@@ -224,6 +224,8 @@ Route::prefix('admin')->middleware([
 
     Route::resource('scores', ScoreController::class);
 
+    Route::resource('challenges', ChallengeController::class);
+
 });
 
 
