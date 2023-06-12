@@ -148,21 +148,21 @@
                     </div>
                 </header>
 
-                <main x-data="{stats: true, katas: false, kataways: false, created: false}" class="sm:mt-8 grid grid-flow-row sm:card-panel">
+                <main x-data="{feed: true, katas: false, kataways: false, created: false}" class="sm:mt-8 grid grid-flow-row sm:card-panel">
                     <nav class="grid grid-flow-col grid-cols-12 shadow-xl relative overflow-hidden dark:text-slate-200">
                         <div
                             class="tab col-span-3"
-                            :class="{'dark:text-slate-50 text-slate-700 tracking-wider': stats}"
-                            x-on:click="stats = true, katas = false, kataways = false, created = false"
+                            :class="{'dark:text-slate-50 text-slate-700 tracking-wider': feed}"
+                            x-on:click="feed = true, katas = false, kataways = false, created = false"
                         >
-                            <span class="">Statistics</span>
-                            <div class="tab-bottom" :class="{'tab-selected': stats}"></div>
+                            <span class="">Feed</span>
+                            <div class="tab-bottom" :class="{'tab-selected': feed}"></div>
                         </div>
 
                         <div
                             class="tab col-span-3"
                             :class="{'dark:text-slate-50 text-slate-700 tracking-wider': katas}"
-                            x-on:click="stats = false, katas = true, kataways = false, created = false"
+                            x-on:click="feed = false, katas = true, kataways = false, created = false"
                         >
                             <span class="">Passed Katas</span>
                             <div class="tab-bottom" :class="{'tab-selected': katas}"></div>
@@ -171,7 +171,7 @@
                         <div
                             class="tab col-span-3"
                             :class="{'dark:text-slate-50 text-slate-700 tracking-wider': kataways}"
-                            x-on:click="stats = false, katas = false, kataways = true, created = false"
+                            x-on:click="feed = false, katas = false, kataways = true, created = false"
                         >
                             <span class="">Kataways</span>
                             <div class="tab-bottom" :class="{'tab-selected': kataways}"></div>
@@ -180,7 +180,7 @@
                         <div
                             class="tab col-span-3"
                             :class="{'dark:text-slate-50 text-slate-700 tracking-wider': created}"
-                            x-on:click="stats = false, katas = false, kataways = false, created = true"
+                            x-on:click="feed = false, katas = false, kataways = false, created = true"
                         >
                             <span class="">Created Katas</span>
                             <div class="tab-bottom" :class="{'tab-selected': created}"></div>
@@ -189,17 +189,188 @@
                     </nav>
                     <div class="min-h-screen grid grid-flow-row">
                         <div class="py-5">
-                            <section x-show="stats" style="display: none;">
-                                Statistics
+                            <section x-show="feed" style="display: none;">
+                                <div class="w-full lg:w-3/4 py-10 mx-auto">
+                                    @if (!count($userValues['feedKatas']))
+                                        <h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>
+                                    @endif
+                                    @foreach ($userValues['feedKatas'] as $kata)
+                                        <div class="card-challenge relative">
+                                            <div class="w-full flex flex-row justify-between">
+                                                <div class="w-full flex flex-row justify-start items-center">
+
+                                                    @foreach ($kata->challenge->categories as $category )
+                                                        <div class="border border-slate-400 bg-slate-50 dark:bg-slate-900 dark:border-slate-800 shadow-md hover:bg-violet-600 dark:hover:bg-violet-600 hover:text-slate-100 cursor-pointer px-2 rounded-lg mr-2">
+                                                            <span class="category">{{ $category->name }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                    <x-utilities.rank :size="4" :rank="$kata->challenge->rank->name"/>
+                                                    <div class="absolute bottom-1 left-4 flex flex-row items-center">
+                                                        <img src="{{ $kata->owner->user->profile_photo_url }}" class="h-6 w-6" alt="">
+                                                        <span class="text-sm px-3">{{ $kata->owner->user->name }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class=" w-full flex flex-row justify-end gap-8 item-center">
+                                                    @php
+                                                        $id = $kata->id;
+                                                    @endphp
+                                                    <x-layout.saved-marker :id="$id" />
+                                                        @if (auth()->user()->profile->passedKatas()->get()->contains($id))
+                                                            <x-layout.favorite-button :id="$id" size="md" />
+                                                        @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="py-2">
+                                                <a href="{{ $kata->challenge->url }}" class="">
+                                                    <div class="text-center text-ellipsis-1 text-xl text-violet-600 dark:text-tomato">
+                                                        {{ $kata->challenge->title }}
+                                                    </div>
+                                                    <div class="text-ellipsis-2">
+                                                        <span>
+                                                            {!! $kata->challenge->description !!}
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
                             </section>
-                            <section x-show="katas"style="display: none;">
-                                Passed Katas
+                            <section x-show="katas" style="display: none;">
+                                <div class="w-full lg:w-3/4 py-10 mx-auto">
+                                    @if (!count($userValues['passedKatas']))
+                                        <h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>
+                                    @endif
+                                    @foreach ($userValues['passedKatas'] as $kata)
+                                        <div class="card-challenge">
+                                            <div class="w-full flex flex-row justify-between">
+                                                <div class="w-full flex flex-row justify-start items-center">
+                                                    @foreach ($kata->challenge->categories as $category )
+                                                        <div class="border border-slate-400 bg-slate-50 dark:bg-slate-900 dark:border-slate-800 shadow-md hover:bg-violet-600 dark:hover:bg-violet-600 hover:text-slate-100 cursor-pointer px-2 rounded-lg mr-2">
+                                                            <span class="category">{{ $category->name }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                    <x-utilities.rank :size="4" :rank="$kata->challenge->rank->name"/>
+                                                </div>
+
+                                                <div class=" w-full flex flex-row justify-end gap-8 item-center">
+                                                    @php
+                                                        $id = $kata->id;
+                                                    @endphp
+                                                    <x-layout.saved-marker :id="$id" />
+                                                        @if (auth()->user()->profile->passedKatas()->get()->contains($id))
+                                                            <x-layout.favorite-button :id="$id" size="md" />
+                                                        @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="py-2">
+                                                <a href="{{ $kata->challenge->url }}" class="">
+                                                    <div class="text-center text-ellipsis-1 text-xl text-violet-600 dark:text-tomato">
+                                                        {{ $kata->challenge->title }}
+                                                    </div>
+                                                    <div class="text-ellipsis-3">
+                                                        <span>
+                                                            {!! $kata->challenge->description !!}
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
                             </section>
                             <section x-show="kataways" style="display: none;">
-                                Kataways
+                                <div class="w-full lg:w-3/4 py-10 mx-auto">
+                                    @if (!count($userValues['kataways']))
+                                    <h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>
+                                    @endif
+                                    @foreach ($userValues['kataways'] as $kata)
+                                        <div class="card-challenge">
+                                            <div class="w-full flex flex-row justify-between">
+                                                <div class="w-full flex flex-row justify-start items-center">
+                                                    @foreach ($kata->challenge->categories as $category )
+                                                        <div class="border border-slate-400 bg-slate-50 dark:bg-slate-900 dark:border-slate-800 shadow-md hover:bg-violet-600 dark:hover:bg-violet-600 hover:text-slate-100 cursor-pointer px-2 rounded-lg mr-2">
+                                                            <span class="category">{{ $category->name }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                    <x-utilities.rank :size="4" :rank="$kata->challenge->rank->name"/>
+                                                </div>
+
+                                                <div class=" w-full flex flex-row justify-end gap-8 item-center">
+                                                    @php
+                                                        $id = $kata->id;
+                                                    @endphp
+                                                    <x-layout.saved-marker :id="$id" />
+                                                        @if (auth()->user()->profile->passedKatas()->get()->contains($id))
+                                                            <x-layout.favorite-button :id="$id" size="md" />
+                                                        @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="py-2">
+                                                <a href="{{ $kata->challenge->url }}" class="">
+                                                    <div class="text-center text-ellipsis-1 text-xl text-violet-600 dark:text-tomato">
+                                                        {{ $kata->challenge->title }}
+                                                    </div>
+                                                    <div class="text-ellipsis-3">
+                                                        <span>
+                                                            {!! $kata->challenge->description !!}
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </section>
                             <section x-show="created" style="display: none;">
-                                Created
+                                <div class="w-full lg:w-3/4 py-10 mx-auto">
+                                    @if (!count($userValues['createdKatas']))
+                                    <h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>
+                                    @endif
+                                    @foreach ($userValues['createdKatas'] as $kata)
+                                        <div class="card-challenge">
+                                            <div class="w-full flex flex-row justify-between">
+                                                <div class="w-full flex flex-row justify-start items-center">
+                                                    @foreach ($kata->challenge->categories as $category )
+                                                        <div class="border border-slate-400 bg-slate-50 dark:bg-slate-900 dark:border-slate-800 shadow-md hover:bg-violet-600 dark:hover:bg-violet-600 hover:text-slate-100 cursor-pointer px-2 rounded-lg mr-2">
+                                                            <span class="category">{{ $category->name }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                    <x-utilities.rank :size="4" :rank="$kata->challenge->rank->name"/>
+                                                </div>
+
+                                                <div class=" w-full flex flex-row justify-end gap-8 item-center">
+                                                    @php
+                                                        $id = $kata->id;
+                                                    @endphp
+                                                    <x-layout.saved-marker :id="$id" />
+                                                        @if (auth()->user()->profile->passedKatas()->get()->contains($id))
+                                                            <x-layout.favorite-button :id="$id" size="md" />
+                                                        @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="py-2">
+                                                <a href="{{ $kata->challenge->url }}" class="">
+                                                    <div class="text-center text-ellipsis-1 text-xl text-violet-600 dark:text-tomato">
+                                                        {{ $kata->challenge->title }}
+                                                    </div>
+                                                    <div class="text-ellipsis-3">
+                                                        <span>
+                                                            {!! $kata->challenge->description !!}
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </section>
                         </div>
                     </div>

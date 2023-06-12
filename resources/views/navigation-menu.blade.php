@@ -125,7 +125,7 @@
 
                                     <x-jet-dropdown-link href="{{ route('dashboard') }}">
                                         <x-layout.dropdown-icon srcPath="statistics" />
-                                        {{ __('Statistics') }}
+                                        {{ __('Activity') }}
                                     </x-jet-dropdown-link>
 
                                     <x-jet-dropdown-link href="{{ route('messenger.index') }}">
@@ -264,7 +264,7 @@
                     </x-jet-responsive-nav-link>
 
                     <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
-                        {{ __('Statistics') }}
+                        {{ __('Activity') }}
                     </x-jet-responsive-nav-link>
 
                     <x-jet-responsive-nav-link href="{{ route('messenger.index') }}">

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProfileRequest;
-use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Profile;
 use App\Events\ThemeModeUpdated;
 use App\Jobs\ReportNewFollower;
@@ -36,15 +34,8 @@ class ProfileController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the public place to search a other users.
      */
-    public function index()
-    {
-        //
-    }
-
     public function showDojo(Request $request)
     {
         $this->validateRequest($request->query());
@@ -317,6 +308,10 @@ class ProfileController extends Controller
      */
     private function getUserDashboardValues(User $user): array
     {
+        $feedKatas = $user->profile->following
+            ->map(fn($followee) => $followee->ownerKatas->where('mode_id', 1))
+            ->flatten();
+
         return [
             'id' => $user->id,
             'nickname' => $user->name,
@@ -334,9 +329,9 @@ class ProfileController extends Controller
             'progress' => $user->profile->getProfileProgress(),
             'followers' => $user->profile->followers,
             'followees' => $user->profile->following,
-            'feed' => '',
+            'feedKatas' => $feedKatas,
             'passedKatas' => $user->profile->passedKatas,
-            'kataways' => '',
+            'kataways' => $user->profile->startedKataways,
             'createdKatas' => $user->profile->ownerKatas,
         ];
     }
