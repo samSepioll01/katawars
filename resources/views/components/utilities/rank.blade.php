@@ -5,6 +5,9 @@
 ])
 
 @php
+
+    $ranks = collect(['white', 'yellow', 'orange', 'green', 'blue', 'brown', 'black']);
+
     $ranksColor = [
         'white' => 'bg-slate-50',
         'yellow' => 'bg-yellow-600',
@@ -15,6 +18,7 @@
         'black' => 'bg-slate-900',
     ];
 
+    $rank = $ranks->contains($rank) ? $rank : 'black';
     $rank = $rank ?? 'white';
     $size = $size == 4 ? 'w-4 h-4' : 'w-6 h-6';
 @endphp

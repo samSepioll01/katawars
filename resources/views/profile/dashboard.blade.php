@@ -287,39 +287,26 @@
                             <section x-show="kataways" style="display: none;">
                                 <div class="w-full lg:w-3/4 py-10 mx-auto">
                                     @if (!count($userValues['kataways']))
-                                    <h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>
+                                        <h1 class="flex items-center text-lg dark:text-slate-100 font-semibold justify-center">Your list its empty.</h1>
                                     @endif
-                                    @foreach ($userValues['kataways'] as $kata)
-                                        <div class="card-challenge">
-                                            <div class="w-full flex flex-row justify-between">
-                                                <div class="w-full flex flex-row justify-start items-center">
-                                                    @foreach ($kata->challenge->categories as $category )
-                                                        <div class="border border-slate-400 bg-slate-50 dark:bg-slate-900 dark:border-slate-800 shadow-md hover:bg-violet-600 dark:hover:bg-violet-600 hover:text-slate-100 cursor-pointer px-2 rounded-lg mr-2">
-                                                            <span class="category">{{ $category->name }}</span>
-                                                        </div>
-                                                    @endforeach
-                                                    <x-utilities.rank :size="4" :rank="$kata->challenge->rank->name"/>
-                                                </div>
-
-                                                <div class=" w-full flex flex-row justify-end gap-8 item-center">
-                                                    @php
-                                                        $id = $kata->id;
-                                                    @endphp
-                                                    <x-layout.saved-marker :id="$id" />
-                                                        @if (auth()->user()->profile->passedKatas()->get()->contains($id))
-                                                            <x-layout.favorite-button :id="$id" size="md" />
-                                                        @endif
-                                                </div>
+                                    @foreach ($userValues['kataways'] as $kataway)
+                                        <div class="card-challenge relative">
+                                            <div class="w-full flex flex-row gap-4">
+                                                <img class="h-6 w-6" src="{{ $kataway->createdByProfile->user->profile_photo_url }}" alt="" />
+                                                <span>{{ $kataway->createdByProfile->user->name }}</span>
+                                            </div>
+                                            <div class="border border-green rounded-lg py-1 px-2 w-fit h-fit absolute right-2 top-2 text-sm text-green-800 bg-green-200">
+                                                Completed
                                             </div>
 
                                             <div class="py-2">
-                                                <a href="{{ $kata->challenge->url }}" class="">
+                                                <a href="{{ route('kataways.show', $kataway) }}" class="">
                                                     <div class="text-center text-ellipsis-1 text-xl text-violet-600 dark:text-tomato">
-                                                        {{ $kata->challenge->title }}
+                                                        {{ $kataway->title }}
                                                     </div>
                                                     <div class="text-ellipsis-3">
                                                         <span>
-                                                            {!! $kata->challenge->description !!}
+                                                            {!! $kataway->description !!}
                                                         </span>
                                                     </div>
                                                 </a>

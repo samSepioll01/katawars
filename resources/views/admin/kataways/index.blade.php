@@ -2,10 +2,11 @@
     <x-layout.wrapped-admin-sections>
 
         <div class="flex flex-row justify-start w-full py-2">
-            <form action="{{ route('users.show', ['user' => $user]) }}" method="get" class="px-5">
+            <form action="{{ route('users.show', $user) }}" method="get" class="px-5">
                 <x-jet-button id="" class="w-32 flex justify-center">Back</x-jet-button>
             </form>
         </div>
+
 
         <div class="flex flex-col lg:flex-row w-full justify-start items-center px-5 py-5">
 
@@ -29,23 +30,26 @@
         <div class="w-full" x-data="{showDeleteBTN: false}">
             <div class="py-3 flex flex-col">
                 <div>
-                    <h1 class="text-gray-800 text-2xl font-semibold">Comments Published</h1>
+                    <h1 class="text-gray-800 text-2xl font-semibold">Created Kataways</h1>
+                </div>
+
+                <div class="col-span-12 lg:col-span-8 py-5">
+                    <x-layout.searcher-sync route="{{ route('users.kataways', $user) }}" />
                 </div>
 
                 <div class="py-5 w-full flex justify-end">
 
                     <x-jet-button id="deleteBTN" class="w-32 flex justify-center" x-ref="deletebtn" x-show="showDeleteBTN" style="display: none;"
                         x-on:click="
-                            checkboxes = [...document.getElementsByName('comments[]')];
+                            checkboxes = [...document.getElementsByName('kataways[]')];
                             selecteds = checkboxes.filter(checkbox => checkbox.checked);
                             ids = selecteds.map(selected => selected.id);
-
                             axios({
-                                method: 'post',
-                                url: '{{ route('users.comments.destroy.multiple', ['user' => $user]) }}',
+                                method: 'delete',
+                                url: '{{ route('users.kataways.destroy-multiple', $user) }}',
                                 responseType: 'json',
                                 data: {
-                                    ids: ids,
+                                    'ids': ids,
                                 }
                             })
                             .then(response => {
@@ -72,7 +76,7 @@
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         <div class="flex flex-row items-center">
                                             <input type="checkbox" x-on:click="
-                                                checkboxes = [...document.getElementsByName('comments[]')];
+                                                checkboxes = [...document.getElementsByName('kataways[]')];
 
                                                 if ($event.target.checked) {
                                                     showDeleteBTN = true;
@@ -82,21 +86,34 @@
                                                     checkboxes.forEach(checkbox => checkbox.checked = false);
                                                 }
                                             ">
-                                            <span class="pl-2">Body</span>
+                                            <span class="pl-2">Title</span>
                                         </div>
 
                                     </th>
                                     <th
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        Challenge
+                                        Description
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Owner
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Challenges
+                                    </th>
+
+                                    <th
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Subscribers
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Users Completed
                                     </th>
                                     <th
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Created at
-                                    </th>
-                                    <th
-                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        Updated at
                                     </th>
                                 </tr>
                             </thead>
@@ -106,7 +123,7 @@
                                     if ($event.target.checked) {
                                         showDeleteBTN = true;
                                     } else {
-                                        checkboxes = [...document.getElementsByName('comments[]')];
+                                        checkboxes = [...document.getElementsByName('kataways[]')];
                                         if (checkboxes.every(checkbox => !checkbox.checked)) {
                                             showDeleteBTN = false;
                                         }
@@ -114,35 +131,53 @@
                                 }
                             "
                             >
-                                @if ($comments->count())
-                                    @foreach ($comments as $comment )
+                                @if ($kataways->count())
+                                    @foreach ($kataways as $kataway )
                                         <tr>
 
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <a href="{{ route('users.comments.show', ['user' => $user, 'comment' => $comment]) }}" class="flex items-center">
-                                                    <input type="checkbox" name="comments[]" class="mr-2" id="{{ $comment->id }}">
-                                                    <span>{{ $comment->body }}</span>
+                                                <a href="{{ route('users.kataways.show', ['user' => $user, 'kataway' => $kataway]) }}" class="flex items-center">
+                                                    <input type="checkbox" name="kataways[]" class="mr-2" id="{{ $kataway->id }}">
+                                                    <span>{{ $kataway->title }}</span>
                                                 </a>
                                             </td>
 
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <a href="{{ $comment->challenge->url }}" class="">
-                                                    {{ $comment->challenge->title }}
-                                                </a>
+                                                {{ $kataway->description }}
+                                            </td>
+
+
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <div class="flex items-center">
+                                                    <img src="{{ $kataway->createdByProfile->user->profile_photo_url }}" class="h-6 w-6 rounded-full" alt="">
+                                                    <span class="px-2 text-gray-900 whitespace-no-wrap">
+                                                        {{ $kataway->createdByProfile->user->name }}
+                                                    </span>
+                                                </div>
                                             </td>
 
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <span>{{ $comment->created_at }}</span>
+                                                @foreach ($kataway->katas as $kata)
+                                                    <p>{{ $kata->challenge->title }}</p>
+                                                @endforeach
                                             </td>
 
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <span>{{ $comment->updated_at }}</span>
+                                                <span>{{ $kataway->startedByProfiles->count() }}</span>
+                                            </td>
+
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <span>{{ $kataway->completedByProfiles()->count() }}</span>
+                                            </td>
+
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <span>{{ $kataway->created_at }}</span>
                                             </td>
                                         </tr>
                                     @endforeach
                                 @else
                                 <tr>
-                                    <td colspan="6" class="py-4 text-xl font-semibold text-center">No Comments founded.</td>
+                                    <td colspan="6" class="py-4 text-xl font-semibold text-center">No Challenges founded.</td>
                                 </tr>
 
                                 @endif
@@ -150,7 +185,7 @@
                             </tbody>
                         </table>
             <div class="relative flex flex-col justify-between p-5">
-                {{ $comments->links() }}
+                {{ $kataways->links() }}
             </div>
         </div>
     </x-layout.wrapped-admin-sections>

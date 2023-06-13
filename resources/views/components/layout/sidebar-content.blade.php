@@ -18,6 +18,10 @@
             {{ __('Challenges') }}
         </x-jet-dropdown-link>
 
+        <x-jet-dropdown-link href="{{ route('admin.kataways.index') }}" class="text-center text-lg py-3 2xl:items-center">
+            {{ __('Kataways') }}
+        </x-jet-dropdown-link>
+
         <x-jet-dropdown-link href="{{ route('admin.categories.index') }}" class="text-center text-lg py-3 2xl:items-center">
             {{ __('Categories') }}
         </x-jet-dropdown-link>
@@ -63,7 +67,7 @@
             {{ __('Blitz') }}
         </x-jet-dropdown-link>
 
-        <x-jet-dropdown-link href="{{ route('dashboard') }}" class="text-md items-center">
+        <x-jet-dropdown-link href="{{ route('kataways.index') }}" class="text-md items-center">
             <x-layout.dropdown-icon srcPath="kata-ways" class="mr-6" sidebar/>
             {{ __('Kata Ways') }}
         </x-jet-dropdown-link>

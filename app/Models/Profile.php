@@ -124,6 +124,14 @@ class Profile extends Model
     }
 
     /**
+     * This determines wich kataways have already been scored or completed.
+     */
+    public function katawayScored(): MorphToMany
+    {
+        return $this->morphedByMany(Kataway::class, 'scoreables');
+    }
+
+    /**
      * Exp Attribute Mutator Method for set the level_up, under the hood,
      * the user rank if the exp earned overtake the level_up attribute.
      *
@@ -132,10 +140,6 @@ class Profile extends Model
      */
     public function setExpAttribute(int $exp): void
     {
-        $ranks = [
-            'yellow' => 'level-up'
-        ];
-
 
         if (array_key_exists('exp', $this->attributes)) {
 
@@ -462,6 +466,10 @@ class Profile extends Model
     {
         $lastLevelUp = $this->rank->id === 1 ? 0 : Rank::find($this->rank_id - 1)->level_up;
         $actualLevelUp = $this->rank->level_up;
+
+        if ($actualLevelUp === $lastLevelUp) {
+            return 0;
+        }
 
         $progress = ($this->exp - $lastLevelUp) / ($actualLevelUp - $lastLevelUp) * 100;
 

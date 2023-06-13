@@ -130,7 +130,7 @@ class ProfileController extends Controller
         if (Auth::check()) {
 
             if (Auth::user()->hasRole(['superadmin', 'admin'])) {
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('admin.panel');
             }
 
             if (Auth::user()->hasRole(['user'])) {
@@ -370,7 +370,7 @@ class ProfileController extends Controller
             'followees' => $user->profile->following,
             'feedKatas' => $feedKatas,
             'passedKatas' => $user->profile->passedKatas,
-            'kataways' => $user->profile->startedKataways,
+            'kataways' => $user->profile->katawayScored,
             'createdKatas' => $user->profile->ownerKatas,
         ];
     }

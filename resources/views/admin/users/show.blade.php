@@ -221,7 +221,7 @@
                     <div>
                         <a href="{{ route('users.challenges', ['user' => $user]) }}">Created Challenges ({{ $user->profile->ownerKatas->count() }})</a></div>
                     <div>
-                        <a href="">Created Kataways ({{ $user->profile->createdKataways->count() }})</a>
+                        <a href="{{ route('users.kataways', $user) }}">Created Kataways ({{ $user->profile->createdKataways->count() }})</a>
                     </div>
                     <div>
                         <a href="{{ route('users.comments', $user) }}">Comments ({{ $user->profile->comments->count() }})</a>
