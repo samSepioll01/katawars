@@ -130,7 +130,7 @@ class ProfileController extends Controller
         if (Auth::check()) {
 
             if (Auth::user()->hasRole(['superadmin', 'admin'])) {
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('admin.panel');
             }
 
             if (Auth::user()->hasRole(['user'])) {
