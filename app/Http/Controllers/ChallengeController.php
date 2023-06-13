@@ -548,27 +548,6 @@ class ChallengeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreChallengeRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreChallengeRequest $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Challenge  $challenge
@@ -583,28 +562,8 @@ class ChallengeController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Challenge  $challenge
-     * @return \Illuminate\Http\Response
+     * Destroy a resource.
      */
-    public function edit(Challenge $challenge)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateChallengeRequest  $request
-     * @param  \App\Models\Challenge  $challenge
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateChallengeRequest $request, Challenge $challenge)
-    {
-        //
-    }
-
     public function destroy(Challenge $challenge)
     {
         $challenge->delete();

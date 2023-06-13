@@ -238,7 +238,7 @@
                         {{ __('Blitz') }}
                     </x-jet-responsive-nav-link>
 
-                    <x-jet-responsive-nav-link href="{{ route('dashboard') }}">
+                    <x-jet-responsive-nav-link href="{{ route('kataways.index') }}">
                         {{ __('Kata Ways') }}
                     </x-jet-responsive-nav-link>
 

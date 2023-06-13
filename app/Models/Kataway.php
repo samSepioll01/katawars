@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\Scoreable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Laravel\Scout\Searchable;
 
 class Kataway extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable, Scoreable;
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +24,14 @@ class Kataway extends Model
         'description',
         'uri_image',
     ];
+
+    public function toSearchableArray()
+    {
+        return [
+            'title' => $this->title,
+            'description' => $this->description,
+        ];
+    }
 
     // RELATIONSHIPS METHODS
 

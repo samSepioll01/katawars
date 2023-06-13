@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Favorite;
+use App\Models\Kataway;
 use App\Models\Profile;
 use App\Models\Resource;
 use App\Models\Score;
@@ -18,6 +19,7 @@ trait Scoreable
         'App\Models\Solution' => 'like',
         'App\Models\Resource' => 'like',
         'App\Models\Favorite' => 'add favorites',
+        'App\Models\Kataway' => 'complete kataway',
     ];
 
     /**
@@ -46,8 +48,7 @@ trait Scoreable
     {
         $voterID = $voterID ?? Auth::user()->profile->id;
 
-        if ($this->scoredBy($voterID) || !$this->profileExist($voterID)
-            || $voterID === $this->selectForeignKey() ) {
+        if ($this->scoredBy($voterID) || $voterID === $this->selectForeignKey() ) {
             return false;
         }
 
@@ -111,9 +112,10 @@ trait Scoreable
     public function selectForeignKey()
     {
         return [
-            Favorite::class => $this->solution->kata->owner_id,
+            Favorite::class => $this->solution?->kata?->owner_id,
             Resource::class => $this->profile_id,
             Solution::class => $this->profile_id,
+            Kataway::class => $this->owner_id
         ][$this::class];
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GitHubLoginController;
@@ -10,13 +9,13 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\KataController;
+use App\Http\Controllers\KatawayController;
 use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\RankController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SavedKatasController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SolutionController;
-use App\Models\Profile;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -62,6 +61,17 @@ Route::prefix('user')->middleware([
 
     Route::get('/activity', [ProfileController::class, 'showProfileActivity'])
         ->name('profile.activity');
+
+    Route::resource('kataways', KatawayController::class);
+
+    Route::post('/kataways/{kataway}/subscribe', [KatawayController::class, 'subscribeKataway'])
+        ->name('kataways.subscribe');
+
+    Route::delete('/kataways/{kataway}/unsubscribe', [KatawayController::class, 'unsubscribeKataway'])
+        ->name('kataways.unsubscribe');
+
+    Route::post('/kataways/{kataway}/complete', [KatawayController::class, 'completeKataway'])
+        ->name('kataways.complete');
 
     Route::get('/dashboard', [ProfileController::class, 'authUserThemeConfig'])
         ->name('dashboard');

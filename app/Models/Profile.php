@@ -124,6 +124,14 @@ class Profile extends Model
     }
 
     /**
+     * This determines wich kataways have already been scored or completed.
+     */
+    public function katawayScored(): MorphToMany
+    {
+        return $this->morphedByMany(Kataway::class, 'scoreables');
+    }
+
+    /**
      * Exp Attribute Mutator Method for set the level_up, under the hood,
      * the user rank if the exp earned overtake the level_up attribute.
      *

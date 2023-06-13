@@ -25,12 +25,7 @@
                             </a>
                         </div>
                         <div class="w-full pt text-sm pt-10 inline-flex justify-evenly items-center">
-                            <span>
-                                <span
-                                    @updatefavorites.window="
-                                        $el.textContent = $event.detail;
-                                    "
-                                >{{ $totalComments }}</span> Published Comments</span>
+                            <span>{{ $totalComments }} Published Comments</span>
                             <span>Updated {{ $lastUpdated ?? 'never' }}</span>
                         </div>
                     </div>
@@ -86,48 +81,5 @@
 
 
         </main>
-
-        <script>
-                        // Set sortable object with the list of saved katas.
-            const list = document.getElementById('list');
-
-                if (list) {
-
-                    // Async Infinite Scroll
-
-                    window.addEventListener('DOMContentLoaded', (eDCL) => {
-                        window.addEventListener('scroll', (eScroll) => {
-                            eScroll.stopImmediatePropagation();
-
-                            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-
-                                let url = window.location.href;
-                                let nextCursor = document.querySelector('#next-cursor').innerHTML || null;
-
-                                if (nextCursor) {
-                                    axios({
-                                        method: 'get',
-                                        url: url,
-                                        responseType: 'json',
-                                        params: {
-                                            nextCursor: nextCursor.trim(),
-                                        },
-                                    })
-                                    .then(response => {
-                                        if (response.data.success) {
-                                            console.log(response.data.nextCursor);
-                                            list.insertAdjacentHTML('beforeend', response.data.html);
-                                            list.querySelector('#next-cursor').innerHTML = response.data.nextCursor;
-                                        } else {
-                                            console.log(response.data.nextCursor); // PENDIENTE ELIMINAR
-                                        }
-                                    })
-                                    .catch(error => console.log(error));
-                                }
-                            }
-                        })
-                    });
-                }
-        </script>
     </x-layout.wrapped-main-section>
 </x-app-layout>

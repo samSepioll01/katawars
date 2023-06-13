@@ -24,9 +24,9 @@ class DatabaseSeeder extends Seeder
             HelpSeeder::class,
             CategorySeeder::class,
             ChallengeSeeder::class,
-            //KatawaySeeder::class,
             ScoreSeeder::class,
             UserSeeder::class,
+            KatawaySeeder::class,
             ResourceSeeder::class,
             VideoSolutionSeeder::class,
         ]);
