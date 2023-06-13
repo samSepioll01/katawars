@@ -8,18 +8,31 @@
                     <img class="w-full h-full saturate-150" src="{{ $kataway->createdByProfile->user->profile_photo_url }}" alt="">
                 </div>
 
+
+
                 <div class="p-10 sm:border border-slate-400 sm:dark:border-cyan-600 shadow-xl sm:dark:shadow-outter-sm sm:dark:shadow-cyan-600 sm:rounded-xl bg-slate-200/70 dark:bg-slate-800/30 backdrop-blur-xl lg:min-h-screen">
 
                     <div class="text-slate-700 dark:text-slate-100">
-                        <div class="pb-10 text-lg">
-                            <a href="{{ route('users.main', $kataway->createdByProfile->slug) }}" class="inline-flex items-center">
-                                <div class="overflow-hidden rounded-full pr-3">
-                                    <img class="h-12 w-12 rounded-full" src="{{ $kataway->createdByProfile->user->profile_photo_url }}" alt="">
+                        <div class="flex flex-row justify-between">
+                            <div class="pb-10 text-lg">
+                                <a href="{{ route('users.main', $kataway->createdByProfile->slug) }}" class="inline-flex items-center">
+                                    <div class="overflow-hidden rounded-full pr-3">
+                                        <img class="h-12 w-12 rounded-full" src="{{ $kataway->createdByProfile->user->profile_photo_url }}" alt="">
+                                    </div>
+                                    <div>
+                                        {{ auth()->user()->name }}
+                                    </div>
+                                </a>
+                            </div>
+                            @if (auth()->user()->profile->id === $kataway->createdByProfile->id)
+                                <div class="">
+                                    <form action="{{ route('kataways.edit', $kataway) }}">
+                                        <x-jet-button>
+                                            Update
+                                        </x-jet-button>
+                                    </form>
                                 </div>
-                                <div>
-                                    {{ auth()->user()->name }}
-                                </div>
-                            </a>
+                            @endif
                         </div>
 
                         <div class="text-4xl font-bold tracking-wider">

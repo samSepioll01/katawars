@@ -190,7 +190,13 @@ class KatawayController extends Controller
      */
     public function edit(Kataway $kataway)
     {
-        //
+        if ($kataway->createdByProfile->id !== Auth::user()->profile->id) {
+            abort(403);
+        }
+
+        return view('kataways.edit', [
+            'kataway' => $kataway,
+        ]);
     }
 
     /**
@@ -202,7 +208,19 @@ class KatawayController extends Controller
      */
     public function update(UpdateKatawayRequest $request, Kataway $kataway)
     {
-        //
+        if (Auth::user()->profile->id !== $kataway->createdByProfile->id) {
+            abort(403);
+        }
+
+        $kataway->title = $request->title;
+        $kataway->description = $request->description;
+        $kataway->save();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Kataway updated successful!!');
+
+        return redirect()->route('kataways.show', $kataway);
+
     }
 
     /**
