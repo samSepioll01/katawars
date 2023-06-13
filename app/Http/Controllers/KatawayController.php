@@ -33,6 +33,26 @@ class KatawayController extends Controller
         ]);
     }
 
+    public function showAllKataways(Request $request)
+    {
+        $kataways = Kataway::orderBy('id');
+
+        if ($request->search) {
+            $kataways = Kataway::search($request->search);
+        }
+
+        return view('admin.kataways.kataways', [
+            'kataways' => $kataways->paginate(10)->withQueryString(),
+        ]);
+    }
+
+    public function showKataway(Kataway $kataway)
+    {
+        return view('admin.kataways.show', [
+            'kataway' => $kataway,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -243,7 +263,7 @@ class KatawayController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user, $id)
+    public function destroyUserKataway(User $user, $id)
     {
         $kataway = Kataway::where('id', $id)->first();
 
@@ -255,5 +275,16 @@ class KatawayController extends Controller
         return redirect()->route('users.kataways', [
             'user' => $user,
         ]);
+    }
+
+    public function destroy(Kataway $kataway, Request $request)
+    {
+        $kataway->delete();
+
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Comment deleted sucessful!');
+
+        return redirect()->route('admin.kataways.index');
     }
 }

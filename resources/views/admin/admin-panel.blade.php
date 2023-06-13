@@ -29,6 +29,15 @@
                     </a>
                 @endsuperadmin
 
+                <a href="{{ route('admin.kataways.index') }}">
+                    <div class="card-info w-96 h-44">
+                        <h3 class="card-info-title">Kataways</h3>
+                        <p class="card-info-text">
+                            Management Kataways
+                        </p>
+                    </div>
+                </a>
+
                 <a href="{{ route('admin.categories.index') }}">
                     <div class="card-info w-96 h-44">
                         <h3 class="card-info-title">Categories</h3>

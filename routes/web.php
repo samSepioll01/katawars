@@ -155,7 +155,7 @@ Route::prefix('admin')->middleware([
         ->name('users.kataways.show')
         ->middleware('role:superadmin');
 
-    Route::delete('/users/{user}/kataways/{kataway:id}', [KatawayController::class, 'destroy'])
+    Route::delete('/users/{user}/kataways/{kataway:id}', [KatawayController::class, 'destroyUserKataway'])
         ->name('users.kataways.destroy')
         ->middleware('role:superadmin');
 
@@ -255,6 +255,12 @@ Route::prefix('admin')->middleware([
     Route::resource('scores', ScoreController::class);
 
     Route::resource('challenges', ChallengeController::class);
+
+    Route::get('/kataways', [KatawayController::class, 'showAllKataways'])
+        ->name('admin.kataways.index');
+
+    Route::get('/kataways/{kataway}', [KatawayController::class, 'showKataway'])
+        ->name('admin.kataways.show');
 
 
 
