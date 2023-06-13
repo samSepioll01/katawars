@@ -13,6 +13,7 @@ use App\Mail\GitHubLoginPasswordMail;
 use App\Models\Challenge;
 use App\Models\Comment;
 use App\Models\Kata;
+use App\Models\Kataway;
 use App\Models\Profile;
 use App\Models\Rank;
 use App\Models\Session as ModelsSession;
@@ -181,12 +182,27 @@ class UserController extends Controller
      */
     public function showCreatedChallenge(User $user, $id)
     {
-        $challenge = Challenge::findOrFail($id);
+        $challenge = Challenge::find($id);
 
         return view('admin.challenges.show', [
             'user' => $user,
             'challenge' => $challenge,
             'test_code' => Storage::disk('s3')->get($challenge->katas->first()->uri_test),
+        ]);
+    }
+
+    public function showCreatedKataways(User $user, Request $request)
+    {
+
+        $kataways = Kataway::where('owner_id', $user->id);
+
+        if ($request->search) {
+            $kataways = Kataway::search($request->search);
+        }
+
+        return view('admin.kataways.index', [
+            'user' => $user,
+            'kataways' => $kataways->paginate(5),
         ]);
     }
 

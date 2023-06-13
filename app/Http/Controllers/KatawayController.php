@@ -8,6 +8,7 @@ use App\Models\Challenge;
 use App\Models\Kata;
 use App\Models\Kataway;
 use App\Models\Score;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -221,6 +222,19 @@ class KatawayController extends Controller
 
         return redirect()->route('kataways.show', $kataway);
 
+    }
+
+    public function destroyMultipleKataways(User $user, Request $request)
+    {
+        $ids = $request->input('ids');
+        Kataway::destroy($ids);
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Kataways deleted successful!');
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     /**

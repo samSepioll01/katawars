@@ -135,8 +135,6 @@ Route::prefix('admin')->middleware([
         ->name('users.toban')
         ->middleware('role:superadmin');
 
-
-
     Route::post('/users/{user}/edit/delete-photos/{index}', [UserController::class, 'deletePhoto'])
         ->name('users.delete.photo')
         ->middleware('role:superadmin');
@@ -147,6 +145,14 @@ Route::prefix('admin')->middleware([
 
     Route::get('/users/{user}/challenges', [UserController::class, 'showCreatedChallenges'])
         ->name('users.challenges')
+        ->middleware('role:superadmin');
+
+    Route::get('/users/{user}/kataways', [UserController::class, 'showCreatedKataways'])
+        ->name('users.kataways')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user}/kataways/destroy-multiple', [KatawayController::class, 'destroyMultipleKataways'])
+        ->name('users.kataways.destroy-multiple')
         ->middleware('role:superadmin');
 
     Route::get('/users/{user}/comments', [UserController::class, 'showComments'])
@@ -241,6 +247,8 @@ Route::prefix('admin')->middleware([
     Route::resource('scores', ScoreController::class);
 
     Route::resource('challenges', ChallengeController::class);
+
+
 
 });
 
