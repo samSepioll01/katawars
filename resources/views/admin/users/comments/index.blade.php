@@ -42,7 +42,7 @@
 
                             axios({
                                 method: 'post',
-                                url: '{{ route('users.comments.destroy-multiple', ['user' => $user]) }}',
+                                url: '{{ route('users.comments.destroy.multiple', ['user' => $user]) }}',
                                 responseType: 'json',
                                 data: {
                                     ids: ids,

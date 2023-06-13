@@ -206,6 +206,16 @@ class UserController extends Controller
         ]);
     }
 
+    public function showCreatedKataway(User $user, $id)
+    {
+        $kataway = Kataway::find($id);
+
+        return view('admin.kataways.user-show', [
+            'user' => $user,
+            'kataway' => $kataway,
+        ]);
+    }
+
     public function showComments(User $user)
     {
         return view('admin.users.comments.index', [

@@ -151,6 +151,14 @@ Route::prefix('admin')->middleware([
         ->name('users.kataways')
         ->middleware('role:superadmin');
 
+    Route::get('/users/{user}/kataways/{kataway:id}', [UserController::class, 'showCreatedKataway'])
+        ->name('users.kataways.show')
+        ->middleware('role:superadmin');
+
+    Route::delete('/users/{user}/kataways/{kataway:id}', [KatawayController::class, 'destroy'])
+        ->name('users.kataways.destroy')
+        ->middleware('role:superadmin');
+
     Route::delete('/users/{user}/kataways/destroy-multiple', [KatawayController::class, 'destroyMultipleKataways'])
         ->name('users.kataways.destroy-multiple')
         ->middleware('role:superadmin');
@@ -167,8 +175,8 @@ Route::prefix('admin')->middleware([
         ->name('users.comments.destroy')
         ->middleware('role:superadmin');
 
-    Route::post('/users/{user}/comments/destroy-multiple', [CommentController::class, 'destroyMultipleComment'])
-        ->name('users.comments.destroy-multiple')
+    Route::post('/users/{user}/comments/destroy/multiple', [CommentController::class, 'destroyMultipleComment'])
+        ->name('users.comments.destroy.multiple')
         ->middleware('role:superadmin');
 
     Route::get('/users/{user}/resources', [ResourceController::class, 'showUserResources'])

@@ -240,11 +240,20 @@ class KatawayController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Kataway  $kataway
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Kataway $kataway)
+    public function destroy(User $user, $id)
     {
-        //
+        $kataway = Kataway::where('id', $id)->first();
+
+        $kataway->delete();
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Kataway deleted successful!!');
+
+        return redirect()->route('users.kataways', [
+            'user' => $user,
+        ]);
     }
 }

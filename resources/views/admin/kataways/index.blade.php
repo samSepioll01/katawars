@@ -136,7 +136,7 @@
                                         <tr>
 
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <a href="" class="flex items-center">
+                                                <a href="{{ route('users.kataways.show', ['user' => $user, 'kataway' => $kataway]) }}" class="flex items-center">
                                                     <input type="checkbox" name="kataways[]" class="mr-2" id="{{ $kataway->id }}">
                                                     <span>{{ $kataway->title }}</span>
                                                 </a>
