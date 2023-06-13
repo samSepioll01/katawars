@@ -18,11 +18,11 @@ class Kataway extends Model
      * @var string[]
      */
     protected $fillable = [
+        'owner_id',
         'url',
         'slug',
         'title',
         'description',
-        'uri_image',
     ];
 
     public function toSearchableArray()

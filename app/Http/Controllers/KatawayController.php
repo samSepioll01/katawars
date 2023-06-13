@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreKatawayRequest;
 use App\Http\Requests\UpdateKatawayRequest;
+use App\Models\Challenge;
+use App\Models\Kata;
 use App\Models\Kataway;
 use App\Models\Score;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class KatawayController extends Controller
 {
@@ -36,7 +39,14 @@ class KatawayController extends Controller
      */
     public function create()
     {
-        //
+        $challenges = Challenge::whereHas(
+            'katas',
+            fn($query) => $query->where('mode_id', 1),
+        )->get();
+
+        return view('kataways.create', [
+            'challenges' => $challenges,
+        ]);
     }
 
     /**
@@ -47,7 +57,37 @@ class KatawayController extends Controller
      */
     public function store(StoreKatawayRequest $request)
     {
-        //
+
+        if (count($request->input('katas')) < 2) {
+            session()->flash('syncStatus', 'error');
+            session()->flash('syncMessage', 'The challenges selected must be greather than 1.');
+            return redirect()->back();
+        }
+
+        $existsKatas = collect($request->input('katas'))
+            ->every(fn($kataID) => Kata::where('id', $kataID)->exists());
+
+        if (!$existsKatas) {
+            session()->flash('syncStatus', 'error');
+            session()->flash('syncMessage', 'Not exists some katas selected.');
+            return redirect()->back();
+        }
+
+        $slug = Str::slug($request->title);
+
+        $kataway = Kataway::create([
+            'owner_id' => Auth::user()->profile->id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'slug' => $slug,
+            'url' => url("/kataways/$slug"),
+        ]);
+
+        $kataway->katas()->sync($request->input('katas'));
+
+        session()->flash('syncStatus', 'success');
+        session()->flash('syncMessage', 'Kataway created successful!!');
+        return redirect()->route('kataways.index');
     }
 
     /**

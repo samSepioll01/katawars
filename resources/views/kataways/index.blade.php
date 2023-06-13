@@ -6,6 +6,12 @@
 
     <x-layout.searcher-sync route="{{ route('kataways.index') }}" />
 
+    <div class="w-full inline-flex justify-end items-center pr-5 lg:pr-20 py-10">
+        <form action="{{ route('kataways.create') }}" method="get">
+            <x-jet-button>Create</x-jet-button>
+        </form>
+    </div>
+
     <section class="xl:my-24 relative flex justify-center items-center">
 
         <div class="relative p-5 md:px-12 lg:px-36 grid grid-cols-1 gap-5 md:grid-cols-2 lg:max-w-none xl:grid-cols-3">
