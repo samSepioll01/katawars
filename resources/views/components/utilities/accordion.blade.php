@@ -18,7 +18,7 @@
 
             <div class="px-4">
                 <img
-                    src="{{ url('storage/icons/chevron-down2.png') }}"
+                    src="{{ env('AWS_APP_URL') . '/icons/chevron-down2.png' }}"
                     :class="{ 'rotate-180' : open , 'rotate-0' : !open }"
                     class="transition-all duration-200 w-8 h-8"
                 />
