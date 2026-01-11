@@ -70,7 +70,7 @@ mensajes por chat", "eliminar mensajes de chat", "buscar usuarios de chat", "eli
     <li> API Chatify para implementar chat en tiempo real en la aplicación en Laravel.</li>
     <li> API PHPParser para analizar la sintaxis del código introducido por el usuario en los retos y generar su árbol ast para buscar patrones.</li>
     <li> Implementación de API propia llamada "SecurityFilter" para establecer el módulo de seguridad para analizar el código del usuario con base de definiciones de Akamai, Fortinet y Kaspersky.</li>
-    <li> Laravel Echo con uso de API de Pusher.js, usando un servidor websocket con conexión full-duplex por protocolo TCP, para permitir el broascasting de eventos en tiempo real (Cambio de Tema y Chat en tiempo real).</li>
+    <li> Laravel Echo con uso de API de Pusher.js, usando un servidor websocket con conexión full-duplex por protocolo TCP, para permitir el broadcasting de eventos en tiempo real (Cambio de Tema y Chat en tiempo real).</li>
     <li> API Spatie Image para permitir el recorte de imagenes en el backend.</li>
     <li> API Spatie Laravel Permission para establecer el sistema de roles y permisos en la aplicación</li>
     <li> Redis Server y Predis para establecer una caché en memoria RAM para gestionar Colas y Jobs, así como procesos en segundo plano de mantenimiento como la subida a Algolia de los modelos para la búsqueda, elimimación de usuarios sin verificar el email después de un tiempo o notificaciones mail para evitar captura de sessión HTTP.</li>
